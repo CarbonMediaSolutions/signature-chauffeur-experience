@@ -117,18 +117,18 @@ const FAQ = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="section-padding-sm bg-background border-b border-border/50">
+      <section className="section-padding-sm bg-background border-b border-border/30">
         <div className="container-luxury">
           <div className="max-w-2xl">
-            <p className="text-caption text-muted-foreground tracking-luxury mb-3">
+            <p className="text-caption text-muted-foreground mb-4">
               Support
             </p>
-            <h1 className="text-display text-foreground mb-6">
-              Frequently Asked Questions
+            <h1 className="text-display text-foreground mb-8">
+              Questions & Answers
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Find answers to common questions about our service. If you need 
-              further assistance, our team is always here to help.
+              Find answers to common questions. Our team is always here 
+              for further assistance.
             </p>
           </div>
         </div>

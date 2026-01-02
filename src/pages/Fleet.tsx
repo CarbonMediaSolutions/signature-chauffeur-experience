@@ -14,18 +14,18 @@ const Fleet = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="section-padding-sm bg-background border-b border-border/50">
+      <section className="section-padding-sm bg-background border-b border-border/30">
         <div className="container-luxury">
           <div className="max-w-2xl">
-            <p className="text-caption text-muted-foreground tracking-luxury mb-3">
-              Our Collection
+            <p className="text-caption text-muted-foreground mb-4">
+              The Collection
             </p>
-            <h1 className="text-display text-foreground mb-6">
-              The Fleet
+            <h1 className="text-display text-foreground mb-8">
+              Our Fleet
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Each vehicle in our collection has been thoughtfully selected for its 
-              character, performance, and ability to deliver an exceptional experience.
+              Each vehicle has been thoughtfully selected for its character, 
+              performance, and ability to deliver an exceptional experience.
             </p>
           </div>
         </div>

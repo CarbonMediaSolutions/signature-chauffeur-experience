@@ -53,18 +53,18 @@ const Contact = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="section-padding-sm bg-background border-b border-border/50">
+      <section className="section-padding-sm bg-background border-b border-border/30">
         <div className="container-luxury">
           <div className="max-w-2xl">
-            <p className="text-caption text-muted-foreground tracking-luxury mb-3">
+            <p className="text-caption text-muted-foreground mb-4">
               Get in Touch
             </p>
-            <h1 className="text-display text-foreground mb-6">
-              Contact Us
+            <h1 className="text-display text-foreground mb-8">
+              Begin Your Enquiry
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Ready to experience luxury your way? Share your requirements and 
-              our team will personally guide you to the perfect vehicle.
+              Share your requirements and our team will personally guide you 
+              to the perfect vehicle.
             </p>
           </div>
         </div>

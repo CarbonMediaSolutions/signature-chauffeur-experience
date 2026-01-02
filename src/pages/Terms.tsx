@@ -63,19 +63,18 @@ const Terms = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="section-padding-sm bg-background border-b border-border/50">
+      <section className="section-padding-sm bg-background border-b border-border/30">
         <div className="container-luxury">
           <div className="max-w-2xl">
-            <p className="text-caption text-muted-foreground tracking-luxury mb-3">
+            <p className="text-caption text-muted-foreground mb-4">
               Information
             </p>
-            <h1 className="text-display text-foreground mb-6">
+            <h1 className="text-display text-foreground mb-8">
               Rental Terms
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Transparency is fundamental to our service. Below you will find our 
-              rental requirements and policies, designed to ensure a smooth and 
-              enjoyable experience.
+              Transparency is fundamental. Our requirements and policies, 
+              designed to ensure a smooth experience.
             </p>
           </div>
         </div>
