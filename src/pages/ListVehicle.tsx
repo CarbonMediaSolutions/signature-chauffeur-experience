@@ -35,34 +35,33 @@ const ListVehicle = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="section-padding bg-background border-b border-border/50">
+      <section className="section-padding bg-background border-b border-border/30">
         <div className="container-luxury">
           <div className="max-w-2xl">
-            <p className="text-caption text-muted-foreground tracking-luxury mb-3">
+            <p className="text-caption text-muted-foreground mb-4">
               For Vehicle Owners
             </p>
-            <h1 className="text-display text-foreground mb-6">
+            <h1 className="text-display text-foreground mb-8">
               List Your Vehicle
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Own a luxury vehicle? Partner with us and let your asset work for you. 
-              We are not a marketplace — we offer a complete concierge management service.
+              Own a luxury vehicle? Partner with us. We offer complete concierge 
+              management — not a marketplace.
             </p>
           </div>
         </div>
       </section>
 
       {/* What We Handle */}
-      <section className="section-padding bg-secondary/30">
+      <section className="section-padding bg-secondary/20">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-16">
+          <div className="grid lg:grid-cols-2 gap-20">
             <div>
-              <h2 className="text-headline text-foreground mb-8">
+              <h2 className="text-headline text-foreground mb-10">
                 What We Handle
               </h2>
-              <p className="text-body text-muted-foreground mb-8">
-                When you list your vehicle with Signature, you are not just 
-                joining a platform. You are partnering with a dedicated team 
+              <p className="text-body text-muted-foreground">
+                When you list with Signature, you partner with a dedicated team 
                 that treats your asset as their own.
               </p>
             </div>
