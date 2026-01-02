@@ -20,7 +20,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
         />
         {/* Subtle overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/40 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Limited availability badge */}
         {vehicle.limited_availability && (
@@ -33,7 +33,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         
         {/* Hover CTA */}
         <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-          <span className="text-sm text-primary-foreground tracking-wide">
+          <span className="text-sm text-primary-foreground tracking-wide drop-shadow-md">
             View Vehicle →
           </span>
         </div>
