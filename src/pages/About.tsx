@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
+import interiorDetail from "@/assets/detail-interior.jpg";
 
 const About = () => {
   return (
@@ -10,12 +11,16 @@ const About = () => {
       <section className="section-padding bg-background">
         <div className="container-luxury">
           <div className="max-w-3xl">
-            <p className="text-caption text-muted-foreground mb-4">
-              About Us
+            <p className="text-caption text-muted-foreground mb-4 tracking-[0.25em]">
+              About Us · Cape Town, South Africa
             </p>
             <h1 className="text-display text-foreground mb-10">
               Driven by Passion,<br />Delivered with Care
             </h1>
+            <p className="text-body-lg text-muted-foreground max-w-2xl">
+              This is not standard car hire. It is a curated, intentional experience — 
+              where every vehicle is handpicked and every detail considered.
+            </p>
           </div>
         </div>
       </section>
@@ -45,21 +50,41 @@ const About = () => {
             </div>
             <div className="space-y-8">
               <p className="text-body-lg text-muted-foreground">
-                Signature Car Rentals began with a shared passion. Dean and Andrea, 
-                lifelong enthusiasts, saw an opportunity to bring something different 
-                to Cape Town — a car rental experience that feels personal, considered, 
-                and genuinely special.
+                Dean and Andrea are lifelong car enthusiasts. For them, driving has 
+                never been about getting from A to B — it has always been about the 
+                experience itself.
               </p>
               <p className="text-body text-muted-foreground">
-                What started as a vision has grown into a curated collection of 
-                exceptional vehicles, each handpicked for its character. But more 
-                than the vehicles themselves, it is the service that sets us apart.
+                Some time ago, they rented a luxury vehicle simply for the joy of 
+                driving something exceptional. That moment — the feel of the wheel, 
+                the sound of the engine, the sense of occasion — stayed with them.
               </p>
               <p className="text-body text-muted-foreground">
-                Every interaction is personal. Every detail, thoughtfully considered. 
-                From the moment you enquire to the day you return — seamless, 
-                discreet, effortless.
+                It sparked an idea: what if more people could access exceptional 
+                vehicles in a way that feels personal, effortless, and far removed 
+                from the transactional experience of typical car rental?
               </p>
+              <p className="text-body text-muted-foreground">
+                Signature Car Rentals was born from a place of pure passion for cars. 
+                Every vehicle in our collection is handpicked for its character. Every 
+                interaction, genuinely personal. From enquiry to return — seamless, 
+                discreet, and utterly effortless.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interior Detail Image */}
+      <section className="pb-16 md:pb-24">
+        <div className="container-luxury">
+          <div className="max-w-4xl mx-auto">
+            <div className="aspect-[16/9] overflow-hidden bg-muted rounded-sm">
+              <img
+                src={interiorDetail}
+                alt="Refined interior craftsmanship"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
@@ -72,10 +97,15 @@ const About = () => {
             <h2 className="text-headline mb-10">
               Our Mission
             </h2>
-            <p className="text-body-lg text-primary-foreground/70 mb-10">
-              To make exceptional vehicles accessible in a way that feels personal, 
-              genuine, and utterly effortless. We are not a marketplace. We are a 
-              concierge service dedicated to matching you with the perfect vehicle.
+            <p className="text-body-lg text-primary-foreground/70 mb-8">
+              Signature Car Rentals is not a marketplace. It is a concierge-style, 
+              highly personal service.
+            </p>
+            <p className="text-body text-primary-foreground/60 mb-10 max-w-2xl mx-auto">
+              We make exceptional vehicles accessible in a way that feels calm, 
+              effortless, and considered. We do not simply offer any available car. 
+              We match each client with the right vehicle — one that suits their 
+              journey, their style, and their expectations.
             </p>
             <div className="w-16 h-px bg-primary-foreground/20 mx-auto" />
           </div>
@@ -95,22 +125,22 @@ const About = () => {
             {[
               {
                 title: "Intention",
-                description: "Every decision is deliberate. From the vehicles we select to the service we provide — nothing left to chance.",
+                description: "Every decision is deliberate. From vehicle selection to service delivery — nothing left to chance.",
               },
               {
                 title: "Discretion",
-                description: "Privacy is paramount. We serve clients who value sophistication over spectacle.",
+                description: "Privacy and quiet confidence. For clients who value sophistication over spectacle.",
               },
               {
                 title: "Excellence",
-                description: "Good enough is never enough. We continuously refine our service to exceed expectations.",
+                description: "Beyond good enough. Continuous refinement of every detail, every experience.",
               },
             ].map((value) => (
               <div key={value.title} className="text-center">
                 <h3 className="font-serif text-2xl font-medium text-foreground mb-5">
                   {value.title}
                 </h3>
-                <p className="text-body text-muted-foreground">
+                <p className="text-body text-muted-foreground leading-relaxed">
                   {value.description}
                 </p>
               </div>
@@ -123,10 +153,13 @@ const About = () => {
       <section className="section-padding bg-secondary/20">
         <div className="container-luxury text-center">
           <h2 className="text-headline text-foreground mb-8">
-            Experience the Difference
+            Begin Your Signature Experience
           </h2>
-          <p className="text-body-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Discover our curated collection and begin your Signature experience.
+          <p className="text-body-lg text-muted-foreground mb-4 max-w-2xl mx-auto">
+            Discover our curated collection of exceptional vehicles.
+          </p>
+          <p className="text-body text-muted-foreground mb-12 max-w-xl mx-auto">
+            Every detail considered, every experience curated with intention.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/fleet">
