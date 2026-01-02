@@ -254,6 +254,21 @@
       radial-gradient(ellipse 80% 60% at 50% 100%, transparent 0%, hsl(var(--primary) / 0.7) 100%),
       linear-gradient(to top, hsl(var(--primary) / 0.85) 0%, hsl(var(--primary) / 0.4) 40%, transparent 70%);
   }
+
+  /* Hero top fade - creates white breathing room below header */
+  .hero-fade-top::before {
+    content: "";
+    @apply absolute left-0 right-0 top-0 pointer-events-none;
+    height: 160px;
+    z-index: 2;
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--background)) 0%,
+      hsl(var(--background)) 40%,
+      hsl(var(--background) / 0.7) 60%,
+      hsl(var(--background) / 0) 100%
+    );
+  }
 }
 
 @layer utilities {
