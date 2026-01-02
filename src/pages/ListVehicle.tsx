@@ -19,7 +19,7 @@ const ListVehicle = () => {
     e.preventDefault();
     toast({
       title: "Submission Received",
-      description: "Thank you for your interest. Our team will be in touch shortly.",
+      description: "Thank you for your interest. Our team will review your submission and be in touch shortly.",
     });
     setFormData({
       name: "",
@@ -32,6 +32,33 @@ const ListVehicle = () => {
     });
   };
 
+  const services = [
+    { 
+      title: "Client Screening & Approval", 
+      desc: "Every potential renter is carefully vetted. We select clients who respect and appreciate exceptional vehicles." 
+    },
+    { 
+      title: "Professional Presentation", 
+      desc: "Your vehicle is presented with refined photography and compelling copy that reflects its true character." 
+    },
+    { 
+      title: "Full Rental Administration", 
+      desc: "Contracts, communications, and coordination — every detail managed with precision on your behalf." 
+    },
+    { 
+      title: "Secure Handovers & Returns", 
+      desc: "Personal handovers with full familiarisation. Your vehicle is collected and returned with the utmost care." 
+    },
+    { 
+      title: "Pre & Post-Rental Inspections", 
+      desc: "Thorough inspections before and after every rental ensure your vehicle remains in impeccable condition." 
+    },
+    { 
+      title: "Transparent Reporting", 
+      desc: "Regular updates on bookings, performance, and earnings. Complete visibility, no surprises." 
+    },
+  ];
+
   return (
     <Layout>
       {/* Hero */}
@@ -39,14 +66,15 @@ const ListVehicle = () => {
         <div className="container-luxury">
           <div className="max-w-2xl">
             <p className="text-caption text-muted-foreground mb-4">
-              For Vehicle Owners
+              For Vehicle Owners · Cape Town
             </p>
             <h1 className="text-display text-foreground mb-8">
-              List Your Vehicle
+              Partner With Signature
             </h1>
             <p className="text-body-lg text-muted-foreground">
-              Own a luxury vehicle? Partner with us. We offer complete concierge 
-              management — not a marketplace.
+              Own a luxury or performance vehicle? We offer complete concierge 
+              management for a curated selection of exceptional cars — not a 
+              marketplace, but a partnership built on trust, discretion, and care.
             </p>
           </div>
         </div>
@@ -60,19 +88,39 @@ const ListVehicle = () => {
               <h2 className="text-headline text-foreground mb-10">
                 What We Handle
               </h2>
-              <p className="text-body text-muted-foreground">
-                When you list with Signature, you partner with a dedicated team 
-                that treats your asset as their own.
+              <p className="text-body text-muted-foreground mb-8">
+                When you partner with Signature, you gain a dedicated team 
+                that treats your vehicle as if it were their own. Every detail 
+                is managed with intention and care.
               </p>
+              
+              {/* Who This Is For */}
+              <div className="border-t border-border/50 pt-8">
+                <h3 className="font-serif text-lg font-medium text-foreground mb-4">
+                  Who This Is For
+                </h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent mt-1">—</span>
+                    <span>Owners who want to offset the costs of ownership</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent mt-1">—</span>
+                    <span>Those who prefer not to manage rentals themselves</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent mt-1">—</span>
+                    <span>Individuals who value discretion and careful handling</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent mt-1">—</span>
+                    <span>Owners who want their vehicle represented to the right clientele</span>
+                  </li>
+                </ul>
+              </div>
             </div>
             <div className="space-y-6">
-              {[
-                { title: "Client Screening", desc: "Rigorous vetting of every potential renter for your peace of mind." },
-                { title: "Professional Marketing", desc: "Stunning photography and compelling presentation of your vehicle." },
-                { title: "Complete Management", desc: "Bookings, communication, and coordination — all handled by us." },
-                { title: "Regular Inspections", desc: "Pre and post-rental inspections to maintain your vehicle's condition." },
-                { title: "Transparent Reporting", desc: "Clear, regular updates on your vehicle's performance and earnings." },
-              ].map((item) => (
+              {services.map((item) => (
                 <div key={item.title} className="border-l border-accent pl-6 py-2">
                   <h3 className="font-serif text-lg font-medium text-foreground mb-1">
                     {item.title}
@@ -96,8 +144,9 @@ const ListVehicle = () => {
                 Submit Your Vehicle
               </h2>
               <p className="text-body text-muted-foreground">
-                Interested in listing your vehicle? Share your details and we will 
-                be in touch to discuss the opportunity.
+                Interested in listing your vehicle with Signature? Share your details 
+                and our team will be in touch to discuss suitability and next steps. 
+                This is a curated partnership — not every vehicle is accepted.
               </p>
             </div>
 
@@ -192,14 +241,14 @@ const ListVehicle = () => {
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Tell us about your vehicle, its condition, and your expectations..."
+                  placeholder="Tell us about your vehicle, its condition, current mileage, and your expectations..."
                   className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-foreground placeholder:text-muted-foreground resize-none"
                 />
               </div>
 
               <div className="pt-4">
                 <LuxuryButton type="submit" variant="default" size="lg" className="w-full md:w-auto">
-                  Submit Your Vehicle
+                  Submit for Consideration
                 </LuxuryButton>
               </div>
             </form>
