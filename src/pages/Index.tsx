@@ -107,7 +107,7 @@ const Index = () => {
                 </LuxuryButton>
               </Link>
             </div>
-            <div className="relative aspect-square">
+            <div className="relative aspect-square overflow-hidden rounded-sm">
               <img
                 src={interiorImage}
                 alt="Refined interior details"

@@ -16,7 +16,7 @@ export const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-sm border-b border-border/30">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-sm">
       <nav className="container-luxury flex items-center justify-between py-5">
         {/* Logo */}
         <Link to="/" className="flex flex-col">
@@ -49,7 +49,7 @@ export const Header = () => {
         {/* CTA Button */}
         <Link
           to="/contact"
-          className="hidden lg:block text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
+          className="hidden lg:block text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
         >
           Enquire
         </Link>
@@ -97,7 +97,7 @@ export const Header = () => {
           <Link
             to="/contact"
             onClick={() => setMobileMenuOpen(false)}
-            className="mt-4 text-center text-sm font-light tracking-wide border border-foreground/20 px-6 py-4 hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
+            className="mt-4 text-center text-sm font-light tracking-wide border border-foreground/20 px-6 py-4 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
           >
             Enquire Now
           </Link>
