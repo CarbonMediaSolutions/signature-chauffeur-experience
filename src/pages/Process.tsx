@@ -6,37 +6,37 @@ const steps = [
   {
     number: "01",
     title: "Enquire",
-    description: "Share your requirements through our form or WhatsApp. Tell us about your dates, preferences, and any special requests.",
+    description: "Share your requirements through our enquiry form or reach out directly via WhatsApp. Tell us your preferred dates, vehicle preferences, and any special requests. No payment required at this stage.",
   },
   {
     number: "02",
     title: "Consultation",
-    description: "Our team personally reviews your request. We recommend vehicles that perfectly match your journey.",
+    description: "Our team personally reviews your request, understanding your journey, delivery location, and any specific requirements. We recommend vehicles that perfectly match your needs — tailored, considered, never rushed.",
   },
   {
     number: "03",
     title: "Confirmation",
-    description: "Once selected, we confirm your booking and handle all documentation. Clear, transparent, no surprises.",
+    description: "Once you've selected your vehicle, we confirm your booking with clear pricing and terms. A simple documentation checklist, transparent conditions — no unnecessary complexity, no surprises.",
   },
   {
     number: "04",
     title: "Preparation",
-    description: "Your vehicle is meticulously prepared. Cleaned, inspected, ensured to be in pristine condition.",
+    description: "Your vehicle is professionally detailed, fully inspected, and prepared to Signature standards. Every detail checked, ensuring it is presented in pristine condition.",
   },
   {
     number: "05",
     title: "Delivery",
-    description: "Your vehicle arrives at your preferred location — airport, hotel, or private address.",
+    description: "Your vehicle arrives at your preferred location — airport, accommodation, or private address. A personal handover includes full familiarisation with the vehicle's features and controls.",
   },
   {
     number: "06",
     title: "Enjoy",
-    description: "Experience Cape Town your way. Our team remains available throughout your rental.",
+    description: "Experience Cape Town your way, without interruption. Our team remains available should you need anything, but the focus is entirely on your enjoyment.",
   },
   {
     number: "07",
     title: "Return",
-    description: "We collect the vehicle from your location. Simple, seamless, stress-free.",
+    description: "We collect the vehicle from your chosen location at a pre-arranged time. Smooth, efficient, and respectful of your schedule — a seamless conclusion to your experience.",
   },
 ];
 
@@ -55,7 +55,8 @@ const Process = () => {
             </h1>
             <p className="text-body-lg text-muted-foreground">
               From first enquiry to final return — seamless, personal, 
-              and free of friction.
+              and free of friction. Every step designed to feel simple, 
+              reassuring, and premium.
             </p>
           </div>
         </div>
@@ -95,9 +96,13 @@ const Process = () => {
           <h2 className="text-headline mb-8">
             No Surprises. Just Excellence.
           </h2>
-          <p className="text-body-lg text-primary-foreground/60 mb-10">
-            Complete transparency. Clear rates, fair terms, and a team that is 
-            always available. This is not transactional — it is relational.
+          <p className="text-body-lg text-primary-foreground/60 mb-4">
+            Complete transparency at every stage. Clear rates, fair terms, and a 
+            team that communicates openly throughout your experience.
+          </p>
+          <p className="text-body text-primary-foreground/60 mb-10">
+            This is not transactional — it is relational. A concierge-style service 
+            where every detail is handled with intention and care.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact">
