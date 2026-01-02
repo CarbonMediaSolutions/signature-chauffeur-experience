@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Search } from "lucide-react";
+import { CalendarIcon, Send } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,7 +14,7 @@ import {
 import { LuxuryButton } from "@/components/ui/luxury-button";
 
 interface FleetSearchProps {
-  onSearch: (dateRange: DateRange | undefined) => void;
+  onSearch?: (dateRange: DateRange | undefined) => void;
   isSearching?: boolean;
   onClear?: () => void;
   hasActiveSearch?: boolean;
@@ -28,10 +29,16 @@ export const FleetSearch = ({
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [isEndOpen, setIsEndOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSearch = () => {
+  const handleEnquiry = () => {
     if (dateRange?.from && dateRange?.to) {
-      onSearch(dateRange);
+      const params = new URLSearchParams({
+        from: format(dateRange.from, "yyyy-MM-dd"),
+        to: format(dateRange.to, "yyyy-MM-dd"),
+        type: "availability",
+      });
+      navigate(`/contact?${params.toString()}`);
     }
   };
 
@@ -42,15 +49,18 @@ export const FleetSearch = ({
 
   return (
     <div className="bg-secondary/50 border border-border p-6 md:p-8">
-      <h2 className="font-serif text-xl md:text-2xl text-foreground mb-6">
-        Search Available Cars
+      <h2 className="font-serif text-xl md:text-2xl text-foreground mb-2">
+        Check Availability
       </h2>
+      <p className="text-sm text-muted-foreground mb-6">
+        Select your preferred dates and we'll confirm availability personally.
+      </p>
       
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-end">
         {/* Start Date */}
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-            Start Date
+            From
           </label>
           <Popover open={isStartOpen} onOpenChange={setIsStartOpen}>
             <PopoverTrigger asChild>
@@ -91,7 +101,7 @@ export const FleetSearch = ({
         {/* End Date */}
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-            End Date
+            To
           </label>
           <Popover open={isEndOpen} onOpenChange={setIsEndOpen}>
             <PopoverTrigger asChild>
@@ -132,20 +142,20 @@ export const FleetSearch = ({
           </Popover>
         </div>
 
-        {/* Search Button */}
+        {/* Enquiry Button */}
         <div className="flex gap-2">
           <LuxuryButton
             variant="default"
             size="lg"
-            onClick={handleSearch}
-            disabled={!dateRange?.from || !dateRange?.to || isSearching}
+            onClick={handleEnquiry}
+            disabled={!dateRange?.from || !dateRange?.to}
             className="h-12 px-8"
           >
-            <Search className="w-4 h-4 mr-2" />
-            {isSearching ? "Searching..." : "Search Cars"}
+            <Send className="w-4 h-4 mr-2" />
+            Send Availability Enquiry
           </LuxuryButton>
           
-          {hasActiveSearch && (
+          {dateRange?.from && (
             <Button
               variant="outline"
               onClick={handleClear}
@@ -157,9 +167,9 @@ export const FleetSearch = ({
         </div>
       </div>
       
-      {hasActiveSearch && dateRange?.from && dateRange?.to && (
+      {dateRange?.from && dateRange?.to && (
         <p className="text-sm text-muted-foreground mt-4">
-          Showing vehicles available from {format(dateRange.from, "d MMMM")} to {format(dateRange.to, "d MMMM yyyy")}
+          {format(dateRange.from, "d MMMM")} – {format(dateRange.to, "d MMMM yyyy")}
         </p>
       )}
     </div>
