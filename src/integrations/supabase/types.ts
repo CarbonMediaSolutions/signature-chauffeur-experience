@@ -14,16 +14,306 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      availability_blocks: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          end_date: string
+          id: string
+          reason: string | null
+          start_date: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          end_date: string
+          id?: string
+          reason?: string | null
+          start_date: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          end_date?: string
+          id?: string
+          reason?: string | null
+          start_date?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "availability_blocks_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          created_at: string
+          customer_id: string
+          daily_rate: number
+          end_date: string
+          hold_id: string | null
+          id: string
+          notes: string | null
+          payfast_payment_id: string | null
+          payfast_reference: string | null
+          payfast_status: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["booking_status"]
+          total_amount: number
+          updated_at: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          daily_rate: number
+          end_date: string
+          hold_id?: string | null
+          id?: string
+          notes?: string | null
+          payfast_payment_id?: string | null
+          payfast_reference?: string | null
+          payfast_status?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_amount: number
+          updated_at?: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          daily_rate?: number
+          end_date?: string
+          hold_id?: string | null
+          id?: string
+          notes?: string | null
+          payfast_payment_id?: string | null
+          payfast_reference?: string | null
+          payfast_status?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_amount?: number
+          updated_at?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_hold_id_fkey"
+            columns: ["hold_id"]
+            isOneToOne: false
+            referencedRelation: "holds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      holds: {
+        Row: {
+          created_at: string
+          end_date: string
+          expires_at: string
+          id: string
+          start_date: string
+          status: Database["public"]["Enums"]["hold_status"]
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          expires_at: string
+          id?: string
+          start_date: string
+          status?: Database["public"]["Enums"]["hold_status"]
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          expires_at?: string
+          id?: string
+          start_date?: string
+          status?: Database["public"]["Enums"]["hold_status"]
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "holds_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          category: string
+          created_at: string
+          daily_rate: number
+          description: string | null
+          engine: string | null
+          features: string[] | null
+          id: string
+          image: string
+          is_active: boolean | null
+          limited_availability: boolean | null
+          name: string
+          seats: number | null
+          transmission: string | null
+          updated_at: string
+          why_we_chose: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          daily_rate: number
+          description?: string | null
+          engine?: string | null
+          features?: string[] | null
+          id: string
+          image: string
+          is_active?: boolean | null
+          limited_availability?: boolean | null
+          name: string
+          seats?: number | null
+          transmission?: string | null
+          updated_at?: string
+          why_we_chose?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          daily_rate?: number
+          description?: string | null
+          engine?: string | null
+          features?: string[] | null
+          id?: string
+          image?: string
+          is_active?: boolean | null
+          limited_availability?: boolean | null
+          name?: string
+          seats?: number | null
+          transmission?: string | null
+          updated_at?: string
+          why_we_chose?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      booking_status:
+        | "pending_payment"
+        | "confirmed"
+        | "cancelled"
+        | "expired"
+        | "completed"
+      hold_status: "active" | "converted" | "expired" | "released"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +440,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      booking_status: [
+        "pending_payment",
+        "confirmed",
+        "cancelled",
+        "expired",
+        "completed",
+      ],
+      hold_status: ["active", "converted", "expired", "released"],
+    },
   },
 } as const
