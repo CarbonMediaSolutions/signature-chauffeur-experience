@@ -1,12 +1,30 @@
-import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { DateRange } from "react-day-picker";
 import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
-import { vehicles } from "@/data/fleet";
-import { ArrowLeft, Users, Fuel, Settings, Briefcase } from "lucide-react";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
+import { PricingSummary } from "@/components/booking/PricingSummary";
+import { useVehicle } from "@/hooks/useVehicles";
+import { useUnavailableDates } from "@/hooks/useAvailability";
+import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2 } from "lucide-react";
 
 const VehicleDetail = () => {
   const { id } = useParams();
-  const vehicle = vehicles.find((v) => v.id === id);
+  const navigate = useNavigate();
+  const { data: vehicle, isLoading } = useVehicle(id || "");
+  const { data: unavailableDates = [] } = useUnavailableDates(id || "");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="section-padding container-luxury flex items-center justify-center min-h-[50vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        </div>
+      </Layout>
+    );
+  }
 
   if (!vehicle) {
     return (
@@ -22,11 +40,21 @@ const VehicleDetail = () => {
   }
 
   const specs = [
-    { icon: Settings, label: "Transmission", value: vehicle.transmission },
-    { icon: Users, label: "Seats", value: vehicle.seats.toString() },
-    { icon: Fuel, label: "Fuel Type", value: vehicle.fuelType },
-    { icon: Briefcase, label: "Luggage", value: vehicle.luggageCapacity },
+    { icon: Settings, label: "Transmission", value: vehicle.transmission || "Automatic" },
+    { icon: Users, label: "Seats", value: vehicle.seats?.toString() || "4" },
+    { icon: Fuel, label: "Engine", value: vehicle.engine || "Petrol" },
+    { icon: Briefcase, label: "Category", value: vehicle.category },
   ];
+
+  const handleBookNow = () => {
+    if (dateRange?.from && dateRange?.to) {
+      const params = new URLSearchParams({
+        from: dateRange.from.toISOString(),
+        to: dateRange.to.toISOString(),
+      });
+      navigate(`/checkout/${vehicle.id}?${params.toString()}`);
+    }
+  };
 
   return (
     <Layout>
@@ -67,7 +95,7 @@ const VehicleDetail = () => {
                 {vehicle.name}
               </h1>
               
-              {vehicle.limitedAvailability && (
+              {vehicle.limited_availability && (
                 <span className="inline-block text-[10px] tracking-luxury uppercase bg-accent text-accent-foreground px-3 py-1.5 mb-6">
                   Limited Availability
                 </span>
@@ -93,49 +121,87 @@ const VehicleDetail = () => {
               </div>
 
               {/* Why We Chose It */}
-              <div className="mt-12">
-                <h3 className="font-serif text-xl font-medium text-foreground mb-4">
-                  Why We Chose This Vehicle
-                </h3>
-                <p className="text-body text-muted-foreground">
-                  {vehicle.whyWeChoseIt}
-                </p>
-              </div>
+              {vehicle.why_we_chose && (
+                <div className="mt-12">
+                  <h3 className="font-serif text-xl font-medium text-foreground mb-4">
+                    Why We Chose This Vehicle
+                  </h3>
+                  <p className="text-body text-muted-foreground">
+                    {vehicle.why_we_chose}
+                  </p>
+                </div>
+              )}
+
+              {/* Features */}
+              {vehicle.features && vehicle.features.length > 0 && (
+                <div className="mt-12">
+                  <h3 className="font-serif text-xl font-medium text-foreground mb-4">
+                    Features
+                  </h3>
+                  <ul className="grid grid-cols-2 gap-2">
+                    {vehicle.features.map((feature, idx) => (
+                      <li key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
-            {/* Sidebar */}
+            {/* Sidebar - Booking */}
             <div className="lg:col-span-1">
               <div className="sticky top-[120px] p-8 bg-secondary/50 border border-border">
                 <p className="text-caption text-muted-foreground tracking-luxury mb-2">
                   Starting From
                 </p>
                 <p className="text-3xl font-serif font-medium text-foreground mb-1">
-                  R{vehicle.dailyRate.toLocaleString()}
+                  R{vehicle.daily_rate.toLocaleString()}
                 </p>
-                <p className="text-sm text-muted-foreground mb-8">
+                <p className="text-sm text-muted-foreground mb-6">
                   per day
                 </p>
 
+                {/* Date Picker */}
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-foreground mb-2">Select Dates</p>
+                  <DateRangePicker
+                    dateRange={dateRange}
+                    onDateRangeChange={setDateRange}
+                    unavailableDates={unavailableDates}
+                  />
+                </div>
+
+                {/* Pricing Summary */}
+                {dateRange?.from && dateRange?.to && (
+                  <PricingSummary
+                    dailyRate={vehicle.daily_rate}
+                    dateRange={dateRange}
+                    className="mb-6"
+                  />
+                )}
+
                 <div className="space-y-3">
+                  <LuxuryButton
+                    variant="default"
+                    size="lg"
+                    className="w-full"
+                    onClick={handleBookNow}
+                    disabled={!dateRange?.from || !dateRange?.to}
+                  >
+                    {dateRange?.from && dateRange?.to ? "Book Now" : "Select Dates to Book"}
+                  </LuxuryButton>
+                  
                   <Link to={`/contact?vehicle=${vehicle.id}`} className="block">
-                    <LuxuryButton variant="default" size="lg" className="w-full">
-                      Enquire About This Vehicle
+                    <LuxuryButton variant="outline" size="lg" className="w-full">
+                      Enquire Instead
                     </LuxuryButton>
                   </Link>
-                  <a
-                    href={`https://wa.me/27000000000?text=Hi, I'm interested in the ${vehicle.name}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <LuxuryButton variant="outline" size="lg" className="w-full">
-                      WhatsApp Us
-                    </LuxuryButton>
-                  </a>
                 </div>
 
                 <p className="text-xs text-muted-foreground mt-6 text-center">
-                  Rates are indicative. Final pricing provided upon enquiry.
+                  Hold expires after 15 minutes. Payment via PayFast.
                 </p>
               </div>
             </div>

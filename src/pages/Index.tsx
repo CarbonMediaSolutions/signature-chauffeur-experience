@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { LuxuryButton } from "@/components/ui/luxury-button";
-import { vehicles } from "@/data/fleet";
+import { useVehicles } from "@/hooks/useVehicles";
 import heroImage from "@/assets/hero-home.jpg";
 import interiorImage from "@/assets/detail-interior.jpg";
+import { Loader2 } from "lucide-react";
 
 const clientSegments = [
   {
@@ -41,6 +42,7 @@ const services = [
 ];
 
 const Index = () => {
+  const { data: vehicles = [], isLoading } = useVehicles();
   const featuredVehicles = vehicles.slice(0, 4);
 
   return (
@@ -137,11 +139,17 @@ const Index = () => {
             </Link>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {featuredVehicles.map((vehicle, index) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+              {featuredVehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Vehicle } from "@/data/fleet";
+import { Vehicle } from "@/hooks/useVehicles";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -23,7 +23,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         
         {/* Limited availability badge */}
-        {vehicle.limitedAvailability && (
+        {vehicle.limited_availability && (
           <div className="absolute top-4 right-4">
             <span className="text-[10px] tracking-[0.15em] uppercase bg-accent/90 text-accent-foreground px-3 py-1.5">
               Limited
@@ -48,7 +48,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           {vehicle.name}
         </h3>
         <p className="text-sm text-muted-foreground">
-          From <span className="text-foreground font-normal">R{vehicle.dailyRate.toLocaleString()}</span> / day
+          From <span className="text-foreground font-normal">R{vehicle.daily_rate.toLocaleString()}</span> / day
         </p>
       </div>
     </Link>

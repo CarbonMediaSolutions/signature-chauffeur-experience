@@ -1,11 +1,14 @@
 import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
-import { vehicles, categories } from "@/data/fleet";
+import { useVehicles, useCategories } from "@/hooks/useVehicles";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const Fleet = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { data: vehicles = [], isLoading } = useVehicles();
+  const { data: categories = [] } = useCategories();
 
   const filteredVehicles = selectedCategory
     ? vehicles.filter((v) => v.category === selectedCategory)
@@ -67,13 +70,19 @@ const Fleet = () => {
       {/* Grid */}
       <section className="section-padding bg-background">
         <div className="container-luxury">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredVehicles.map((vehicle, index) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {filteredVehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
+              ))}
+            </div>
+          )}
           
-          {filteredVehicles.length === 0 && (
+          {!isLoading && filteredVehicles.length === 0 && (
             <div className="text-center py-20">
               <p className="text-muted-foreground">
                 No vehicles found in this category.
