@@ -14,11 +14,15 @@ const clientSegments = [
   },
   {
     title: "Luxury Travellers",
-    description: "Explore Cape Town in style. Coastal drives to Winelands escapes.",
+    description: "International and local guests exploring Cape Town in style.",
   },
   {
-    title: "Special Occasions",
-    description: "Weddings, anniversaries, milestones. Moments made memorable.",
+    title: "Property & Airbnb Guests",
+    description: "Seamless add-on for high-end holiday rentals and villas.",
+  },
+  {
+    title: "Weddings & Special Occasions",
+    description: "Anniversaries, milestones, and moments made memorable.",
   },
   {
     title: "Discretion Focused",
@@ -28,16 +32,20 @@ const clientSegments = [
 
 const services = [
   {
-    title: "Doorstep Delivery",
+    title: "Doorstep Delivery & Collection",
     description: "Your vehicle arrives impeccably prepared, wherever you are.",
   },
   {
-    title: "Flexible Terms",
+    title: "Flexible Rental Periods",
     description: "Daily, weekly, or extended. Tailored to your schedule.",
   },
   {
     title: "Personal Consultation",
     description: "We guide you to the perfect vehicle for your journey.",
+  },
+  {
+    title: "Concierge-Style Service",
+    description: "Discreet, attentive support from enquiry to return.",
   },
 ];
 
@@ -60,25 +68,25 @@ const Index = () => {
         
         <div className="relative container-luxury pb-24 md:pb-32">
           <div className="max-w-2xl animate-fade-in-up">
-            <p className="text-caption text-primary-foreground/60 mb-6">
+            <p className="text-caption text-primary-foreground/70 mb-6 tracking-[0.25em]">
               Cape Town, South Africa
             </p>
             <h1 className="text-display text-primary-foreground mb-8">
-              Bespoke Luxury<br />Vehicle Hire
+              Bespoke Luxury<br />Vehicle Hire in Cape Town
             </h1>
             <p className="text-body-lg text-primary-foreground/75 mb-12 max-w-lg">
-              This is not standard car hire. Curated vehicles, delivered with 
-              intention and care.
+              This is not standard car hire. This is luxury, done with intention — 
+              curated vehicles, delivered with care.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/fleet">
+              <Link to="/contact">
                 <LuxuryButton variant="hero" size="lg">
-                  Explore the Fleet
+                  Begin Your Enquiry
                 </LuxuryButton>
               </Link>
-              <Link to="/contact">
+              <Link to="/fleet">
                 <LuxuryButton variant="heroInverse" size="lg">
-                  Begin Your Enquiry
+                  Explore the Fleet
                 </LuxuryButton>
               </Link>
             </div>
@@ -133,8 +141,8 @@ const Index = () => {
               </h2>
             </div>
             <Link to="/fleet">
-              <LuxuryButton variant="subtle" size="sm">
-                View All →
+              <LuxuryButton variant="subtle" size="default">
+                Explore the Full Collection →
               </LuxuryButton>
             </Link>
           </div>
@@ -169,17 +177,17 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             {clientSegments.map((segment, index) => (
               <div 
                 key={segment.title}
-                className="p-10 border border-border/40 hover:border-border/80 transition-colors duration-500 animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="p-8 border border-border/40 hover:border-accent/40 hover:shadow-sm transition-all duration-300 animate-fade-in-up group"
+                style={{ animationDelay: `${index * 0.08}s` }}
               >
-                <h3 className="font-serif text-xl font-medium text-foreground mb-4">
+                <h3 className="font-serif text-lg font-medium text-foreground mb-3 group-hover:text-foreground/80 transition-colors duration-300">
                   {segment.title}
                 </h3>
-                <p className="text-body text-muted-foreground">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {segment.description}
                 </p>
               </div>
