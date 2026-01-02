@@ -116,3 +116,64 @@ export const useCheckAvailability = (
     enabled: !!vehicleId && !!dateRange?.from && !!dateRange?.to,
   });
 };
+
+export const useAvailableVehicles = (dateRange: DateRange | null) => {
+  return useQuery({
+    queryKey: ["available-vehicles", dateRange?.from?.toISOString(), dateRange?.to?.toISOString()],
+    queryFn: async () => {
+      if (!dateRange?.from || !dateRange?.to) return [];
+
+      const startDate = dateRange.from.toISOString().split("T")[0];
+      const endDate = dateRange.to.toISOString().split("T")[0];
+
+      // Get all active vehicles
+      const { data: vehicles, error: vehiclesError } = await supabase
+        .from("vehicles")
+        .select("id")
+        .eq("is_active", true);
+
+      if (vehiclesError) throw vehiclesError;
+      if (!vehicles) return [];
+
+      // Get vehicle IDs with overlapping bookings
+      const { data: bookedVehicles, error: bookingsError } = await supabase
+        .from("bookings")
+        .select("vehicle_id")
+        .in("status", ["pending_payment", "confirmed"])
+        .or(`and(start_date.lte.${endDate},end_date.gte.${startDate})`);
+
+      if (bookingsError) throw bookingsError;
+
+      // Get vehicle IDs with overlapping holds
+      const { data: heldVehicles, error: holdsError } = await supabase
+        .from("holds")
+        .select("vehicle_id")
+        .eq("status", "active")
+        .gt("expires_at", new Date().toISOString())
+        .or(`and(start_date.lte.${endDate},end_date.gte.${startDate})`);
+
+      if (holdsError) throw holdsError;
+
+      // Get vehicle IDs with overlapping blocks
+      const { data: blockedVehicles, error: blocksError } = await supabase
+        .from("availability_blocks")
+        .select("vehicle_id")
+        .or(`and(start_date.lte.${endDate},end_date.gte.${startDate})`);
+
+      if (blocksError) throw blocksError;
+
+      // Combine unavailable vehicle IDs
+      const unavailableIds = new Set([
+        ...(bookedVehicles || []).map((b) => b.vehicle_id),
+        ...(heldVehicles || []).map((h) => h.vehicle_id),
+        ...(blockedVehicles || []).map((bl) => bl.vehicle_id),
+      ]);
+
+      // Return available vehicle IDs
+      return vehicles
+        .filter((v) => !unavailableIds.has(v.id))
+        .map((v) => v.id);
+    },
+    enabled: !!dateRange?.from && !!dateRange?.to,
+  });
+};
