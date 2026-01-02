@@ -1,20 +1,21 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
+import { EnquiryModal } from "@/components/enquiry/EnquiryModal";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
 import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2, MessageCircle } from "lucide-react";
 
 const VehicleDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { data: vehicle, isLoading } = useVehicle(id || "");
   const { data: unavailableDates = [] } = useUnavailableDates(id || "");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -45,18 +46,6 @@ const VehicleDetail = () => {
     { icon: Fuel, label: "Engine", value: vehicle.engine || "Petrol" },
     { icon: Briefcase, label: "Category", value: vehicle.category },
   ];
-
-  const handleEnquiry = () => {
-    const params = new URLSearchParams({
-      vehicle: vehicle.id,
-      name: vehicle.name,
-    });
-    if (dateRange?.from && dateRange?.to) {
-      params.append("from", format(dateRange.from, "yyyy-MM-dd"));
-      params.append("to", format(dateRange.to, "yyyy-MM-dd"));
-    }
-    navigate(`/contact?${params.toString()}`);
-  };
 
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
@@ -205,7 +194,7 @@ const VehicleDetail = () => {
                     variant="default"
                     size="lg"
                     className="w-full"
-                    onClick={handleEnquiry}
+                    onClick={() => setEnquiryOpen(true)}
                   >
                     Enquire About This Vehicle
                   </LuxuryButton>
@@ -214,7 +203,7 @@ const VehicleDetail = () => {
                     variant="outline" 
                     size="lg" 
                     className="w-full"
-                    onClick={handleEnquiry}
+                    onClick={() => setEnquiryOpen(true)}
                   >
                     Request Availability
                   </LuxuryButton>
@@ -236,6 +225,18 @@ const VehicleDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        open={enquiryOpen}
+        onOpenChange={setEnquiryOpen}
+        vehicle={{
+          id: vehicle.id,
+          name: vehicle.name,
+          image: vehicle.image,
+        }}
+        dateRange={dateRange}
+      />
     </Layout>
   );
 };

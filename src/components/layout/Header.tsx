@@ -4,8 +4,9 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { name: "Fleet", href: "/fleet" },
+  { name: "Home", href: "/" },
   { name: "About", href: "/about" },
+  { name: "Fleet", href: "/fleet" },
   { name: "Process", href: "/process" },
   { name: "List Your Vehicle", href: "/list-vehicle" },
   { name: "Contact", href: "/contact" },
