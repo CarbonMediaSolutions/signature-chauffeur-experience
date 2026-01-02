@@ -2,46 +2,20 @@ import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { FleetSearch } from "@/components/fleet/FleetSearch";
 import { useVehicles, useCategories } from "@/hooks/useVehicles";
-import { useAvailableVehicles } from "@/hooks/useAvailability";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { DateRange } from "react-day-picker";
 
 const Fleet = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchDateRange, setSearchDateRange] = useState<DateRange | undefined>();
-  const [hasActiveSearch, setHasActiveSearch] = useState(false);
   
   const { data: vehicles = [], isLoading } = useVehicles();
   const { data: categories = [] } = useCategories();
-  const { data: availableVehicleIds, isLoading: isSearching } = useAvailableVehicles(
-    hasActiveSearch && searchDateRange?.from && searchDateRange?.to 
-      ? { from: searchDateRange.from, to: searchDateRange.to } 
-      : null
-  );
 
-  // Filter by category first
-  let filteredVehicles = selectedCategory
+  // Filter by category
+  const filteredVehicles = selectedCategory
     ? vehicles.filter((v) => v.category === selectedCategory)
     : vehicles;
-
-  // Then filter by availability if search is active
-  if (hasActiveSearch && availableVehicleIds) {
-    filteredVehicles = filteredVehicles.filter((v) => 
-      availableVehicleIds.includes(v.id)
-    );
-  }
-
-  const handleSearch = (dateRange: DateRange | undefined) => {
-    setSearchDateRange(dateRange);
-    setHasActiveSearch(true);
-  };
-
-  const handleClearSearch = () => {
-    setSearchDateRange(undefined);
-    setHasActiveSearch(false);
-  };
 
   return (
     <Layout>
@@ -63,20 +37,15 @@ const Fleet = () => {
         </div>
       </section>
 
-      {/* Search */}
+      {/* Availability Enquiry */}
       <section className="py-8 bg-background border-b border-border/30">
         <div className="container-luxury">
-          <FleetSearch 
-            onSearch={handleSearch}
-            isSearching={isSearching}
-            onClear={handleClearSearch}
-            hasActiveSearch={hasActiveSearch}
-          />
+          <FleetSearch />
         </div>
       </section>
 
       {/* Filter */}
-      <section className="py-8 bg-background border-b border-border/50 sticky top-[73px] z-30">
+      <section className="py-8 bg-background border-b border-border/50 sticky top-[73px] z-30 backdrop-blur-sm bg-background/95">
         <div className="container-luxury">
           <div className="flex flex-wrap gap-3">
             <button
@@ -111,7 +80,7 @@ const Fleet = () => {
       {/* Grid */}
       <section className="section-padding bg-background">
         <div className="container-luxury">
-          {isLoading || isSearching ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
             </div>
@@ -123,21 +92,17 @@ const Fleet = () => {
             </div>
           )}
           
-          {!isLoading && !isSearching && filteredVehicles.length === 0 && (
+          {!isLoading && filteredVehicles.length === 0 && (
             <div className="text-center py-20">
               <p className="text-muted-foreground mb-4">
-                {hasActiveSearch 
-                  ? "No vehicles available for the selected dates."
-                  : "No vehicles found in this category."}
+                No vehicles found in this category.
               </p>
-              {hasActiveSearch && (
-                <button
-                  onClick={handleClearSearch}
-                  className="text-sm text-foreground underline hover:no-underline"
-                >
-                  Clear search and show all vehicles
-                </button>
-              )}
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="text-sm text-foreground underline hover:no-underline transition-all duration-200"
+              >
+                View all vehicles
+              </button>
             </div>
           )}
         </div>

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
-import { PricingSummary } from "@/components/booking/PricingSummary";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
-import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2 } from "lucide-react";
+import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2, MessageCircle } from "lucide-react";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -46,14 +46,27 @@ const VehicleDetail = () => {
     { icon: Briefcase, label: "Category", value: vehicle.category },
   ];
 
-  const handleBookNow = () => {
+  const handleEnquiry = () => {
+    const params = new URLSearchParams({
+      vehicle: vehicle.id,
+      name: vehicle.name,
+    });
     if (dateRange?.from && dateRange?.to) {
-      const params = new URLSearchParams({
-        from: dateRange.from.toISOString(),
-        to: dateRange.to.toISOString(),
-      });
-      navigate(`/checkout/${vehicle.id}?${params.toString()}`);
+      params.append("from", format(dateRange.from, "yyyy-MM-dd"));
+      params.append("to", format(dateRange.to, "yyyy-MM-dd"));
     }
+    navigate(`/contact?${params.toString()}`);
+  };
+
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent(
+      `Hello, I'm interested in hiring the ${vehicle.name}${
+        dateRange?.from && dateRange?.to 
+          ? ` from ${format(dateRange.from, "d MMM yyyy")} to ${format(dateRange.to, "d MMM yyyy")}`
+          : ""
+      }. Could you please confirm availability?`
+    );
+    window.open(`https://wa.me/27000000000?text=${message}`, "_blank");
   };
 
   return (
@@ -62,7 +75,7 @@ const VehicleDetail = () => {
       <div className="container-luxury pt-8">
         <Link
           to="/fleet"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Fleet
@@ -126,7 +139,7 @@ const VehicleDetail = () => {
                   <h3 className="font-serif text-xl font-medium text-foreground mb-4">
                     Why We Chose This Vehicle
                   </h3>
-                  <p className="text-body text-muted-foreground">
+                  <p className="text-body text-muted-foreground leading-relaxed">
                     {vehicle.why_we_chose}
                   </p>
                 </div>
@@ -141,7 +154,7 @@ const VehicleDetail = () => {
                   <ul className="grid grid-cols-2 gap-2">
                     {vehicle.features.map((feature, idx) => (
                       <li key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                        <span className="w-1.5 h-1.5 bg-accent rounded-full" />
                         {feature}
                       </li>
                     ))}
@@ -150,7 +163,7 @@ const VehicleDetail = () => {
               )}
             </div>
 
-            {/* Sidebar - Booking */}
+            {/* Sidebar - Enquiry Panel */}
             <div className="lg:col-span-1">
               <div className="sticky top-[120px] p-8 bg-secondary/50 border border-border">
                 <p className="text-caption text-muted-foreground tracking-luxury mb-2">
@@ -159,27 +172,32 @@ const VehicleDetail = () => {
                 <p className="text-3xl font-serif font-medium text-foreground mb-1">
                   R{vehicle.daily_rate.toLocaleString()}
                 </p>
-                <p className="text-sm text-muted-foreground mb-6">
+                <p className="text-sm text-muted-foreground mb-8">
                   per day
                 </p>
 
                 {/* Date Picker */}
                 <div className="mb-6">
-                  <p className="text-sm font-medium text-foreground mb-2">Select Dates</p>
+                  <p className="text-sm font-medium text-foreground mb-2">
+                    Preferred Dates
+                  </p>
                   <DateRangePicker
                     dateRange={dateRange}
                     onDateRangeChange={setDateRange}
                     unavailableDates={unavailableDates}
                   />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Optional – we can discuss dates in your enquiry.
+                  </p>
                 </div>
 
-                {/* Pricing Summary */}
+                {/* Date Summary */}
                 {dateRange?.from && dateRange?.to && (
-                  <PricingSummary
-                    dailyRate={vehicle.daily_rate}
-                    dateRange={dateRange}
-                    className="mb-6"
-                  />
+                  <div className="py-4 border-y border-border mb-6">
+                    <p className="text-sm text-muted-foreground">
+                      {format(dateRange.from, "d MMM")} – {format(dateRange.to, "d MMM yyyy")}
+                    </p>
+                  </div>
                 )}
 
                 <div className="space-y-3">
@@ -187,21 +205,31 @@ const VehicleDetail = () => {
                     variant="default"
                     size="lg"
                     className="w-full"
-                    onClick={handleBookNow}
-                    disabled={!dateRange?.from || !dateRange?.to}
+                    onClick={handleEnquiry}
                   >
-                    {dateRange?.from && dateRange?.to ? "Book Now" : "Select Dates to Book"}
+                    Enquire About This Vehicle
                   </LuxuryButton>
                   
-                  <Link to={`/contact?vehicle=${vehicle.id}`} className="block">
-                    <LuxuryButton variant="outline" size="lg" className="w-full">
-                      Enquire Instead
-                    </LuxuryButton>
-                  </Link>
+                  <LuxuryButton 
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full"
+                    onClick={handleEnquiry}
+                  >
+                    Request Availability
+                  </LuxuryButton>
+
+                  <button
+                    onClick={handleWhatsApp}
+                    className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 py-3"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Contact via WhatsApp
+                  </button>
                 </div>
 
-                <p className="text-xs text-muted-foreground mt-6 text-center">
-                  Hold expires after 15 minutes. Payment via PayFast.
+                <p className="text-xs text-muted-foreground mt-6 text-center leading-relaxed">
+                  Every enquiry is personally reviewed to ensure a seamless, tailored experience.
                 </p>
               </div>
             </div>

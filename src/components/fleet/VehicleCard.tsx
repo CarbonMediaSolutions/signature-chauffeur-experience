@@ -13,14 +13,14 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
       className="group block animate-fade-in-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
         <img
           src={vehicle.image}
           alt={vehicle.name}
-          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
         />
         {/* Subtle overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Limited availability badge */}
         {vehicle.limited_availability && (
@@ -32,9 +32,9 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         )}
         
         {/* Hover CTA */}
-        <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-1 group-hover:translate-y-0">
+        <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
           <span className="text-sm text-primary-foreground tracking-wide">
-            View Details →
+            View Vehicle →
           </span>
         </div>
       </div>
