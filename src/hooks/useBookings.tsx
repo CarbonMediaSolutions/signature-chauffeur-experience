@@ -1,5 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
+
+type BookingStatus = Database["public"]["Enums"]["booking_status"];
 
 export interface Booking {
   id: string;
@@ -33,7 +36,7 @@ export interface BookingWithDetails extends Booking {
   } | null;
 }
 
-export const useBookings = (filters?: { status?: string; vehicleId?: string }) => {
+export const useBookings = (filters?: { status?: BookingStatus; vehicleId?: string }) => {
   return useQuery({
     queryKey: ["bookings", filters],
     queryFn: async () => {

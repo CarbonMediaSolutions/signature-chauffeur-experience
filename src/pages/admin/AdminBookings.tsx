@@ -34,7 +34,7 @@ const AdminBookings = () => {
   const { toast } = useToast();
   
   const { data: bookings, isLoading } = useBookings(
-    statusFilter !== "all" ? { status: statusFilter } : undefined
+    statusFilter !== "all" ? { status: statusFilter as "pending_payment" | "confirmed" | "cancelled" | "expired" | "completed" } : undefined
   );
   const updateStatus = useUpdateBookingStatus();
 
