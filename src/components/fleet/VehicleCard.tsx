@@ -13,7 +13,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
       className="group block animate-fade-in-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm">
         <img
           src={vehicle.image}
           alt={vehicle.name}

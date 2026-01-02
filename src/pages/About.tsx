@@ -23,7 +23,7 @@ const About = () => {
       {/* Image */}
       <section className="pb-16">
         <div className="container-luxury">
-          <div className="aspect-[21/9] overflow-hidden bg-muted">
+          <div className="aspect-[21/9] overflow-hidden bg-muted rounded-sm">
             <img
               src={capeTownRoad}
               alt="Cape Town coastal road"

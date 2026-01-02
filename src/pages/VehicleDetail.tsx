@@ -44,7 +44,7 @@ const VehicleDetail = () => {
       {/* Hero Image */}
       <section className="section-padding-sm">
         <div className="container-luxury">
-          <div className="aspect-[16/9] lg:aspect-[21/9] overflow-hidden bg-muted">
+          <div className="aspect-[16/9] lg:aspect-[21/9] overflow-hidden bg-muted rounded-sm">
             <img
               src={vehicle.image}
               alt={vehicle.name}
