@@ -1,12 +1,14 @@
 import { differenceInDays } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { cn } from "@/lib/utils";
 
 interface PricingSummaryProps {
   dailyRate: number;
   dateRange: DateRange | undefined;
+  className?: string;
 }
 
-export const PricingSummary = ({ dailyRate, dateRange }: PricingSummaryProps) => {
+export const PricingSummary = ({ dailyRate, dateRange, className }: PricingSummaryProps) => {
   if (!dateRange?.from || !dateRange?.to) {
     return (
       <div className="py-6 border-t border-border">
@@ -23,7 +25,7 @@ export const PricingSummary = ({ dailyRate, dateRange }: PricingSummaryProps) =>
   const total = subtotal;
 
   return (
-    <div className="py-6 border-t border-border space-y-4">
+    <div className={cn("py-6 border-t border-border space-y-4", className)}>
       <div className="flex justify-between text-sm">
         <span className="text-muted-foreground">
           R{dailyRate.toLocaleString()} × {numberOfDays} {numberOfDays === 1 ? "day" : "days"}
