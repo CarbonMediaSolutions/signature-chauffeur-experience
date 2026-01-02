@@ -17,7 +17,7 @@ export const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/98 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background backdrop-blur-md shadow-sm border-b border-border/30">
       <nav className="container-luxury flex items-center justify-between py-5">
         {/* Logo */}
         <Link to="/" className="flex flex-col">
