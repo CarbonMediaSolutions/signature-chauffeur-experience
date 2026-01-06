@@ -6,6 +6,7 @@ import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
 import { EnquiryModal } from "@/components/enquiry/EnquiryModal";
+import { MediaGallery } from "@/components/vehicle/MediaGallery";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
 import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2, MessageCircle } from "lucide-react";
@@ -150,6 +151,13 @@ const VehicleDetail = () => {
                   </ul>
                 </div>
               )}
+
+              {/* Media Gallery */}
+              <MediaGallery
+                images={vehicle.gallery_urls || []}
+                videos={vehicle.video_urls || []}
+                vehicleName={vehicle.name}
+              />
             </div>
 
             {/* Sidebar - Enquiry Panel */}
