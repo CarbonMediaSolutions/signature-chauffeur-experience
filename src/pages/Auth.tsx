@@ -22,7 +22,7 @@ const Auth = () => {
   const { toast } = useToast();
   const location = useLocation();
 
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/admin";
 
   if (user) {
     return <Navigate to={from} replace />;
