@@ -1,15 +1,36 @@
 import { useBookings } from "@/hooks/useBookings";
-import { useVehicles } from "@/hooks/useVehicles";
-import { Calendar, Car, CheckCircle, Clock } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Calendar, Car, CheckCircle, Clock, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+
+// Fetch all vehicles including inactive for dashboard stats
+const useAllVehicles = () => {
+  return useQuery({
+    queryKey: ["vehicles-all"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vehicles")
+        .select("id, is_active")
+        .order("name");
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+};
 
 const AdminDashboard = () => {
   const { data: bookings } = useBookings();
-  const { data: vehicles } = useVehicles();
+  const { data: vehicles } = useAllVehicles();
 
   const confirmedBookings = bookings?.filter((b) => b.status === "confirmed") || [];
   const pendingBookings = bookings?.filter((b) => b.status === "pending_payment") || [];
   const totalRevenue = confirmedBookings.reduce((sum, b) => sum + b.total_amount, 0);
+
+  const activeVehicles = vehicles?.filter((v) => v.is_active) || [];
+  const inactiveVehicles = vehicles?.filter((v) => !v.is_active) || [];
 
   const stats = [
     {
@@ -26,9 +47,10 @@ const AdminDashboard = () => {
     },
     {
       label: "Active Vehicles",
-      value: vehicles?.length || 0,
+      value: activeVehicles.length,
       icon: Car,
       href: "/admin/fleet",
+      subtext: inactiveVehicles.length > 0 ? `${inactiveVehicles.length} inactive` : undefined,
     },
     {
       label: "Total Revenue",
@@ -40,9 +62,17 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="font-serif text-3xl text-foreground mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Overview of your rental business</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-serif text-3xl text-foreground mb-2">Dashboard</h1>
+          <p className="text-muted-foreground">Overview of your rental business</p>
+        </div>
+        <Link to="/admin/fleet/new">
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add New Vehicle
+          </Button>
+        </Link>
       </div>
 
       {/* Stats Grid */}
@@ -58,6 +88,9 @@ const AdminDashboard = () => {
               <span className="text-sm text-muted-foreground">{stat.label}</span>
             </div>
             <p className="font-serif text-3xl text-foreground">{stat.value}</p>
+            {stat.subtext && (
+              <p className="text-xs text-muted-foreground mt-1">{stat.subtext}</p>
+            )}
           </Link>
         ))}
       </div>

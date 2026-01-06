@@ -241,53 +241,86 @@ export type Database = {
       vehicles: {
         Row: {
           category: string
+          cover_image_url: string | null
           created_at: string
           daily_rate: number
           description: string | null
+          drive_type: string | null
           engine: string | null
+          featured: boolean | null
           features: string[] | null
+          fuel_type: string | null
+          gallery_urls: string[] | null
           id: string
           image: string
+          insurance_excess: number | null
           is_active: boolean | null
           limited_availability: boolean | null
+          luggage_capacity: string | null
+          mileage_limit: string | null
           name: string
           seats: number | null
+          security_deposit: number | null
+          slug: string | null
           transmission: string | null
           updated_at: string
+          video_urls: string[] | null
           why_we_chose: string | null
         }
         Insert: {
           category: string
+          cover_image_url?: string | null
           created_at?: string
           daily_rate: number
           description?: string | null
+          drive_type?: string | null
           engine?: string | null
+          featured?: boolean | null
           features?: string[] | null
+          fuel_type?: string | null
+          gallery_urls?: string[] | null
           id: string
           image: string
+          insurance_excess?: number | null
           is_active?: boolean | null
           limited_availability?: boolean | null
+          luggage_capacity?: string | null
+          mileage_limit?: string | null
           name: string
           seats?: number | null
+          security_deposit?: number | null
+          slug?: string | null
           transmission?: string | null
           updated_at?: string
+          video_urls?: string[] | null
           why_we_chose?: string | null
         }
         Update: {
           category?: string
+          cover_image_url?: string | null
           created_at?: string
           daily_rate?: number
           description?: string | null
+          drive_type?: string | null
           engine?: string | null
+          featured?: boolean | null
           features?: string[] | null
+          fuel_type?: string | null
+          gallery_urls?: string[] | null
           id?: string
           image?: string
+          insurance_excess?: number | null
           is_active?: boolean | null
           limited_availability?: boolean | null
+          luggage_capacity?: string | null
+          mileage_limit?: string | null
           name?: string
           seats?: number | null
+          security_deposit?: number | null
+          slug?: string | null
           transmission?: string | null
           updated_at?: string
+          video_urls?: string[] | null
           why_we_chose?: string | null
         }
         Relationships: []
