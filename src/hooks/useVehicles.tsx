@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface Vehicle {
   id: string;
   name: string;
+  slug: string | null;
   category: string;
   daily_rate: number;
   image: string;
@@ -15,6 +16,16 @@ export interface Vehicle {
   why_we_chose: string | null;
   limited_availability: boolean | null;
   is_active: boolean | null;
+  featured: boolean | null;
+  fuel_type: string | null;
+  drive_type: string | null;
+  luggage_capacity: string | null;
+  mileage_limit: string | null;
+  security_deposit: number | null;
+  insurance_excess: number | null;
+  cover_image_url: string | null;
+  gallery_urls: string[] | null;
+  video_urls: string[] | null;
 }
 
 export const useVehicles = () => {

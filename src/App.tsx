@@ -25,6 +25,8 @@ import AdminBookings from "./pages/admin/AdminBookings";
 import AdminCalendar from "./pages/admin/AdminCalendar";
 import AdminAvailability from "./pages/admin/AdminAvailability";
 import AdminFleet from "./pages/admin/AdminFleet";
+import AdminFleetNew from "./pages/admin/AdminFleetNew";
+import AdminFleetEdit from "./pages/admin/AdminFleetEdit";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +61,8 @@ const App = () => (
               <Route path="calendar" element={<AdminCalendar />} />
               <Route path="availability" element={<AdminAvailability />} />
               <Route path="fleet" element={<AdminFleet />} />
+              <Route path="fleet/new" element={<AdminFleetNew />} />
+              <Route path="fleet/:id/edit" element={<AdminFleetEdit />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
