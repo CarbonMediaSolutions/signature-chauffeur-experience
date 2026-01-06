@@ -15,12 +15,10 @@ const authSchema = z.object({
 });
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn } = useAuth();
   const { toast } = useToast();
   const location = useLocation();
 
@@ -35,11 +33,7 @@ const Auth = () => {
     setIsSubmitting(true);
 
     try {
-      const validation = authSchema.safeParse({ 
-        email, 
-        password, 
-        fullName: isLogin ? undefined : fullName 
-      });
+      const validation = authSchema.safeParse({ email, password });
 
       if (!validation.success) {
         toast({
@@ -51,40 +45,14 @@ const Auth = () => {
         return;
       }
 
-      let error;
-      if (isLogin) {
-        const result = await signIn(email, password);
-        error = result.error;
-      } else {
-        if (!fullName.trim()) {
-          toast({
-            title: "Validation Error",
-            description: "Please enter your full name",
-            variant: "destructive",
-          });
-          setIsSubmitting(false);
-          return;
-        }
-        const result = await signUp(email, password, fullName);
-        error = result.error;
-      }
+      const { error } = await signIn(email, password);
 
       if (error) {
-        let message = error.message;
-        if (message.includes("User already registered")) {
-          message = "An account with this email already exists. Please sign in.";
-        }
         toast({
-          title: isLogin ? "Sign In Failed" : "Sign Up Failed",
-          description: message,
+          title: "Sign In Failed",
+          description: error.message,
           variant: "destructive",
         });
-      } else if (!isLogin) {
-        toast({
-          title: "Account Created",
-          description: "You can now sign in with your credentials.",
-        });
-        setIsLogin(true);
       }
     } catch (err) {
       toast({
@@ -104,28 +72,14 @@ const Auth = () => {
           <div className="max-w-md mx-auto">
             <div className="text-center mb-12">
               <p className="text-caption text-muted-foreground mb-4">
-                {isLogin ? "Welcome Back" : "Join Us"}
+                Admin Access
               </p>
               <h1 className="text-display-sm text-foreground">
-                {isLogin ? "Sign In" : "Create Account"}
+                Sign In
               </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {!isLogin && (
-                <div className="space-y-2">
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Enter your full name"
-                    className="bg-background border-border"
-                  />
-                </div>
-              )}
-
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -157,27 +111,9 @@ const Auth = () => {
                 className="w-full"
                 disabled={isSubmitting}
               >
-                {isSubmitting 
-                  ? "Please wait..." 
-                  : isLogin 
-                    ? "Sign In" 
-                    : "Create Account"
-                }
+                {isSubmitting ? "Please wait..." : "Sign In"}
               </Button>
             </form>
-
-            <div className="mt-8 text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {isLogin
-                  ? "Don't have an account? Create one"
-                  : "Already have an account? Sign in"
-                }
-              </button>
-            </div>
           </div>
         </div>
       </section>
