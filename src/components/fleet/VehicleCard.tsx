@@ -7,6 +7,12 @@ interface VehicleCardProps {
 }
 
 export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
+  // Resolve best available image: cover_image_url > first gallery image > legacy image
+  const displayImage = 
+    vehicle.cover_image_url || 
+    (vehicle.gallery_urls && vehicle.gallery_urls.length > 0 ? vehicle.gallery_urls[0] : null) || 
+    vehicle.image;
+
   return (
     <Link
       to={`/fleet/${vehicle.id}`}
@@ -15,7 +21,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
         <img
-          src={vehicle.image}
+          src={displayImage}
           alt={vehicle.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
         />
