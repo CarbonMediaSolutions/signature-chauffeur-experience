@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -20,13 +21,8 @@ export const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background backdrop-blur-md shadow-sm border-b border-border/30">
       <nav className="container-luxury flex items-center justify-between py-5">
         {/* Logo */}
-        <Link to="/" className="flex flex-col">
-          <span className="font-serif text-xl md:text-2xl font-medium tracking-tight text-foreground">
-            Signature
-          </span>
-          <span className="text-caption text-muted-foreground tracking-luxury text-[10px]">
-            Car Rentals
-          </span>
+        <Link to="/">
+          <img src={logo} alt="Signature Car Rentals" className="h-10 md:h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
