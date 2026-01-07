@@ -27,12 +27,17 @@ interface VehicleRow {
   limited_availability?: boolean;
   is_active?: boolean;
   featured?: boolean;
+  acceleration?: string;
+  top_speed?: string;
+  doors?: number;
+  excess_mileage_rate?: number;
+  minimum_rental_days?: number;
   errors?: string[];
 }
 
-const CSV_TEMPLATE = `name,category,daily_rate,description,engine,transmission,seats,fuel_type,drive_type,luggage_capacity,mileage_limit,security_deposit,insurance_excess,why_we_chose,features,limited_availability,is_active,featured
-Ferrari California,Sports,6500,A stunning convertible with exhilarating performance,4.5L V8,Automatic,2,Petrol,RWD,2 Small Bags,300km/day,50000,25000,Pure driving pleasure meets Italian elegance,"Leather seats,GPS,Bluetooth,Parking sensors",false,true,true
-Mercedes-Benz S-Class,Luxury Sedan,4500,The pinnacle of luxury motoring,3.0L Inline-6,Automatic,5,Petrol,AWD,3 Large Bags,Unlimited,30000,15000,Unmatched comfort for executive travel,"Massage seats,Burmester sound,Night vision,Heated steering",false,true,false`;
+const CSV_TEMPLATE = `name,category,daily_rate,description,engine,transmission,seats,fuel_type,drive_type,luggage_capacity,mileage_limit,security_deposit,insurance_excess,why_we_chose,features,limited_availability,is_active,featured,acceleration,top_speed,doors,excess_mileage_rate,minimum_rental_days
+Ferrari California,Sports Car,6500,A stunning convertible with exhilarating performance,4.5L V8,Automatic,2,Petrol,RWD,2 Small Bags,300km/day,50000,25000,Pure driving pleasure meets Italian elegance,"Leather seats,GPS,Bluetooth,Parking sensors",false,true,true,3.8 sec,310 km/h,2,150,1
+Mercedes-Benz S-Class,Luxury Sedan,4500,The pinnacle of luxury motoring,3.0L Inline-6,Automatic,5,Petrol,AWD,3 Large Bags,Unlimited,30000,15000,Unmatched comfort for executive travel,"Massage seats,Burmester sound,Night vision,Heated steering",false,true,false,4.5 sec,250 km/h,4,100,1`;
 
 const AdminBulkImport = () => {
   const navigate = useNavigate();
@@ -82,6 +87,9 @@ const AdminBulkImport = () => {
           case "seats":
           case "security_deposit":
           case "insurance_excess":
+          case "doors":
+          case "excess_mileage_rate":
+          case "minimum_rental_days":
             row[header] = value ? parseInt(value) : undefined;
             break;
           case "limited_availability":
@@ -181,6 +189,11 @@ const AdminBulkImport = () => {
           image: "/placeholder.svg",
           gallery_urls: [],
           video_urls: [],
+          acceleration: row.acceleration || null,
+          top_speed: row.top_speed || null,
+          doors: row.doors || null,
+          excess_mileage_rate: row.excess_mileage_rate || null,
+          minimum_rental_days: row.minimum_rental_days || 1,
         };
       });
 

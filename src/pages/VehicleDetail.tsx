@@ -5,7 +5,7 @@ import { WhatsAppEnquiry } from "@/components/enquiry/WhatsAppEnquiry";
 
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
-import { ArrowLeft, Users, Fuel, Settings, Briefcase, Loader2, Play } from "lucide-react";
+import { ArrowLeft, Loader2, Play, Gauge, Zap, Car, Users, Settings, Calendar, Shield, Route } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -42,11 +42,28 @@ const VehicleDetail = () => {
     );
   }
 
-  const specs = [
-    { icon: Settings, label: "Transmission", value: vehicle.transmission || "Automatic" },
-    { icon: Users, label: "Seats", value: vehicle.seats?.toString() || "4" },
-    { icon: Fuel, label: "Engine", value: vehicle.engine || "Petrol" },
-    { icon: Briefcase, label: "Category", value: vehicle.category },
+  // Cast to any to access new fields until types are regenerated
+  const v = vehicle as any;
+
+  const vehicleSpecs = [
+    { icon: Settings, label: "Engine", value: vehicle.engine || "—" },
+    { icon: Zap, label: "Acceleration", value: v.acceleration || "—" },
+    { icon: Gauge, label: "Top Speed", value: v.top_speed || "—" },
+    { icon: Users, label: "Seats & Doors", value: `${vehicle.seats || "—"} and ${v.doors || "—"}` },
+    { icon: Car, label: "Transmission", value: vehicle.transmission || "—" },
+  ];
+
+  const rentalInfo = [
+    { icon: Shield, label: "Security Deposit", value: vehicle.security_deposit ? `R${vehicle.security_deposit.toLocaleString()}` : "—" },
+    { 
+      icon: Route, 
+      label: "Mileage Allowance", 
+      value: vehicle.mileage_limit 
+        ? `${vehicle.mileage_limit}${v.excess_mileage_rate ? `, thereafter R${v.excess_mileage_rate}/km` : ""}`
+        : "—" 
+    },
+    { icon: Shield, label: "Max Liability (Accident)", value: vehicle.insurance_excess ? `R${vehicle.insurance_excess.toLocaleString()}` : "—" },
+    { icon: Calendar, label: "Minimum Rental", value: v.minimum_rental_days ? `${v.minimum_rental_days} Day${v.minimum_rental_days > 1 ? "s" : ""}` : "1 Day" },
   ];
 
   // Resolve best available image for fallback
@@ -180,19 +197,43 @@ const VehicleDetail = () => {
                 {vehicle.description}
               </p>
 
-              {/* Specs Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-border">
-                {specs.map((spec) => (
-                  <div key={spec.label}>
-                    <spec.icon className="w-5 h-5 text-muted-foreground mb-2" />
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                      {spec.label}
-                    </p>
-                    <p className="text-sm font-medium text-foreground">
-                      {spec.value}
-                    </p>
+              {/* Specs & Rental Info Grid */}
+              <div className="grid md:grid-cols-2 gap-8 py-8 border-y border-border">
+                {/* Vehicle Specifications */}
+                <div>
+                  <h3 className="font-serif text-lg font-medium text-foreground mb-4">
+                    Vehicle Specifications
+                  </h3>
+                  <div className="space-y-4">
+                    {vehicleSpecs.map((spec) => (
+                      <div key={spec.label} className="flex items-center gap-3">
+                        <spec.icon className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                        <div className="flex justify-between w-full border-b border-border/50 pb-2">
+                          <span className="text-sm text-muted-foreground">{spec.label}</span>
+                          <span className="text-sm font-medium text-foreground">{spec.value}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Rental Information */}
+                <div>
+                  <h3 className="font-serif text-lg font-medium text-foreground mb-4">
+                    Rental Information
+                  </h3>
+                  <div className="space-y-4">
+                    {rentalInfo.map((info) => (
+                      <div key={info.label} className="flex items-center gap-3">
+                        <info.icon className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                        <div className="flex justify-between w-full border-b border-border/50 pb-2">
+                          <span className="text-sm text-muted-foreground">{info.label}</span>
+                          <span className="text-sm font-medium text-foreground">{info.value}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Why We Chose It */}

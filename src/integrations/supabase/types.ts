@@ -240,13 +240,16 @@ export type Database = {
       }
       vehicles: {
         Row: {
+          acceleration: string | null
           category: string
           cover_image_url: string | null
           created_at: string
           daily_rate: number
           description: string | null
+          doors: number | null
           drive_type: string | null
           engine: string | null
+          excess_mileage_rate: number | null
           featured: boolean | null
           features: string[] | null
           fuel_type: string | null
@@ -258,23 +261,28 @@ export type Database = {
           limited_availability: boolean | null
           luggage_capacity: string | null
           mileage_limit: string | null
+          minimum_rental_days: number | null
           name: string
           seats: number | null
           security_deposit: number | null
           slug: string | null
+          top_speed: string | null
           transmission: string | null
           updated_at: string
           video_urls: string[] | null
           why_we_chose: string | null
         }
         Insert: {
+          acceleration?: string | null
           category: string
           cover_image_url?: string | null
           created_at?: string
           daily_rate: number
           description?: string | null
+          doors?: number | null
           drive_type?: string | null
           engine?: string | null
+          excess_mileage_rate?: number | null
           featured?: boolean | null
           features?: string[] | null
           fuel_type?: string | null
@@ -286,23 +294,28 @@ export type Database = {
           limited_availability?: boolean | null
           luggage_capacity?: string | null
           mileage_limit?: string | null
+          minimum_rental_days?: number | null
           name: string
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null
+          top_speed?: string | null
           transmission?: string | null
           updated_at?: string
           video_urls?: string[] | null
           why_we_chose?: string | null
         }
         Update: {
+          acceleration?: string | null
           category?: string
           cover_image_url?: string | null
           created_at?: string
           daily_rate?: number
           description?: string | null
+          doors?: number | null
           drive_type?: string | null
           engine?: string | null
+          excess_mileage_rate?: number | null
           featured?: boolean | null
           features?: string[] | null
           fuel_type?: string | null
@@ -314,10 +327,12 @@ export type Database = {
           limited_availability?: boolean | null
           luggage_capacity?: string | null
           mileage_limit?: string | null
+          minimum_rental_days?: number | null
           name?: string
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null
+          top_speed?: string | null
           transmission?: string | null
           updated_at?: string
           video_urls?: string[] | null
