@@ -4,31 +4,7 @@ import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useVehicles } from "@/hooks/useVehicles";
 import heroImage from "@/assets/hero-home.jpg";
-import interiorImage from "@/assets/detail-interior.jpg";
 import { Loader2 } from "lucide-react";
-
-const clientSegments = [
-  {
-    title: "Business Executives",
-    description: "Arrive with presence. Vehicles that reflect your standards.",
-  },
-  {
-    title: "Luxury Travellers",
-    description: "International and local guests exploring Cape Town in style.",
-  },
-  {
-    title: "Property & Airbnb Guests",
-    description: "Seamless add-on for high-end holiday rentals and villas.",
-  },
-  {
-    title: "Weddings & Special Occasions",
-    description: "Anniversaries, milestones, and moments made memorable.",
-  },
-  {
-    title: "Discretion Focused",
-    description: "Privacy as priority. Luxury without the spotlight.",
-  },
-];
 
 const services = [
   {
@@ -71,12 +47,17 @@ const Index = () => {
             <p className="text-caption text-primary-foreground/70 mb-6 tracking-[0.25em]">
               Cape Town, South Africa
             </p>
-            <h1 className="text-display text-primary-foreground mb-8">
-              Bespoke Luxury<br />Vehicle Hire in Cape Town
+            <h1 className="text-display text-primary-foreground mb-8 tracking-tight">
+              DREAM IT. DRIVE IT.<br />LIVE IT.
             </h1>
-            <p className="text-body-lg text-primary-foreground/75 mb-12 max-w-lg">
-              This is not standard car hire. This is luxury, done with intention — 
-              curated vehicles, delivered with care.
+            <p className="text-body-lg text-primary-foreground/90 mb-4 max-w-lg font-medium">
+              Luxury car rental created for moments that matter.
+            </p>
+            <p className="text-body text-primary-foreground/75 mb-8 max-w-lg">
+              More than hiring a car — it's where the dream comes alive!
+            </p>
+            <p className="text-sm text-primary-foreground/50 mb-12 tracking-wide">
+              Based in Cape Town. Serving clients nationally.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/contact">
@@ -94,35 +75,94 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Philosophy Section */}
+      {/* Our Values Section */}
       <section className="section-padding bg-background">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-20 lg:gap-28 items-center">
-            <div>
-              <div className="line-accent mb-10" />
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="text-caption text-muted-foreground mb-4 tracking-[0.25em]">
+                Introduction
+              </p>
               <h2 className="text-headline text-foreground mb-8">
-                Luxury is not loud
+                Our Values
               </h2>
-              <p className="text-body-lg text-muted-foreground mb-8">
-                It is confident. Considered. Intentional.
-              </p>
-              <p className="text-body text-muted-foreground mb-10">
-                Every vehicle in our collection is handpicked for its character. 
-                Every detail of your experience, thoughtfully considered. From 
-                enquiry to return — seamless, discreet, effortless.
-              </p>
+            </div>
+            
+            <div className="space-y-16">
+              {/* Main Values Statement */}
+              <div className="text-center">
+                <p className="text-body-lg text-muted-foreground leading-relaxed">
+                  At Signature Car Rentals, we believe luxury is about more than status — it's about possibility, confidence, and how something makes you feel. We exist to inspire people to arrive differently: to feel empowered, alive, and present in moments that matter, whether it's a defining business meeting, a first date, a milestone celebration, or an unforgettable drive along iconic roads like Chapman's Peak or the coast to Hermanus. We see cars not as objects, but as experiences that awaken the senses and elevate the journey. Built on trust, passion, and human connection, we are a family-led business with a face behind the name — creating access to extraordinary experiences, caring deeply for every vehicle, and allowing owners and drivers alike to share in the joy, meaning, and opportunity that luxury in motion can create.
+                </p>
+              </div>
+
+              {/* Our Mission */}
+              <div className="border-t border-border/40 pt-16">
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                  <div>
+                    <h3 className="font-serif text-2xl font-medium text-foreground">
+                      Our Mission
+                    </h3>
+                  </div>
+                  <div className="lg:col-span-2">
+                    <p className="text-body-lg text-muted-foreground leading-relaxed">
+                      Our mission is to transform luxury car rental into an experience. One that inspires confidence, ambition, and belief.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Who is Signature For */}
+              <div className="border-t border-border/40 pt-16">
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                  <div>
+                    <h3 className="font-serif text-2xl font-medium text-foreground">
+                      Who is Signature Car Rentals for?
+                    </h3>
+                  </div>
+                  <div className="lg:col-span-2 space-y-6">
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      Signature Car Rentals is for those who see a car as part of the moment, not just the journey. For people who value quality, discretion, and how an experience makes them feel.
+                    </p>
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      We work with business leaders, travellers, hosts, and individuals celebrating meaningful milestones, from important meetings and international visits to weddings, events, and once-in-a-lifetime occasions.
+                    </p>
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      By intentionally working with a select number of clients, we're able to offer a more personal, attentive experience, where every booking is handled with care and intention.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Why Signature */}
+              <div className="border-t border-border/40 pt-16">
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                  <div>
+                    <h3 className="font-serif text-2xl font-medium text-foreground">
+                      Why Signature Car Rentals?
+                    </h3>
+                  </div>
+                  <div className="lg:col-span-2 space-y-6">
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      Because we believe cars are more than machines — they're experiences that symbolise ambition, confidence, and possibility. We focus on how a drive makes you feel, not just what you drive.
+                    </p>
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      Signature is a family-led, hands-on business, built on trust and genuine care. Every car, every booking, and every interaction is treated with intention and respect.
+                    </p>
+                    <p className="text-body text-muted-foreground leading-relaxed">
+                      Most importantly, Signature exists for the dreamers — for those who have always believed a car could represent something more. We create access to extraordinary experiences, without intimidation, and with meaning.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-16">
               <Link to="/about">
                 <LuxuryButton variant="subtle" size="default">
                   Our Story
                 </LuxuryButton>
               </Link>
-            </div>
-            <div className="relative aspect-square overflow-hidden rounded-sm">
-              <img
-                src={interiorImage}
-                alt="Refined interior details"
-                className="w-full h-full object-cover"
-              />
             </div>
           </div>
         </div>
@@ -158,41 +198,6 @@ const Index = () => {
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Who We Cater To */}
-      <section className="section-padding bg-background">
-        <div className="container-luxury">
-          <div className="text-center max-w-2xl mx-auto mb-20">
-            <p className="text-caption text-muted-foreground mb-4">
-              Our Clients
-            </p>
-            <h2 className="text-headline text-foreground mb-8">
-              Who We Serve
-            </h2>
-            <p className="text-body text-muted-foreground">
-              Executives, travellers, and those who appreciate the 
-              finer details.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
-            {clientSegments.map((segment, index) => (
-              <div 
-                key={segment.title}
-                className="p-8 border border-border/40 hover:border-accent/40 hover:shadow-sm transition-all duration-300 animate-fade-in-up group"
-                style={{ animationDelay: `${index * 0.08}s` }}
-              >
-                <h3 className="font-serif text-lg font-medium text-foreground mb-3 group-hover:text-foreground/80 transition-colors duration-300">
-                  {segment.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {segment.description}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
