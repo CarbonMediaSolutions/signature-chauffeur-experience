@@ -41,6 +41,7 @@ const AdminFleetEdit = () => {
           cover_image_url: data.cover_image_url || null,
           gallery_urls: data.gallery_urls,
           video_urls: data.video_urls,
+          hero_video_url: data.hero_video_url || null,
         })
         .eq("id", id);
 

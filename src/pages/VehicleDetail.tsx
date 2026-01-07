@@ -72,10 +72,9 @@ const VehicleDetail = () => {
     (vehicle.gallery_urls && vehicle.gallery_urls.length > 0 ? vehicle.gallery_urls[0] : null) || 
     vehicle.image;
 
-  // Get the first video URL for hero, or null if none
-  const heroVideoUrl = vehicle.video_urls && vehicle.video_urls.length > 0 
-    ? vehicle.video_urls[0] 
-    : null;
+  // Get hero video: prioritize hero_video_url, then fall back to first video_urls entry
+  const heroVideoUrl = v.hero_video_url || 
+    (vehicle.video_urls && vehicle.video_urls.length > 0 ? vehicle.video_urls[0] : null);
 
   // Convert YouTube/Vimeo URL to embed URL with autoplay
   const getEmbedUrl = (url: string) => {

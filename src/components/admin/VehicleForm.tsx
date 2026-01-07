@@ -38,6 +38,7 @@ export interface VehicleFormData {
   cover_image_url: string | null;
   gallery_urls: string[];
   video_urls: string[];
+  hero_video_url: string | null;
   acceleration: string;
   top_speed: string;
   doors: number;
@@ -94,6 +95,7 @@ export const VehicleForm = ({
     cover_image_url: initialData?.cover_image_url || null,
     gallery_urls: initialData?.gallery_urls || [],
     video_urls: initialData?.video_urls || [],
+    hero_video_url: (initialData as any)?.hero_video_url || null,
     acceleration: (initialData as any)?.acceleration || "",
     top_speed: (initialData as any)?.top_speed || "",
     doors: (initialData as any)?.doors || 4,
@@ -461,9 +463,11 @@ export const VehicleForm = ({
           coverImage={formData.cover_image_url}
           galleryUrls={formData.gallery_urls}
           videoUrls={formData.video_urls}
+          heroVideo={formData.hero_video_url}
           onCoverImageChange={(url) => updateField("cover_image_url", url)}
           onGalleryChange={(urls) => updateField("gallery_urls", urls)}
           onVideoChange={(urls) => updateField("video_urls", urls)}
+          onHeroVideoChange={(url) => updateField("hero_video_url", url)}
           vehicleId={initialData?.id}
         />
       </section>
