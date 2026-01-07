@@ -27,6 +27,7 @@ import AdminAvailability from "./pages/admin/AdminAvailability";
 import AdminFleet from "./pages/admin/AdminFleet";
 import AdminFleetNew from "./pages/admin/AdminFleetNew";
 import AdminFleetEdit from "./pages/admin/AdminFleetEdit";
+import AdminBulkImport from "./pages/admin/AdminBulkImport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="availability" element={<AdminAvailability />} />
               <Route path="fleet" element={<AdminFleet />} />
               <Route path="fleet/new" element={<AdminFleetNew />} />
+              <Route path="fleet/bulk-import" element={<AdminBulkImport />} />
               <Route path="fleet/:id/edit" element={<AdminFleetEdit />} />
             </Route>
             
