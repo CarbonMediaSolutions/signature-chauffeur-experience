@@ -38,6 +38,11 @@ export interface VehicleFormData {
   cover_image_url: string | null;
   gallery_urls: string[];
   video_urls: string[];
+  acceleration: string;
+  top_speed: string;
+  doors: number;
+  excess_mileage_rate: number;
+  minimum_rental_days: number;
 }
 
 interface VehicleFormProps {
@@ -89,6 +94,11 @@ export const VehicleForm = ({
     cover_image_url: initialData?.cover_image_url || null,
     gallery_urls: initialData?.gallery_urls || [],
     video_urls: initialData?.video_urls || [],
+    acceleration: (initialData as any)?.acceleration || "",
+    top_speed: (initialData as any)?.top_speed || "",
+    doors: (initialData as any)?.doors || 4,
+    excess_mileage_rate: (initialData as any)?.excess_mileage_rate || 0,
+    minimum_rental_days: (initialData as any)?.minimum_rental_days || 1,
   });
 
   const [featuresInput, setFeaturesInput] = useState(
@@ -283,6 +293,36 @@ export const VehicleForm = ({
               placeholder="e.g., 2 large bags"
             />
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="acceleration">Acceleration (0-100 km/h)</Label>
+            <Input
+              id="acceleration"
+              value={formData.acceleration}
+              onChange={(e) => updateField("acceleration", e.target.value)}
+              placeholder="e.g., 3.3 sec"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="top_speed">Top Speed</Label>
+            <Input
+              id="top_speed"
+              value={formData.top_speed}
+              onChange={(e) => updateField("top_speed", e.target.value)}
+              placeholder="e.g., 305 km/h"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="doors">Doors</Label>
+            <Input
+              id="doors"
+              type="number"
+              value={formData.doors}
+              onChange={(e) => updateField("doors", parseInt(e.target.value) || 0)}
+            />
+          </div>
         </div>
       </section>
 
@@ -322,6 +362,30 @@ export const VehicleForm = ({
               value={formData.insurance_excess}
               onChange={(e) =>
                 updateField("insurance_excess", parseInt(e.target.value) || 0)
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="excess_mileage_rate">Excess Mileage Rate (R/km)</Label>
+            <Input
+              id="excess_mileage_rate"
+              type="number"
+              value={formData.excess_mileage_rate}
+              onChange={(e) =>
+                updateField("excess_mileage_rate", parseInt(e.target.value) || 0)
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="minimum_rental_days">Minimum Rental Days</Label>
+            <Input
+              id="minimum_rental_days"
+              type="number"
+              value={formData.minimum_rental_days}
+              onChange={(e) =>
+                updateField("minimum_rental_days", parseInt(e.target.value) || 1)
               }
             />
           </div>
