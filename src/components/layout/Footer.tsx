@@ -82,7 +82,15 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-primary-foreground/50">
-            © {new Date().getFullYear()} Signature Car Rentals. All rights reserved.
+            © {new Date().getFullYear()} Signature Car Rentals. All rights reserved. Website made with love by{" "}
+            <a
+              href="https://carbonmediasolutions.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary-foreground transition-colors duration-300"
+            >
+              Carbon Media Solutions
+            </a>
           </p>
           <div className="flex items-center gap-6">
             <a

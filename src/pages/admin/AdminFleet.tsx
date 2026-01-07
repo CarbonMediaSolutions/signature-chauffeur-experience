@@ -122,12 +122,19 @@ const AdminFleet = () => {
             {vehicles?.length || 0} vehicles in fleet
           </p>
         </div>
-        <Link to="/admin/fleet/new">
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Vehicle
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/admin/fleet/bulk-import">
+            <Button variant="outline">
+              Bulk Import
+            </Button>
+          </Link>
+          <Link to="/admin/fleet/new">
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Vehicle
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}
