@@ -254,6 +254,7 @@ export type Database = {
           features: string[] | null
           fuel_type: string | null
           gallery_urls: string[] | null
+          hero_video_url: string | null
           id: string
           image: string
           insurance_excess: number | null
@@ -287,6 +288,7 @@ export type Database = {
           features?: string[] | null
           fuel_type?: string | null
           gallery_urls?: string[] | null
+          hero_video_url?: string | null
           id: string
           image: string
           insurance_excess?: number | null
@@ -320,6 +322,7 @@ export type Database = {
           features?: string[] | null
           fuel_type?: string | null
           gallery_urls?: string[] | null
+          hero_video_url?: string | null
           id?: string
           image?: string
           insurance_excess?: number | null
