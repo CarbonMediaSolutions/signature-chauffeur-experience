@@ -178,12 +178,45 @@
   }
 
   .animate-fade-in-up {
-    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-fade-in-delayed {
     animation: fadeIn 1s ease-out 0.3s forwards;
     opacity: 0;
+  }
+
+  .animate-fade-in-delayed-2 {
+    animation: fadeIn 1s ease-out 0.5s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delayed-3 {
+    animation: fadeIn 1s ease-out 0.7s forwards;
+    opacity: 0;
+  }
+
+  /* Scroll-triggered animations */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-slide-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-slide-left.in-view {
+    opacity: 1;
+    transform: translateX(0);
   }
 
   @keyframes fadeIn {
@@ -198,7 +231,7 @@
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -248,11 +281,32 @@
     @apply py-16 md:py-20 lg:py-24;
   }
 
-  /* Hero vignette overlay */
+  /* Hero vignette overlay - cinematic gradient */
   .hero-vignette {
     background: 
-      radial-gradient(ellipse 80% 60% at 50% 100%, transparent 0%, hsl(var(--primary) / 0.7) 100%),
-      linear-gradient(to top, hsl(var(--primary) / 0.85) 0%, hsl(var(--primary) / 0.4) 40%, transparent 70%);
+      radial-gradient(ellipse 100% 70% at 50% 100%, hsl(var(--primary) / 0.9) 0%, transparent 60%),
+      linear-gradient(to top, hsl(var(--primary) / 0.95) 0%, hsl(var(--primary) / 0.6) 25%, hsl(var(--primary) / 0.25) 50%, transparent 75%),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.3) 0%, transparent 20%);
+  }
+
+  /* Visual interlude section */
+  .visual-interlude {
+    @apply relative overflow-hidden;
+  }
+
+  .visual-interlude::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: linear-gradient(to bottom, hsl(var(--background)) 0%, transparent 8%, transparent 92%, hsl(var(--background)) 100%);
+  }
+
+  /* Prose styling for editorial content */
+  .prose-luxury {
+    @apply leading-[2] tracking-wide;
+  }
+
+  .prose-luxury p {
+    @apply mb-6 last:mb-0;
   }
 }
 
