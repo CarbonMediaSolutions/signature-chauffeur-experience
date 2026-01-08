@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useVehicles } from "@/hooks/useVehicles";
+import { FeaturedCarousel } from "@/components/home/FeaturedCarousel";
 import heroImage from "@/assets/hero-home.jpg";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import detailInterior from "@/assets/detail-interior.jpg";
@@ -79,6 +80,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Featured Cars Carousel */}
+      <FeaturedCarousel />
 
       {/* Introduction Quote */}
       <section className="py-24 md:py-32 bg-[hsl(35,30%,95%)]">
