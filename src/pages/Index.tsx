@@ -59,7 +59,7 @@ const Index = () => {
               Luxury car rental created for moments that matter.
             </p>
             <p className="text-body text-primary-foreground/75 mb-8 max-w-lg">
-              More than hiring a car — it's where the dream comes alive!
+              More than hiring a car - it's where the dream comes alive!
             </p>
             <p className="text-sm text-primary-foreground/50 mb-12 tracking-wide">
               Based in Cape Town. Serving clients nationally.
@@ -90,7 +90,7 @@ const Index = () => {
             "Luxury car rental created for <span className="text-brass">moments</span> that matter."
           </blockquote>
           <p className="text-body-lg text-muted-foreground">
-            More than hiring a car — it's where the dream comes alive.
+            More than hiring a car - it's where the dream comes alive.
           </p>
         </div>
       </section>
@@ -110,10 +110,10 @@ const Index = () => {
                 It's about possibility, confidence, and how something makes you feel. We exist to inspire people to arrive differently: to feel empowered, alive, and present in moments that matter.
               </p>
               <p className="text-body text-muted-foreground leading-relaxed mb-6">
-                Whether it's a defining business meeting, a first date, a milestone celebration, or an unforgettable drive along iconic roads like Chapman's Peak or the coast to Hermanus — we see cars not as objects, but as experiences that awaken the senses and elevate the journey.
+                Whether it's a defining business meeting, a first date, a milestone celebration, or an unforgettable drive along iconic roads like Chapman's Peak or the coast to Hermanus - we see cars not as objects, but as experiences that awaken the senses and elevate the journey.
               </p>
               <p className="text-body text-muted-foreground leading-relaxed">
-                Built on trust, passion, and human connection, we are a family-led business with a face behind the name — creating access to extraordinary experiences, caring deeply for every vehicle, and allowing owners and drivers alike to share in the joy, meaning, and opportunity that luxury in motion can create.
+                Built on trust, passion, and human connection, we are a family-led business with a face behind the name - creating access to extraordinary experiences, caring deeply for every vehicle, and allowing owners and drivers alike to share in the joy, meaning, and opportunity that luxury in motion can create.
               </p>
             </div>
             
@@ -214,13 +214,13 @@ const Index = () => {
               </h2>
               <div className="space-y-6">
                 <p className="text-body text-muted-foreground leading-relaxed">
-                  Because we believe cars are more than machines — they're experiences that symbolise ambition, confidence, and possibility. We focus on how a drive makes you feel, not just what you drive.
+                  Because we believe cars are more than machines - they're experiences that symbolise ambition, confidence, and possibility. We focus on how a drive makes you feel, not just what you drive.
                 </p>
                 <p className="text-body text-muted-foreground leading-relaxed">
                   Signature is a family-led, hands-on business, built on trust and genuine care. Every car, every booking, and every interaction is treated with intention and respect.
                 </p>
                 <p className="text-body text-muted-foreground leading-relaxed">
-                  Most importantly, Signature exists for the dreamers — for those who have always believed a car could represent something more. We create access to extraordinary experiences, without intimidation, and with meaning.
+                  Most importantly, Signature exists for the dreamers - for those who have always believed a car could represent something more. We create access to extraordinary experiences, without intimidation, and with meaning.
                 </p>
               </div>
               <div className="mt-10">

@@ -101,19 +101,19 @@ const ListVehicle = () => {
                 </h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
-                    <span className="text-accent mt-1">—</span>
+                    <span className="text-accent mt-1">•</span>
                     <span>Owners who want to offset the costs of ownership</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-accent mt-1">—</span>
+                    <span className="text-accent mt-1">•</span>
                     <span>Those who prefer not to manage rentals themselves</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-accent mt-1">—</span>
+                    <span className="text-accent mt-1">•</span>
                     <span>Individuals who value discretion and careful handling</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-accent mt-1">—</span>
+                    <span className="text-accent mt-1">•</span>
                     <span>Owners who want their vehicle represented to the right clientele</span>
                   </li>
                 </ul>
