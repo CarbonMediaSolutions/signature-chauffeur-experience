@@ -70,7 +70,7 @@ const faqCategories = [
     questions: [
       {
         q: "Is there a mileage limit?",
-        a: "Daily rentals include a generous mileage allowance. Extended rentals may include additional or unlimited mileage. Any excess will be discussed and agreed in advance — no surprises.",
+        a: "Daily rentals include a generous mileage allowance. Extended rentals may include additional or unlimited mileage. Any excess will be discussed and agreed in advance. No surprises.",
       },
       {
         q: "What happens if I need assistance during my rental?",
@@ -87,7 +87,7 @@ const faqCategories = [
       },
       {
         q: "What is your cancellation policy?",
-        a: "Cancellation terms are confirmed at the time of booking. We understand plans change — please notify us as early as possible, and we'll work with you to find the best solution.",
+        a: "Cancellation terms are confirmed at the time of booking. We understand plans change. Please notify us as early as possible, and we'll work with you to find the best solution.",
       },
     ],
   },
@@ -96,11 +96,11 @@ const faqCategories = [
     questions: [
       {
         q: "Can I list my luxury vehicle with Signature?",
-        a: "Yes — subject to approval. We work with select vehicle owners whose cars align with our brand standards. Submit your details, and our team will be in touch to discuss suitability.",
+        a: "Yes, subject to approval. We work with select vehicle owners whose cars align with our brand standards. Submit your details, and our team will be in touch to discuss suitability.",
       },
       {
         q: "Do you manage the entire rental process?",
-        a: "Completely. From client screening and bookings to handovers, inspections, and administration — we handle every detail. You simply receive regular updates and transparent reporting.",
+        a: "Completely. From client screening and bookings to handovers, inspections, and administration, we handle every detail. You simply receive regular updates and transparent reporting.",
       },
     ],
   },

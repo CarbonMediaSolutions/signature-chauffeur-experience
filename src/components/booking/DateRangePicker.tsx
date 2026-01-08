@@ -63,7 +63,7 @@ export const DateRangePicker = ({
                       {numberOfDays} {numberOfDays === 1 ? "day" : "days"}
                     </span>
                     <span className="text-foreground">
-                      {format(dateRange.from, "d MMM")} — {format(dateRange.to, "d MMM yyyy")}
+                      {format(dateRange.from, "d MMM")} - {format(dateRange.to, "d MMM yyyy")}
                     </span>
                   </>
                 ) : (
