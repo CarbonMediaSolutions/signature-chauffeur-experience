@@ -134,7 +134,7 @@ const AdminBookings = () => {
                     {booking.vehicles?.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {format(parseISO(booking.start_date), "d MMM")} — {format(parseISO(booking.end_date), "d MMM yyyy")}
+                    {format(parseISO(booking.start_date), "d MMM")} - {format(parseISO(booking.end_date), "d MMM yyyy")}
                   </td>
                   <td className="px-6 py-4">
                     <span

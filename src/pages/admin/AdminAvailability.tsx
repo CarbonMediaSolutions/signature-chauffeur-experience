@@ -213,10 +213,10 @@ const AdminAvailability = () => {
                     {getVehicleName(block.vehicle_id)}
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {format(parseISO(block.start_date), "d MMM yyyy")} — {format(parseISO(block.end_date), "d MMM yyyy")}
+                    {format(parseISO(block.start_date), "d MMM yyyy")} - {format(parseISO(block.end_date), "d MMM yyyy")}
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {block.reason || "—"}
+                    {block.reason || "-"}
                   </td>
                   <td className="px-6 py-4">
                     <Button

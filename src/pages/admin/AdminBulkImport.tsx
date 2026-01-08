@@ -309,9 +309,9 @@ const AdminBulkImport = () => {
                             <CheckCircle className="h-4 w-4 text-green-600" />
                           )}
                         </TableCell>
-                        <TableCell className="font-medium">{row.name || "—"}</TableCell>
-                        <TableCell>{row.category || "—"}</TableCell>
-                        <TableCell>R{row.daily_rate?.toLocaleString() || "—"}</TableCell>
+                        <TableCell className="font-medium">{row.name || "-"}</TableCell>
+                        <TableCell>{row.category || "-"}</TableCell>
+                        <TableCell>R{row.daily_rate?.toLocaleString() || "-"}</TableCell>
                         <TableCell className="text-destructive text-sm">
                           {row.errors?.join(", ")}
                         </TableCell>

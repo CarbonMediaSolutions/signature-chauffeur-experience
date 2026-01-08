@@ -146,7 +146,7 @@ const AdminDashboard = () => {
                       {booking.vehicles?.name}
                     </td>
                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                      {booking.start_date} — {booking.end_date}
+                      {booking.start_date} - {booking.end_date}
                     </td>
                     <td className="px-6 py-4">
                       <span

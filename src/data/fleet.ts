@@ -56,7 +56,7 @@ export const vehicles: Vehicle[] = [
     driveType: "Rear-Wheel Drive",
     luggageCapacity: "2 Small Bags",
     description: "An icon of automotive excellence, the 911 Carrera S delivers timeless design with cutting-edge performance technology.",
-    whyWeChoseIt: "The 911 is more than a sports car—it's a statement. Perfect for those who appreciate automotive heritage and precision engineering.",
+    whyWeChoseIt: "The 911 is more than a sports car - it's a statement. Perfect for those who appreciate automotive heritage and precision engineering.",
   },
   {
     id: "bentley-continental-gt",
