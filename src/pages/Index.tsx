@@ -6,6 +6,9 @@ import { useVehicles } from "@/hooks/useVehicles";
 import heroImage from "@/assets/hero-home.jpg";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import detailInterior from "@/assets/detail-interior.jpg";
+import lifestyleCoastalDrive from "@/assets/lifestyle-coastal-drive.jpg";
+import lifestyleBusiness from "@/assets/lifestyle-business.jpg";
+import lifestyleCelebration from "@/assets/lifestyle-celebration.jpg";
 import { Loader2 } from "lucide-react";
 
 const services = [
@@ -78,7 +81,7 @@ const Index = () => {
       </section>
 
       {/* Introduction Quote */}
-      <section className="py-24 md:py-32 bg-background">
+      <section className="py-24 md:py-32 bg-[hsl(35,30%,95%)]">
         <div className="container-luxury text-center max-w-3xl mx-auto">
           <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
             Introduction
@@ -93,7 +96,7 @@ const Index = () => {
       </section>
 
       {/* Our Values + Image Collage */}
-      <section className="py-20 md:py-28 bg-secondary/20">
+      <section className="py-20 md:py-28 bg-background">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="order-2 lg:order-1">
@@ -131,11 +134,11 @@ const Index = () => {
                   />
                 </div>
                 <div className="col-span-5">
-                  <div className="bg-brass/10 aspect-[4/3] rounded-sm flex items-center justify-center p-6">
-                    <p className="font-serif text-lg text-brass text-center italic">
-                      "Arrive differently"
-                    </p>
-                  </div>
+                  <img 
+                    src={lifestyleCelebration} 
+                    alt="Luxury celebration moment" 
+                    className="w-full h-full object-cover aspect-[4/3] rounded-sm"
+                  />
                 </div>
               </div>
             </div>
@@ -164,13 +167,13 @@ const Index = () => {
       </section>
 
       {/* Who We Serve + Image */}
-      <section className="py-20 md:py-28 bg-background">
+      <section className="py-20 md:py-28 bg-[hsl(35,30%,95%)]">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
               <img 
-                src={capeTownRoad} 
-                alt="Luxury driving experience" 
+                src={lifestyleBusiness} 
+                alt="Business professional with luxury vehicle" 
                 className="w-full h-auto object-cover aspect-[4/5] rounded-sm"
               />
             </div>
@@ -199,7 +202,7 @@ const Index = () => {
       </section>
 
       {/* Why Signature + Image Grid */}
-      <section className="py-20 md:py-28 bg-secondary/20">
+      <section className="py-20 md:py-28 bg-background">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="order-2 lg:order-1">
@@ -230,25 +233,18 @@ const Index = () => {
             </div>
             
             <div className="order-1 lg:order-2">
-              <div className="relative">
-                <img 
-                  src={detailInterior} 
-                  alt="Premium car interior" 
-                  className="w-full h-auto object-cover aspect-[4/5] rounded-sm"
-                />
-                <div className="absolute -bottom-6 -left-6 bg-brass p-6 md:p-8 rounded-sm max-w-[200px]">
-                  <p className="font-serif text-sm md:text-base text-charcoal italic">
-                    "For the dreamers"
-                  </p>
-                </div>
-              </div>
+              <img 
+                src={lifestyleCoastalDrive} 
+                alt="Luxury sports car on scenic coastal road" 
+                className="w-full h-auto object-cover aspect-[4/5] rounded-sm"
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Fleet */}
-      <section className="section-padding bg-secondary/20">
+      <section className="section-padding bg-[hsl(35,30%,95%)]">
         <div className="container-luxury">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
             <div>
