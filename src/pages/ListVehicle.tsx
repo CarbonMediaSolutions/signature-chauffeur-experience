@@ -52,7 +52,7 @@ const ListVehicle = () => {
     { 
       icon: FileCheck,
       headline: "Zero Admin",
-      desc: "Contracts, communications, coordination — every detail managed on your behalf." 
+      desc: "Contracts, communications, coordination. Every detail managed on your behalf." 
     },
     { 
       icon: Shield,
@@ -95,7 +95,7 @@ const ListVehicle = () => {
               </h1>
               <p className="text-body-lg text-muted-foreground mb-8">
                 Own a luxury or performance vehicle? We offer complete concierge 
-                management for a curated selection of exceptional cars — not a 
+                management for a curated selection of exceptional cars. Not a 
                 marketplace, but a partnership built on trust, discretion, and care.
               </p>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -290,7 +290,7 @@ const ListVehicle = () => {
               <p className="text-body text-muted-foreground">
                 Interested in listing your vehicle with Signature? Share your details 
                 and our team will be in touch to discuss suitability and next steps. 
-                This is a curated partnership — not every vehicle is accepted.
+                This is a curated partnership. Not every vehicle is accepted.
               </p>
             </div>
 

@@ -46,23 +46,23 @@ const VehicleDetail = () => {
   const v = vehicle as any;
 
   const vehicleSpecs = [
-    { icon: Settings, label: "Engine", value: vehicle.engine || "—" },
-    { icon: Zap, label: "Acceleration", value: v.acceleration || "—" },
-    { icon: Gauge, label: "Top Speed", value: v.top_speed || "—" },
-    { icon: Users, label: "Seats & Doors", value: `${vehicle.seats || "—"} and ${v.doors || "—"}` },
-    { icon: Car, label: "Transmission", value: vehicle.transmission || "—" },
+    { icon: Settings, label: "Engine", value: vehicle.engine || "-" },
+    { icon: Zap, label: "Acceleration", value: v.acceleration || "-" },
+    { icon: Gauge, label: "Top Speed", value: v.top_speed || "-" },
+    { icon: Users, label: "Seats & Doors", value: `${vehicle.seats || "-"} and ${v.doors || "-"}` },
+    { icon: Car, label: "Transmission", value: vehicle.transmission || "-" },
   ];
 
   const rentalInfo = [
-    { icon: Shield, label: "Security Deposit", value: vehicle.security_deposit ? `R${vehicle.security_deposit.toLocaleString()}` : "—" },
+    { icon: Shield, label: "Security Deposit", value: vehicle.security_deposit ? `R${vehicle.security_deposit.toLocaleString()}` : "-" },
     { 
       icon: Route, 
       label: "Mileage Allowance", 
       value: vehicle.mileage_limit 
         ? `${vehicle.mileage_limit}${v.excess_mileage_rate ? `, thereafter R${v.excess_mileage_rate}/km` : ""}`
-        : "—" 
+        : "-" 
     },
-    { icon: Shield, label: "Max Liability (Accident)", value: vehicle.insurance_excess ? `R${vehicle.insurance_excess.toLocaleString()}` : "—" },
+    { icon: Shield, label: "Max Liability (Accident)", value: vehicle.insurance_excess ? `R${vehicle.insurance_excess.toLocaleString()}` : "-" },
     { icon: Calendar, label: "Minimum Rental", value: v.minimum_rental_days ? `${v.minimum_rental_days} Day${v.minimum_rental_days > 1 ? "s" : ""}` : "1 Day" },
   ];
 
