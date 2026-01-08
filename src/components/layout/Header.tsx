@@ -43,7 +43,7 @@ export const Header = () => {
           ))}
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button - Desktop */}
         <Link
           to="/contact"
           className="hidden lg:block text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
@@ -51,27 +51,36 @@ export const Header = () => {
           Enquire
         </Link>
 
-        {/* Mobile menu button */}
-        <button
-          type="button"
-          className="lg:hidden p-2 -mr-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        {/* Mobile: Enquire button + Menu button */}
+        <div className="lg:hidden flex items-center gap-3">
+          <Link
+            to="/contact"
+            className="text-xs font-light tracking-wide border border-foreground/20 px-4 py-2 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
+          >
+            Enquire Now
+          </Link>
+          <button
+            type="button"
+            className="p-2 -mr-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Navigation */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 top-[73px] bg-background z-40 transition-all duration-500",
+          "lg:hidden fixed inset-0 top-[73px] z-40 transition-all duration-500",
           mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}
+        style={{ backgroundColor: 'hsl(var(--background))' }}
       >
         <div className="container-luxury py-10 flex flex-col gap-8">
           {navigation.map((item, index) => (
