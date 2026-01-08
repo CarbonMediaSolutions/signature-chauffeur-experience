@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { LuxuryButton } from "@/components/ui/luxury-button";
-import { useVehicles } from "@/hooks/useVehicles";
 import { FeaturedCarousel } from "@/components/home/FeaturedCarousel";
+import { MissionIcons } from "@/components/home/MissionIcons";
+import { HowItWorks } from "@/components/home/HowItWorks";
 import heroImage from "@/assets/hero-home.jpg";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import detailInterior from "@/assets/detail-interior.jpg";
 import lifestyleCoastalDrive from "@/assets/lifestyle-coastal-drive.jpg";
 import lifestyleBusiness from "@/assets/lifestyle-business.jpg";
 import lifestyleCelebration from "@/assets/lifestyle-celebration.jpg";
-import { Loader2 } from "lucide-react";
 
 const services = [
   {
@@ -32,8 +31,6 @@ const services = [
 ];
 
 const Index = () => {
-  const { data: vehicles = [], isLoading } = useVehicles();
-  const featuredVehicles = vehicles.slice(0, 4);
 
   return (
     <Layout>
@@ -81,21 +78,23 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Mission Icons - What makes us special */}
+      <MissionIcons />
+
       {/* Featured Cars Carousel */}
       <FeaturedCarousel />
 
+      {/* How It Works Steps */}
+      <HowItWorks />
+
+      {/* ============ BELOW THE FOLD ============ */}
+
       {/* Introduction Quote */}
-      <section className="py-24 md:py-32 bg-[hsl(35,30%,95%)]">
+      <section className="py-20 md:py-24 bg-[hsl(35,30%,95%)]">
         <div className="container-luxury text-center max-w-3xl mx-auto">
-          <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
-            Introduction
-          </p>
-          <blockquote className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight mb-8 italic">
+          <blockquote className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground leading-tight italic">
             "Luxury car rental created for <span className="text-brass">moments</span> that matter."
           </blockquote>
-          <p className="text-body-lg text-muted-foreground">
-            More than hiring a car - it's where the dream comes alive.
-          </p>
         </div>
       </section>
 
@@ -151,7 +150,7 @@ const Index = () => {
       </section>
 
       {/* Mission Statement - Full Width */}
-      <section className="relative py-32 md:py-40 overflow-hidden">
+      <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
@@ -244,39 +243,6 @@ const Index = () => {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Featured Fleet */}
-      <section className="section-padding bg-[hsl(35,30%,95%)]">
-        <div className="container-luxury">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
-            <div>
-              <p className="text-caption text-muted-foreground mb-4">
-                The Collection
-              </p>
-              <h2 className="text-headline text-foreground">
-                Featured Vehicles
-              </h2>
-            </div>
-            <Link to="/fleet">
-              <LuxuryButton variant="subtle" size="default">
-                Explore the Full Collection →
-              </LuxuryButton>
-            </Link>
-          </div>
-          
-          {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-              {featuredVehicles.map((vehicle, index) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-              ))}
-            </div>
-          )}
         </div>
       </section>
 
