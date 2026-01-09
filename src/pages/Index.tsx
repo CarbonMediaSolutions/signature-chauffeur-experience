@@ -27,7 +27,10 @@ const Index = () => {
               <span className="block">DRIVE IT.</span>
               <span className="block">LIVE IT.</span>
             </h1>
-            <p className="text-body text-primary-foreground/80 mb-10 max-w-lg mx-auto">Luxury Car Rental created for moments that matter.</p>
+            <p className="font-serif text-lg md:text-xl lg:text-2xl text-primary-foreground/80 mb-10 max-w-lg mx-auto leading-relaxed">
+              <span className="block">Luxury Car Rental</span>
+              <span className="block">created for moments that matter.</span>
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
                 <LuxuryButton variant="hero" size="lg">
