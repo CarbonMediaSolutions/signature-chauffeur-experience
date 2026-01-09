@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
 import { LuxuryButton } from "@/components/ui/luxury-button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 
 const steps = [
   {
@@ -25,6 +32,30 @@ const steps = [
 ];
 
 export const HowItWorks = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  const scrollTo = useCallback(
+    (index: number) => {
+      if (emblaApi) emblaApi.scrollTo(index);
+    },
+    [emblaApi]
+  );
+
   return (
     <section className="py-16 md:py-20 bg-charcoal text-primary-foreground">
       <div className="container-luxury">
@@ -35,7 +66,47 @@ export const HowItWorks = () => {
           Four Simple Steps
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-10 md:mb-14">
+        {/* Mobile: Carousel */}
+        <div className="md:hidden">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {steps.map((step) => (
+                <div key={step.number} className="flex-[0_0_100%] min-w-0 px-4">
+                  <div className="text-center py-8">
+                    <span className="block font-serif text-5xl text-brass mb-4">
+                      {step.number}
+                    </span>
+                    <h3 className="font-serif text-2xl mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-base text-primary-foreground/60">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Dot indicators */}
+          <div className="flex justify-center gap-2 mt-6 mb-10">
+            {steps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollTo(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === selectedIndex
+                    ? "bg-brass w-6"
+                    : "bg-primary-foreground/30"
+                }`}
+                aria-label={`Go to step ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Grid */}
+        <div className="hidden md:grid grid-cols-4 gap-8 mb-14">
           {steps.map((step) => (
             <div key={step.number} className="text-center">
               <span className="block font-serif text-3xl md:text-4xl text-brass mb-3">
