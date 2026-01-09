@@ -89,9 +89,10 @@ export const Header = () => {
       {/* Mobile Navigation - Fixed full-screen overlay */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 z-[60] transition-all duration-500 bg-background",
-          mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+          "lg:hidden fixed inset-0 z-[60] transition-all duration-300",
+          mobileMenuOpen ? "visible" : "invisible pointer-events-none"
         )}
+        style={{ backgroundColor: mobileMenuOpen ? '#FAF8F5' : 'transparent' }}
       >
         {/* Overlay header with logo and close button */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-border/30">
