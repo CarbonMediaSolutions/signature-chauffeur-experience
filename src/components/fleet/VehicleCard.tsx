@@ -24,6 +24,9 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           src={displayImage}
           alt={vehicle.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+          loading="lazy"
+          width={400}
+          height={300}
         />
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/40 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

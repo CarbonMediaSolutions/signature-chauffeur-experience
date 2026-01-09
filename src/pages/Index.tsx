@@ -12,7 +12,14 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Luxury vehicle on Cape Town coastal road" className="w-full h-full object-cover" />
+          <img 
+            src={heroImage} 
+            alt="Luxury vehicle on Cape Town coastal road" 
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+          />
           <div className="absolute inset-0 hero-vignette" />
         </div>
         
@@ -20,7 +27,7 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             {/* Logo above headline */}
             <div className="mb-8 flex justify-center">
-              <img src={logo} alt="Signature Car Rentals" className="h-12 md:h-16 w-auto brightness-0 invert" />
+              <img src={logo} alt="Signature Car Rentals" className="h-12 md:h-16 w-auto brightness-0 invert" width={200} height={64} />
             </div>
             <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
               <span className="block">DREAM IT.</span>
@@ -62,7 +69,7 @@ const Index = () => {
       {/* Mission Statement - Full Width */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Background" className="w-full h-full object-cover" />
+          <img src={heroImage} alt="Background" className="w-full h-full object-cover" loading="lazy" width={1920} height={1080} />
           <div className="absolute inset-0 bg-charcoal/85" />
         </div>
         <div className="relative container-luxury text-center max-w-4xl mx-auto">
