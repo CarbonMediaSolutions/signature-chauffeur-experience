@@ -77,6 +77,9 @@ export const FeaturedCarousel = () => {
                       src={vehicle.cover_image_url || vehicle.image}
                       alt={vehicle.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      width={400}
+                      height={300}
                     />
                     {vehicle.featured && (
                       <div className="absolute top-3 left-3 bg-brass text-charcoal text-xs font-medium px-2 py-1 rounded-sm">
