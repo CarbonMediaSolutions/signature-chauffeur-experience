@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useVehicles } from "@/hooks/useVehicles";
 import {
@@ -8,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { LuxuryButton } from "@/components/ui/luxury-button";
 import { Loader2 } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -44,11 +44,10 @@ export const FeaturedCarousel = () => {
               Featured Cars
             </h2>
           </div>
-          <Link 
-            to="/fleet"
-            className="text-sm font-light tracking-wide text-muted-foreground hover:text-foreground transition-colors"
-          >
-            View All →
+          <Link to="/fleet">
+            <LuxuryButton variant="default" size="default">
+              View All Cars
+            </LuxuryButton>
           </Link>
         </div>
 

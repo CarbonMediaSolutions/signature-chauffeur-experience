@@ -22,7 +22,7 @@ export const Header = () => {
       <nav className="container-luxury flex items-center justify-between py-5">
         {/* Logo */}
         <Link to="/">
-          <img src={logo} alt="Signature Car Rentals" className="h-10 md:h-12 w-auto" />
+          <img src={logo} alt="Signature Car Rentals" className="h-12 md:h-14 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -74,15 +74,15 @@ export const Header = () => {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation - Fixed full-screen overlay */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 top-[73px] z-40 transition-all duration-500",
+          "lg:hidden fixed inset-0 top-[81px] z-40 transition-all duration-500 overflow-hidden",
           mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}
         style={{ backgroundColor: 'hsl(var(--background))' }}
       >
-        <div className="container-luxury py-10 flex flex-col gap-8">
+        <div className="container-luxury py-10 flex flex-col gap-8 h-full">
           {navigation.map((item, index) => (
             <Link
               key={item.name}
