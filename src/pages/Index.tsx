@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:h-screen flex items-end">
+      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center">
         <div className="absolute inset-0">
           <img
             src={heroImage}
@@ -22,10 +22,10 @@ const Index = () => {
           <div className="absolute inset-0 hero-vignette" />
         </div>
         
-        <div className="relative container-luxury pt-24 md:pt-8 pb-24 md:pb-32">
-          <div className="max-w-2xl animate-fade-in-up">
-            {/* Logo above headline - like Avis */}
-            <div className="mb-8">
+        <div className="relative container-luxury py-24 md:py-32">
+          <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
+            {/* Logo above headline */}
+            <div className="mb-8 flex justify-center">
               <img 
                 src={logo} 
                 alt="Signature Car Rentals" 
@@ -33,13 +33,14 @@ const Index = () => {
               />
             </div>
             <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
-              <span className="block">DREAM IT. DRIVE IT.</span>
+              <span className="block">DREAM IT.</span>
+              <span className="block">DRIVE IT.</span>
               <span className="block">LIVE IT.</span>
             </h1>
-            <p className="text-body text-primary-foreground/80 mb-10 max-w-lg">
+            <p className="text-body text-primary-foreground/80 mb-10 max-w-lg mx-auto">
               Luxury car rental created for moments that matter.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
                 <LuxuryButton variant="hero" size="lg">
                   Begin Your Enquiry
