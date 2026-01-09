@@ -22,7 +22,7 @@ const Index = () => {
           <div className="absolute inset-0 hero-vignette" />
         </div>
         
-        <div className="relative container-luxury pb-24 md:pb-32">
+        <div className="relative container-luxury pt-24 md:pt-8 pb-24 md:pb-32">
           <div className="max-w-2xl animate-fade-in-up">
             {/* Logo above headline - like Avis */}
             <div className="mb-8">
