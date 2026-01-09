@@ -5,7 +5,7 @@ import { FeaturedCarousel } from "@/components/home/FeaturedCarousel";
 import { MissionIcons } from "@/components/home/MissionIcons";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
-import heroImage from "@/assets/hero-home.jpg";
+import heroImage from "@/assets/hero-home.webp";
 import logo from "@/assets/logo.png";
 const Index = () => {
   return <Layout>
