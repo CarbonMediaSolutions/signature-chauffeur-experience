@@ -7,18 +7,12 @@ import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
 import heroImage from "@/assets/hero-home.jpg";
 import logo from "@/assets/logo.png";
-
 const Index = () => {
-  return (
-    <Layout>
+  return <Layout>
       {/* Hero Section */}
       <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt="Luxury vehicle on Cape Town coastal road"
-            className="w-full h-full object-cover"
-          />
+          <img src={heroImage} alt="Luxury vehicle on Cape Town coastal road" className="w-full h-full object-cover" />
           <div className="absolute inset-0 hero-vignette" />
         </div>
         
@@ -26,20 +20,15 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             {/* Logo above headline */}
             <div className="mb-8 flex justify-center">
-              <img 
-                src={logo} 
-                alt="Signature Car Rentals" 
-                className="h-12 md:h-16 w-auto brightness-0 invert"
-              />
+              <img src={logo} alt="Signature Car Rentals" className="h-12 md:h-16 w-auto brightness-0 invert" />
             </div>
             <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
               <span className="block">DREAM IT.</span>
               <span className="block">DRIVE IT.</span>
               <span className="block">LIVE IT.</span>
             </h1>
-            <p className="text-body text-primary-foreground/80 mb-10 max-w-lg mx-auto">
-              Luxury car rental created for moments that matter.
-            </p>
+            <p className="text-body text-primary-foreground/80 mb-10 max-w-lg mx-auto">Luxury Car Rental
+created for moments that matter.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
                 <LuxuryButton variant="hero" size="lg">
@@ -71,11 +60,7 @@ const Index = () => {
       {/* Mission Statement - Full Width */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="Background" 
-            className="w-full h-full object-cover"
-          />
+          <img src={heroImage} alt="Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-charcoal/85" />
         </div>
         <div className="relative container-luxury text-center max-w-4xl mx-auto">
@@ -104,8 +89,6 @@ const Index = () => {
           </Link>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
