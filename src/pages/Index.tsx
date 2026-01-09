@@ -41,12 +41,12 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
                 <LuxuryButton variant="hero" size="lg">
-                  Begin Your Enquiry
+                  Enquire Now
                 </LuxuryButton>
               </Link>
               <Link to="/fleet">
                 <LuxuryButton variant="heroInverse" size="lg">
-                  Explore the Fleet
+                  Explore Your Dream Ride
                 </LuxuryButton>
               </Link>
             </div>
