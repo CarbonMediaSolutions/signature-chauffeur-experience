@@ -77,7 +77,7 @@ export const Header = () => {
       {/* Mobile Navigation - Fixed full-screen overlay */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 top-[81px] z-40 transition-all duration-500 overflow-hidden",
+          "lg:hidden fixed inset-x-0 top-[81px] bottom-0 z-50 transition-all duration-500 overflow-hidden",
           mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}
         style={{ backgroundColor: 'hsl(var(--background))' }}

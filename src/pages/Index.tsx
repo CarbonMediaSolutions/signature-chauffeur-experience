@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[750px] flex items-end">
+      <section className="relative min-h-[500px] md:min-h-[600px] lg:h-screen flex items-end">
         <div className="absolute inset-0">
           <img
             src={heroImage}
