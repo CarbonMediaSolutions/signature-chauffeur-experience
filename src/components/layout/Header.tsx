@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,18 @@ const navigation = [
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background backdrop-blur-md shadow-sm border-b border-border/30">
@@ -77,12 +89,27 @@ export const Header = () => {
       {/* Mobile Navigation - Fixed full-screen overlay */}
       <div
         className={cn(
-          "lg:hidden fixed inset-x-0 top-[81px] bottom-0 z-50 transition-all duration-500 overflow-hidden",
+          "lg:hidden fixed inset-0 z-[60] transition-all duration-500 bg-background",
           mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}
-        style={{ backgroundColor: 'hsl(var(--background))' }}
       >
-        <div className="container-luxury py-10 flex flex-col gap-8 h-full">
+        {/* Overlay header with logo and close button */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border/30">
+          <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+            <img src={logo} alt="Signature Car Rentals" className="h-12 w-auto" />
+          </Link>
+          <button
+            type="button"
+            className="p-2 -mr-2"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        {/* Menu items */}
+        <div className="container-luxury py-10 flex flex-col gap-8">
           {navigation.map((item, index) => (
             <Link
               key={item.name}
