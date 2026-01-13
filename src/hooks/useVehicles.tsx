@@ -27,8 +27,7 @@ export interface Vehicle {
   gallery_urls: string[] | null;
   video_urls: string[] | null;
   multi_day_threshold: number | null;
-  multi_day_rate: number | null;
-  original_multi_day_rate: number | null;
+  multi_day_discount_percent: number | null;
   has_aircon: boolean | null;
   doors: number | null;
   acceleration: string | null;

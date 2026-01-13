@@ -45,6 +45,8 @@ const AdminFleetNew = () => {
         gallery_urls: data.gallery_urls,
         video_urls: data.video_urls,
         hero_video_url: data.hero_video_url || null,
+        multi_day_threshold: data.multi_day_threshold || 4,
+        multi_day_discount_percent: data.multi_day_discount_percent ?? 10,
       });
 
       if (error) throw error;

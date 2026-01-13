@@ -45,8 +45,7 @@ export interface VehicleFormData {
   excess_mileage_rate: number;
   minimum_rental_days: number;
   multi_day_threshold: number;
-  multi_day_rate: number | null;
-  original_multi_day_rate: number | null;
+  multi_day_discount_percent: number;
   has_aircon: boolean;
 }
 
@@ -106,8 +105,7 @@ export const VehicleForm = ({
     excess_mileage_rate: (initialData as any)?.excess_mileage_rate || 0,
     minimum_rental_days: (initialData as any)?.minimum_rental_days || 1,
     multi_day_threshold: (initialData as any)?.multi_day_threshold || 4,
-    multi_day_rate: (initialData as any)?.multi_day_rate || null,
-    original_multi_day_rate: (initialData as any)?.original_multi_day_rate || null,
+    multi_day_discount_percent: (initialData as any)?.multi_day_discount_percent ?? 10,
     has_aircon: (initialData as any)?.has_aircon ?? true,
   });
 
@@ -417,9 +415,9 @@ export const VehicleForm = ({
           Multi-Day Promotional Pricing
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Set discounted rates for longer rentals to encourage extended bookings.
+          Set a discount percentage for longer rentals. The discounted rate is automatically calculated from the daily rate.
         </p>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="multi_day_threshold">Day Threshold (e.g., 4+ days)</Label>
             <Input
@@ -434,31 +432,37 @@ export const VehicleForm = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="multi_day_rate">Discounted Daily Rate (R)</Label>
+            <Label htmlFor="multi_day_discount_percent">Discount Percentage (%)</Label>
             <Input
-              id="multi_day_rate"
+              id="multi_day_discount_percent"
               type="number"
-              value={formData.multi_day_rate ?? ""}
+              value={formData.multi_day_discount_percent}
               onChange={(e) =>
-                updateField("multi_day_rate", e.target.value ? parseInt(e.target.value) : null)
+                updateField("multi_day_discount_percent", parseInt(e.target.value) || 0)
               }
-              placeholder="Leave empty to hide"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="original_multi_day_rate">Original Rate for Strikethrough (R)</Label>
-            <Input
-              id="original_multi_day_rate"
-              type="number"
-              value={formData.original_multi_day_rate ?? ""}
-              onChange={(e) =>
-                updateField("original_multi_day_rate", e.target.value ? parseInt(e.target.value) : null)
-              }
-              placeholder="Shows as crossed-out price"
+              min={0}
+              max={50}
+              placeholder="e.g., 10"
             />
           </div>
         </div>
+        
+        {/* Live preview */}
+        {formData.daily_rate > 0 && formData.multi_day_discount_percent > 0 && (
+          <div className="mt-4 p-4 bg-muted/50 rounded-md">
+            <p className="text-sm text-muted-foreground">
+              <strong className="text-foreground">Preview:</strong>{" "}
+              <span className="text-accent font-medium">
+                R{Math.round(formData.daily_rate * (1 - formData.multi_day_discount_percent / 100)).toLocaleString()}
+              </span>
+              /day for {formData.multi_day_threshold}+ days{" "}
+              <span className="line-through text-muted-foreground">
+                R{formData.daily_rate.toLocaleString()}
+              </span>{" "}
+              ({formData.multi_day_discount_percent}% off)
+            </p>
+          </div>
+        )}
       </section>
 
       {/* Content */}

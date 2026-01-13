@@ -312,6 +312,7 @@ export type Database = {
           luggage_capacity: string | null
           mileage_limit: string | null
           minimum_rental_days: number | null
+          multi_day_discount_percent: number | null
           multi_day_rate: number | null
           multi_day_threshold: number | null
           name: string
@@ -350,6 +351,7 @@ export type Database = {
           luggage_capacity?: string | null
           mileage_limit?: string | null
           minimum_rental_days?: number | null
+          multi_day_discount_percent?: number | null
           multi_day_rate?: number | null
           multi_day_threshold?: number | null
           name: string
@@ -388,6 +390,7 @@ export type Database = {
           luggage_capacity?: string | null
           mileage_limit?: string | null
           minimum_rental_days?: number | null
+          multi_day_discount_percent?: number | null
           multi_day_rate?: number | null
           multi_day_threshold?: number | null
           name?: string
