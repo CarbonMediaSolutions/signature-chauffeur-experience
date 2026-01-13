@@ -28,6 +28,9 @@ import AdminFleet from "./pages/admin/AdminFleet";
 import AdminFleetNew from "./pages/admin/AdminFleetNew";
 import AdminFleetEdit from "./pages/admin/AdminFleetEdit";
 import AdminBulkImport from "./pages/admin/AdminBulkImport";
+import AdminSpecials from "./pages/admin/AdminSpecials";
+import AdminSpecialNew from "./pages/admin/AdminSpecialNew";
+import AdminSpecialEdit from "./pages/admin/AdminSpecialEdit";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +68,9 @@ const App = () => (
               <Route path="fleet/new" element={<AdminFleetNew />} />
               <Route path="fleet/bulk-import" element={<AdminBulkImport />} />
               <Route path="fleet/:id/edit" element={<AdminFleetEdit />} />
+              <Route path="specials" element={<AdminSpecials />} />
+              <Route path="specials/new" element={<AdminSpecialNew />} />
+              <Route path="specials/:id/edit" element={<AdminSpecialEdit />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
