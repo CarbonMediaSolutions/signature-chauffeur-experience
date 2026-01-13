@@ -49,7 +49,7 @@ export const SpecialsCarousel = () => {
                 <div className="bg-card border border-border rounded-sm overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
                   {/* Image */}
                   {special.image_url && (
-                    <div className="aspect-[16/10] overflow-hidden">
+                    <div className="aspect-[3/4] overflow-hidden">
                       <img
                         src={special.image_url}
                         alt={special.title}
