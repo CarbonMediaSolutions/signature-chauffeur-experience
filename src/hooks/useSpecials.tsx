@@ -36,10 +36,11 @@ export const useSpecials = () => {
 };
 
 export const useActiveSpecials = () => {
+  const today = new Date().toISOString().split("T")[0];
+  
   return useQuery({
-    queryKey: ["specials", "active"],
+    queryKey: ["specials", "active", today],
     queryFn: async () => {
-      const today = new Date().toISOString().split("T")[0];
       const { data, error } = await supabase
         .from("specials")
         .select("*")
@@ -51,6 +52,9 @@ export const useActiveSpecials = () => {
       if (error) throw error;
       return data as Special[];
     },
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 
