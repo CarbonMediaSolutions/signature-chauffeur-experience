@@ -302,6 +302,7 @@ export type Database = {
           features: string[] | null
           fuel_type: string | null
           gallery_urls: string[] | null
+          has_aircon: boolean | null
           hero_video_url: string | null
           id: string
           image: string
@@ -311,7 +312,10 @@ export type Database = {
           luggage_capacity: string | null
           mileage_limit: string | null
           minimum_rental_days: number | null
+          multi_day_rate: number | null
+          multi_day_threshold: number | null
           name: string
+          original_multi_day_rate: number | null
           seats: number | null
           security_deposit: number | null
           slug: string | null
@@ -336,6 +340,7 @@ export type Database = {
           features?: string[] | null
           fuel_type?: string | null
           gallery_urls?: string[] | null
+          has_aircon?: boolean | null
           hero_video_url?: string | null
           id: string
           image: string
@@ -345,7 +350,10 @@ export type Database = {
           luggage_capacity?: string | null
           mileage_limit?: string | null
           minimum_rental_days?: number | null
+          multi_day_rate?: number | null
+          multi_day_threshold?: number | null
           name: string
+          original_multi_day_rate?: number | null
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null
@@ -370,6 +378,7 @@ export type Database = {
           features?: string[] | null
           fuel_type?: string | null
           gallery_urls?: string[] | null
+          has_aircon?: boolean | null
           hero_video_url?: string | null
           id?: string
           image?: string
@@ -379,7 +388,10 @@ export type Database = {
           luggage_capacity?: string | null
           mileage_limit?: string | null
           minimum_rental_days?: number | null
+          multi_day_rate?: number | null
+          multi_day_threshold?: number | null
           name?: string
+          original_multi_day_rate?: number | null
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null
