@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { FeaturedCarousel } from "@/components/home/FeaturedCarousel";
+import { SpecialsCarousel } from "@/components/home/SpecialsCarousel";
 import { MissionIcons } from "@/components/home/MissionIcons";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
@@ -59,6 +60,9 @@ const Index = () => {
 
       {/* Featured Cars Carousel */}
       <FeaturedCarousel />
+
+      {/* Special Offers Carousel */}
+      <SpecialsCarousel />
 
       {/* How It Works Steps - Swipeable on mobile */}
       <HowItWorks />

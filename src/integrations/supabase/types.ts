@@ -217,6 +217,54 @@ export type Database = {
         }
         Relationships: []
       }
+      specials: {
+        Row: {
+          category_tag: string
+          created_at: string
+          cta_link: string
+          cta_text: string
+          description: string | null
+          display_order: number | null
+          end_date: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          start_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category_tag: string
+          created_at?: string
+          cta_link: string
+          cta_text: string
+          description?: string | null
+          display_order?: number | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          start_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category_tag?: string
+          created_at?: string
+          cta_link?: string
+          cta_text?: string
+          description?: string | null
+          display_order?: number | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
