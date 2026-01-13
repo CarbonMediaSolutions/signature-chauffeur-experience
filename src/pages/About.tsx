@@ -28,29 +28,15 @@ const About = () => {
                 Long before they represent success, cars live in our imagination — pinned to walls, driven by icons, associated with the belief that life can be bigger. Signature was created from that understanding. We see cars not as machines, but as emotional experiences that change how you show up, sharpen confidence, and remind you of what's possible.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[3/4] overflow-hidden rounded-sm">
-                <img
-                  src={capeTownRoad}
-                  alt="Cape Town coastal road"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="space-y-4">
-                <div className="aspect-square overflow-hidden rounded-sm">
-                  <img
-                    src={interiorDetail}
-                    alt="Luxury interior craftsmanship"
-                    className="w-full h-full object-cover"
-                  />
+            <div className="aspect-video bg-charcoal rounded-sm overflow-hidden relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-primary/40" />
+              <div className="relative z-10 text-center">
+                <div className="w-20 h-20 rounded-full border-2 border-primary-foreground/30 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-primary-foreground/60 border-b-8 border-b-transparent ml-1" />
                 </div>
-                <div className="aspect-square overflow-hidden rounded-sm">
-                  <img
-                    src={lifestyleCoastal}
-                    alt="Coastal lifestyle"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <p className="text-caption text-primary-foreground/60 tracking-[0.2em]">
+                  VIDEO COMING SOON
+                </p>
               </div>
             </div>
           </div>
@@ -142,7 +128,7 @@ const About = () => {
               <p className="text-body-lg text-muted-foreground leading-relaxed">
                 My love for cars started with a Ferrari F40 poster and weekends watching Formula One. To me, they symbolised possibility — the belief that one day, more was achievable.
               </p>
-              <p className="text-body text-muted-foreground leading-relaxed">
+              <p className="text-body-lg text-muted-foreground leading-relaxed">
                 That fascination never left. When I eventually owned the cars I once dreamed about, what stayed with me wasn't status, but how they made me feel: focused, confident, fully present. Signature was born from that feeling.
               </p>
             </div>
@@ -198,15 +184,6 @@ const About = () => {
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
-            <blockquote className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground italic leading-relaxed mb-6">
-              "Because luxury isn't just about what you drive.<br />
-              It's about how it makes you show up."
-            </blockquote>
-            <p className="text-caption text-muted-foreground tracking-[0.15em] mb-16">
-              — Dean Oliver
-            </p>
-            
             <h2 className="text-headline text-foreground mb-12">
               Begin Your Signature Experience
             </h2>
