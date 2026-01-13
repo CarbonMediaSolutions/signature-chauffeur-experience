@@ -22,10 +22,12 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
   const hasAircon = vehicle.has_aircon ?? true;
   const driveType = vehicle.drive_type ?? "RWD";
   
-  // Multi-day pricing
+  // Multi-day pricing - calculate from discount percentage
+  const discountPercent = vehicle.multi_day_discount_percent ?? 10;
   const multiDayThreshold = vehicle.multi_day_threshold ?? 4;
-  const multiDayRate = vehicle.multi_day_rate;
-  const originalMultiDayRate = vehicle.original_multi_day_rate;
+  const discountedRate = discountPercent > 0 
+    ? Math.round(vehicle.daily_rate * (1 - discountPercent / 100)) 
+    : null;
 
   const isAutomatic = transmission?.toLowerCase().includes("auto");
 
@@ -112,16 +114,14 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           </p>
           
           {/* Multi-day rate with strikethrough */}
-          {multiDayRate && (
+          {discountedRate && discountPercent > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm text-accent font-medium">
-                R{multiDayRate.toLocaleString()} / day for {multiDayThreshold}+ days
+                R{discountedRate.toLocaleString()} / day for {multiDayThreshold}+ days
               </span>
-              {originalMultiDayRate && originalMultiDayRate > multiDayRate && (
-                <span className="text-xs text-muted-foreground line-through">
-                  R{originalMultiDayRate.toLocaleString()}
-                </span>
-              )}
+              <span className="text-xs text-muted-foreground line-through">
+                R{vehicle.daily_rate.toLocaleString()}
+              </span>
             </div>
           )}
         </div>
