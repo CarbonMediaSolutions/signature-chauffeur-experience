@@ -12,6 +12,18 @@ import aboutDean from "@/assets/about-dean-placeholder.jpg";
 const About = () => {
   return (
     <Layout>
+      {/* Hero Image */}
+      <section className="relative h-[50vh] md:h-[60vh]">
+        <div className="absolute inset-0">
+          <img
+            src={capeTownRoad}
+            alt="Scenic coastal road"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-transparent to-primary/40" />
+        </div>
+      </section>
+
       {/* Section 1: Our Story */}
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
@@ -24,10 +36,22 @@ const About = () => {
             </h1>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div>
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+            <div className="space-y-6">
+              <p className="font-serif text-xl md:text-2xl text-foreground italic leading-relaxed">
+                "Cars have always meant more than the destination."
+              </p>
               <p className="text-body-lg text-muted-foreground leading-relaxed">
-                Long before they represent success, cars live in our imagination — pinned to walls, driven by icons, associated with the belief that life can be bigger. Signature was created from that understanding. We see cars not as machines, but as emotional experiences that change how you show up, sharpen confidence, and remind you of what's possible.
+                Cars have always meant more than the destination. Long before status or success, they live in our imagination. Symbols of confidence, freedom, and possibility. As we grow, that meaning evolves. Cars become part of our milestones: how we arrive, how we're perceived, and how we feel stepping into moments that matter.
+              </p>
+              <p className="text-body-lg text-muted-foreground leading-relaxed">
+                Signature Car Rentals was created from that understanding. We don't see cars as machines alone, but as emotional experiences shaped by design, sound, and the feeling they create behind the wheel. A great car doesn't just take you somewhere. It changes how you show up.
+              </p>
+              <p className="text-body-lg text-muted-foreground leading-relaxed">
+                Signature exists to give people access to that feeling. For moments where ambition meets emotion.
+              </p>
+              <p className="font-serif text-lg text-foreground italic">
+                Because cars aren't just driven. They're felt.
               </p>
             </div>
             <div className="aspect-video bg-charcoal rounded-sm overflow-hidden relative flex items-center justify-center">
@@ -221,29 +245,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Section 4: The Difference */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container-luxury">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
-              THE DIFFERENCE
-            </p>
-            <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
-            
-            <div className="space-y-6">
-              <p className="text-body-lg text-muted-foreground leading-relaxed">
-                We believe cars are emotional experiences — they symbolise ambition and possibility.
-              </p>
-              <p className="text-body text-muted-foreground leading-relaxed">
-                Signature is family-led and hands-on, built on trust and genuine care.
-              </p>
-              <p className="text-body text-muted-foreground leading-relaxed">
-                We exist for the dreamers — creating access without intimidation.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Section 5: Final Statement + CTA */}
       <section className="py-24 md:py-32 bg-ivory">
