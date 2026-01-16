@@ -1,9 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
 import { LuxuryButton } from "@/components/ui/luxury-button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
-import interiorDetail from "@/assets/detail-interior.jpg";
-import lifestyleCoastal from "@/assets/lifestyle-coastal-drive.jpg";
 import aboutDean from "@/assets/about-dean-placeholder.jpg";
 
 const About = () => {
@@ -13,13 +16,12 @@ const About = () => {
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
           <div className="max-w-4xl mx-auto text-center mb-16">
-            <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
+            <p className="text-caption text-muted-foreground mb-4 tracking-[0.25em]">
               OUR STORY
             </p>
-            <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
-            <blockquote className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground italic leading-relaxed">
-              "Cars have always meant more than just the destination."
-            </blockquote>
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground leading-relaxed mb-8">
+              Cars Have Always Meant More
+            </h1>
           </div>
           
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -52,9 +54,10 @@ const About = () => {
             </p>
             <div className="w-16 h-px bg-primary/30 mx-auto mb-16" />
             
-            <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Desktop: 3-column grid */}
+            <div className="hidden md:grid md:grid-cols-3 gap-12 lg:gap-16">
               {/* Why Signature */}
-              <div className="text-center md:text-left">
+              <div className="text-left">
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   Why Signature
                 </h3>
@@ -64,7 +67,7 @@ const About = () => {
               </div>
               
               {/* Who We Serve */}
-              <div className="text-center md:text-left">
+              <div className="text-left">
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   Who We Serve
                 </h3>
@@ -79,7 +82,7 @@ const About = () => {
               </div>
               
               {/* Our Values */}
-              <div className="text-center md:text-left">
+              <div className="text-left">
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   Our Values
                 </h3>
@@ -97,6 +100,71 @@ const About = () => {
                     <span className="block text-sm mt-1">A family-led business with a face behind the name</span>
                   </li>
                 </ul>
+              </div>
+            </div>
+
+            {/* Mobile: Carousel */}
+            <div className="md:hidden">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {/* Why Signature */}
+                  <CarouselItem>
+                    <div className="text-center px-4">
+                      <h3 className="font-serif text-xl text-foreground mb-4">
+                        Why Signature
+                      </h3>
+                      <p className="text-body text-muted-foreground leading-relaxed">
+                        We focus on how a drive makes you feel — not just what you drive. Every booking, every car, every interaction is handled with intention.
+                      </p>
+                    </div>
+                  </CarouselItem>
+                  
+                  {/* Who We Serve */}
+                  <CarouselItem>
+                    <div className="text-center px-4">
+                      <h3 className="font-serif text-xl text-foreground mb-4">
+                        Who We Serve
+                      </h3>
+                      <p className="text-body text-muted-foreground leading-relaxed mb-4">
+                        For those who see a car as part of the moment:
+                      </p>
+                      <ul className="space-y-2 text-body text-muted-foreground">
+                        <li>Business leaders arriving with presence</li>
+                        <li>Travellers seeking something extraordinary</li>
+                        <li>Those celebrating milestones worth remembering</li>
+                      </ul>
+                    </div>
+                  </CarouselItem>
+                  
+                  {/* Our Values */}
+                  <CarouselItem>
+                    <div className="text-center px-4">
+                      <h3 className="font-serif text-xl text-foreground mb-4">
+                        Our Values
+                      </h3>
+                      <ul className="space-y-3 text-body text-muted-foreground">
+                        <li>
+                          <span className="text-foreground font-medium">Possibility</span>
+                          <span className="block text-sm mt-1">Access to experiences once only dreamed of</span>
+                        </li>
+                        <li>
+                          <span className="text-foreground font-medium">Discretion</span>
+                          <span className="block text-sm mt-1">Personal, attentive, never transactional</span>
+                        </li>
+                        <li>
+                          <span className="text-foreground font-medium">Humanity</span>
+                          <span className="block text-sm mt-1">A family-led business with a face behind the name</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </CarouselItem>
+                </CarouselContent>
+              </Carousel>
+              {/* Carousel dots indicator */}
+              <div className="flex justify-center gap-2 mt-6">
+                <div className="w-2 h-2 rounded-full bg-primary/30" />
+                <div className="w-2 h-2 rounded-full bg-primary/30" />
+                <div className="w-2 h-2 rounded-full bg-primary/30" />
               </div>
             </div>
           </div>
@@ -124,12 +192,9 @@ const About = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="space-y-6">
+            <div>
               <p className="text-body-lg text-muted-foreground leading-relaxed">
-                My love for cars started with a Ferrari F40 poster and weekends watching Formula One. To me, they symbolised possibility — the belief that one day, more was achievable.
-              </p>
-              <p className="text-body-lg text-muted-foreground leading-relaxed">
-                That fascination never left. When I eventually owned the cars I once dreamed about, what stayed with me wasn't status, but how they made me feel: focused, confident, fully present. Signature was born from that feeling.
+                My love for cars started with a Ferrari F40 poster and weekends watching Formula One. To me, they symbolised possibility — the belief that one day, more was achievable. That fascination never left. When I eventually owned the cars I once dreamed about, what stayed with me wasn't status, but how they made me feel: focused, confident, fully present. Signature was born from that feeling.
               </p>
             </div>
           </div>
