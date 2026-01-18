@@ -31,16 +31,13 @@ const About = () => {
             <p className="text-caption text-muted-foreground mb-4 tracking-[0.25em]">
               OUR STORY
             </p>
-            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground leading-relaxed mb-8">
-              Cars Have Always Meant More
+            <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground italic leading-relaxed">
+              "Cars have always meant more than the destination."
             </h1>
           </div>
           
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div className="space-y-6">
-              <p className="font-serif text-xl md:text-2xl text-foreground italic leading-relaxed">
-                "Cars have always meant more than the destination."
-              </p>
               <p className="text-body-lg text-muted-foreground leading-relaxed">
                 Cars have always meant more than the destination. Long before status or success, they live in our imagination. Symbols of confidence, freedom, and possibility. As we grow, that meaning evolves. Cars become part of our milestones: how we arrive, how we're perceived, and how we feel stepping into moments that matter.
               </p>

@@ -150,31 +150,6 @@ const Process = () => {
         </div>
       </section>
 
-      {/* Steps Grid - Desktop Alternative */}
-      <section className="section-padding bg-[hsl(35,30%,95%)]">
-        <div className="container-luxury">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-            {steps.map((step) => (
-              <div key={step.number} className="text-center">
-                <span className="text-5xl font-serif font-medium text-muted-foreground/20 block mb-4">
-                  {step.number}
-                </span>
-                <h3 className="font-serif text-xl font-medium text-foreground mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Tagline */}
-          <p className="text-center mt-16 font-serif text-xl md:text-2xl text-foreground/80 italic">
-            Simple. Personal. Signature.
-          </p>
-        </div>
-      </section>
 
       {/* Philosophy Section */}
       <section className="relative py-24 md:py-32">
