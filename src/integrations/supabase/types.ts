@@ -317,6 +317,7 @@ export type Database = {
           multi_day_threshold: number | null
           name: string
           original_multi_day_rate: number | null
+          power_kw: number | null
           seats: number | null
           security_deposit: number | null
           slug: string | null
@@ -356,6 +357,7 @@ export type Database = {
           multi_day_threshold?: number | null
           name: string
           original_multi_day_rate?: number | null
+          power_kw?: number | null
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null
@@ -395,6 +397,7 @@ export type Database = {
           multi_day_threshold?: number | null
           name?: string
           original_multi_day_rate?: number | null
+          power_kw?: number | null
           seats?: number | null
           security_deposit?: number | null
           slug?: string | null

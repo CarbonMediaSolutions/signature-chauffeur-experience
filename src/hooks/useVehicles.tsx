@@ -31,6 +31,7 @@ export interface Vehicle {
   has_aircon: boolean | null;
   doors: number | null;
   acceleration: string | null;
+  power_kw: number | null;
 }
 
 export const useVehicles = () => {
