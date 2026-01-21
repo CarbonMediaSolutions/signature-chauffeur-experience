@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicles ADD COLUMN power_kw INTEGER;

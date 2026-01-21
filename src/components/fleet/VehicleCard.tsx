@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Vehicle } from "@/hooks/useVehicles";
-import { Users, Gauge, DoorOpen, Snowflake, Car, Cog } from "lucide-react";
+import { Users, Gauge, Zap, Cog } from "lucide-react";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -17,10 +17,12 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
   // Fallback values for specs if not in database
   const seats = vehicle.seats ?? 4;
   const transmission = vehicle.transmission ?? "Automatic";
-  const acceleration = vehicle.acceleration ?? "5.2s";
-  const doors = vehicle.doors ?? 4;
-  const hasAircon = vehicle.has_aircon ?? true;
-  const driveType = vehicle.drive_type ?? "RWD";
+  const acceleration = vehicle.acceleration ?? null;
+  const powerKw = vehicle.power_kw ?? null;
+  const engine = vehicle.engine ?? null;
+  
+  // Extract engine type (V8, V6, etc.) from engine string
+  const engineType = engine?.match(/V\d+|Inline-\d+|I\d+|Flat-\d+/i)?.[0] || null;
   
   // Multi-day pricing - calculate from discount percentage
   const discountPercent = vehicle.multi_day_discount_percent ?? 10;
@@ -78,8 +80,25 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           {vehicle.name}
         </h3>
         
-        {/* Quick specs grid */}
-        <div className="grid grid-cols-3 gap-2 mb-5">
+        {/* Quick specs row */}
+        <div className="flex items-center gap-3 mb-5 flex-wrap">
+          {powerKw && (
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Zap className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium text-foreground">{powerKw} kW</span>
+            </div>
+          )}
+          {acceleration && (
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Gauge className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium text-foreground">0-100: {acceleration}</span>
+            </div>
+          )}
+          {engineType && (
+            <span className="text-xs font-medium text-foreground bg-accent/10 px-2 py-0.5 rounded">
+              {engineType}
+            </span>
+          )}
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Users className="w-3.5 h-3.5" />
             <span className="text-xs font-medium text-foreground">{seats}</span>
@@ -88,41 +107,30 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
             <Cog className="w-3.5 h-3.5" />
             <span className="text-xs font-medium text-foreground">{isAutomatic ? "Auto" : "Manual"}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Gauge className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium text-foreground">{acceleration}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <DoorOpen className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium text-foreground">{doors} doors</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Snowflake className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium text-foreground">{hasAircon ? "A/C" : "No A/C"}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Car className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium text-foreground">{driveType}</span>
-          </div>
         </div>
         
         {/* Pricing section */}
-        <div className="space-y-1.5 border-t border-border/50 pt-4">
-          {/* Daily rate */}
-          <p className="text-sm text-muted-foreground">
-            From <span className="text-foreground font-semibold text-base">R{vehicle.daily_rate.toLocaleString()}</span> / day
-          </p>
-          
-          {/* Multi-day rate with strikethrough */}
-          {discountedRate && discountPercent > 0 && (
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm text-accent font-medium">
-                R{discountedRate.toLocaleString()} / day for {multiDayThreshold}+ days
-              </span>
-              <span className="text-xs text-muted-foreground line-through">
-                R{vehicle.daily_rate.toLocaleString()}
-              </span>
+        <div className="border-t border-border/50 pt-4">
+          {discountedRate && discountPercent > 0 ? (
+            <div className="space-y-1">
+              {/* Strikethrough original + discounted price */}
+              <div className="flex items-baseline gap-3">
+                <span className="text-lg text-muted-foreground line-through">
+                  R{vehicle.daily_rate.toLocaleString()}
+                </span>
+                <span className="text-xl font-semibold text-foreground">
+                  R{discountedRate.toLocaleString()}
+                </span>
+                <span className="text-sm text-muted-foreground">/ day</span>
+              </div>
+              <p className="text-xs text-accent font-medium">
+                {multiDayThreshold}+ day rate • Save {discountPercent}%
+              </p>
             </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              From <span className="text-foreground font-semibold text-lg">R{vehicle.daily_rate.toLocaleString()}</span> / day
+            </p>
           )}
         </div>
       </div>
