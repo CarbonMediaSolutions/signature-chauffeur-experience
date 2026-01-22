@@ -9,22 +9,38 @@ import {
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import aboutDean from "@/assets/about-dean-placeholder.jpg";
 
+// Video configuration - replace with actual URL when ready
+const ABOUT_VIDEO_URL: string | null = null; // e.g., "https://your-storage.com/brand-video.mp4"
+const ABOUT_VIDEO_POSTER = capeTownRoad;
+
 const About = () => {
   return (
     <Layout>
-      {/* Hero Image */}
+      {/* Hero Video/Image Section */}
       <section className="relative h-[50vh] md:h-[60vh]">
         <div className="absolute inset-0">
-          <img
-            src={capeTownRoad}
-            alt="Scenic coastal road"
-            className="w-full h-full object-cover"
-          />
+          {ABOUT_VIDEO_URL ? (
+            <video
+              src={ABOUT_VIDEO_URL}
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={ABOUT_VIDEO_POSTER}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={ABOUT_VIDEO_POSTER}
+              alt="Signature Car Rentals - Scenic coastal road"
+              className="w-full h-full object-cover"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-transparent to-primary/40" />
         </div>
       </section>
 
-      {/* Section 1: Our Story */}
+      {/* Section 1: Our Story - Quote first, then two columns */}
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
           <div className="max-w-4xl mx-auto text-center mb-16">
@@ -51,16 +67,33 @@ const About = () => {
                 Because cars aren't just driven. They're felt.
               </p>
             </div>
-            <div className="aspect-video bg-charcoal rounded-sm overflow-hidden relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-primary/40" />
-              <div className="relative z-10 text-center">
-                <div className="w-20 h-20 rounded-full border-2 border-primary-foreground/30 flex items-center justify-center mx-auto mb-4">
-                  <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-primary-foreground/60 border-b-8 border-b-transparent ml-1" />
-                </div>
-                <p className="text-caption text-primary-foreground/60 tracking-[0.2em]">
-                  VIDEO COMING SOON
-                </p>
-              </div>
+            {/* Video placeholder - will show video when URL is set */}
+            <div className="aspect-video bg-charcoal rounded-sm overflow-hidden relative">
+              {ABOUT_VIDEO_URL ? (
+                <video
+                  src={ABOUT_VIDEO_URL}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  poster={ABOUT_VIDEO_POSTER}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-primary/40" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="relative z-10 text-center">
+                      <div className="w-20 h-20 rounded-full border-2 border-primary-foreground/30 flex items-center justify-center mx-auto mb-4">
+                        <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-primary-foreground/60 border-b-8 border-b-transparent ml-1" />
+                      </div>
+                      <p className="text-caption text-primary-foreground/60 tracking-[0.2em]">
+                        VIDEO COMING SOON
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
