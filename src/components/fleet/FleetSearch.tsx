@@ -1,177 +1,118 @@
-import { useState } from "react";
-import { format } from "date-fns";
-import { CalendarIcon, Send } from "lucide-react";
-import { DateRange } from "react-day-picker";
-import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { useState, useMemo } from "react";
+import { Search, X } from "lucide-react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 
 interface FleetSearchProps {
-  onSearch?: (dateRange: DateRange | undefined) => void;
-  isSearching?: boolean;
-  onClear?: () => void;
-  hasActiveSearch?: boolean;
+  categories: string[];
+  brands: string[];
+  onFilter: (category: string | null, brand: string | null) => void;
+  hasActiveFilters: boolean;
 }
 
 export const FleetSearch = ({ 
-  onSearch, 
-  isSearching, 
-  onClear,
-  hasActiveSearch 
+  categories,
+  brands,
+  onFilter,
+  hasActiveFilters
 }: FleetSearchProps) => {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [isStartOpen, setIsStartOpen] = useState(false);
-  const [isEndOpen, setIsEndOpen] = useState(false);
-  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
 
-  const handleEnquiry = () => {
-    if (dateRange?.from && dateRange?.to) {
-      const params = new URLSearchParams({
-        from: format(dateRange.from, "yyyy-MM-dd"),
-        to: format(dateRange.to, "yyyy-MM-dd"),
-        type: "availability",
-      });
-      navigate(`/contact?${params.toString()}`);
-    }
+  const handleSearch = () => {
+    onFilter(
+      selectedCategory || null,
+      selectedBrand || null
+    );
   };
 
   const handleClear = () => {
-    setDateRange(undefined);
-    onClear?.();
+    setSelectedCategory("");
+    setSelectedBrand("");
+    onFilter(null, null);
   };
 
   return (
     <div className="bg-secondary/50 border border-border p-6 md:p-8">
       <h2 className="font-serif text-xl md:text-2xl text-foreground mb-2">
-        Check Availability
+        Find Your Perfect Drive
       </h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Select your preferred dates and we'll confirm availability personally.
+        Browse by category and brand to discover your ideal vehicle.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-end">
-        {/* Start Date */}
+        {/* Category Filter */}
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-            From
+            Category
           </label>
-          <Popover open={isStartOpen} onOpenChange={setIsStartOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal h-12 bg-background border-border",
-                  !dateRange?.from && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange?.from ? (
-                  format(dateRange.from, "d MMM yyyy")
-                ) : (
-                  <span>Select start date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-background" align="start">
-              <Calendar
-                mode="single"
-                selected={dateRange?.from}
-                onSelect={(date) => {
-                  setDateRange(prev => ({ ...prev, from: date }));
-                  setIsStartOpen(false);
-                  if (date && !dateRange?.to) {
-                    setIsEndOpen(true);
-                  }
-                }}
-                disabled={(date) => date < new Date()}
-                initialFocus
-                className="pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="h-12 bg-background border-border">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent className="bg-background">
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* End Date */}
+        {/* Brand Filter */}
         <div>
           <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-            To
+            Brand
           </label>
-          <Popover open={isEndOpen} onOpenChange={setIsEndOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal h-12 bg-background border-border",
-                  !dateRange?.to && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange?.to ? (
-                  format(dateRange.to, "d MMM yyyy")
-                ) : (
-                  <span>Select end date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-background" align="start">
-              <Calendar
-                mode="single"
-                selected={dateRange?.to}
-                onSelect={(date) => {
-                  setDateRange(prev => ({ ...prev, to: date }));
-                  setIsEndOpen(false);
-                }}
-                disabled={(date) => {
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-                  if (date < today) return true;
-                  if (dateRange?.from && date < dateRange.from) return true;
-                  return false;
-                }}
-                initialFocus
-                className="pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
+          <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+            <SelectTrigger className="h-12 bg-background border-border">
+              <SelectValue placeholder="All Brands" />
+            </SelectTrigger>
+            <SelectContent className="bg-background">
+              <SelectItem value="all">All Brands</SelectItem>
+              {brands.map((brand) => (
+                <SelectItem key={brand} value={brand}>
+                  {brand}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Enquiry Button */}
+        {/* Action Buttons */}
         <div className="flex gap-2">
           <LuxuryButton
             variant="default"
             size="lg"
-            onClick={handleEnquiry}
-            disabled={!dateRange?.from || !dateRange?.to}
+            onClick={handleSearch}
             className="h-12 px-8"
           >
-            <Send className="w-4 h-4 mr-2" />
-            Send Availability Enquiry
+            <Search className="w-4 h-4 mr-2" />
+            Search Fleet
           </LuxuryButton>
           
-          {dateRange?.from && (
+          {hasActiveFilters && (
             <Button
               variant="outline"
               onClick={handleClear}
               className="h-12 px-4"
             >
+              <X className="w-4 h-4 mr-2" />
               Clear
             </Button>
           )}
         </div>
       </div>
-      
-      {dateRange?.from && dateRange?.to && (
-        <p className="text-sm text-muted-foreground mt-4">
-          {format(dateRange.from, "d MMMM")} – {format(dateRange.to, "d MMMM yyyy")}
-        </p>
-      )}
     </div>
   );
 };

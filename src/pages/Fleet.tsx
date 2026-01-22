@@ -2,20 +2,56 @@ import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
 import { FleetSearch } from "@/components/fleet/FleetSearch";
 import { useVehicles, useCategories } from "@/hooks/useVehicles";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState, useMemo } from "react";
 import { Loader2 } from "lucide-react";
 
 const Fleet = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   
   const { data: vehicles = [], isLoading } = useVehicles();
   const { data: categories = [] } = useCategories();
 
-  // Filter by category
-  const filteredVehicles = selectedCategory
-    ? vehicles.filter((v) => v.category === selectedCategory)
-    : vehicles;
+  // Extract unique brands from vehicle names
+  const brands = useMemo(() => {
+    const brandSet = new Set<string>();
+    vehicles.forEach((v) => {
+      // Extract brand from vehicle name (first word or known patterns)
+      const name = v.name;
+      if (name.startsWith("Mercedes")) brandSet.add("Mercedes");
+      else if (name.startsWith("BMW")) brandSet.add("BMW");
+      else if (name.startsWith("Porsche")) brandSet.add("Porsche");
+      else if (name.startsWith("Ford")) brandSet.add("Ford");
+      else if (name.startsWith("Audi")) brandSet.add("Audi");
+      else if (name.startsWith("Range Rover")) brandSet.add("Range Rover");
+      else if (name.startsWith("Bentley")) brandSet.add("Bentley");
+      else if (name.startsWith("Lamborghini")) brandSet.add("Lamborghini");
+      else if (name.startsWith("Ferrari")) brandSet.add("Ferrari");
+      else if (name.startsWith("Rolls-Royce")) brandSet.add("Rolls-Royce");
+      else {
+        // Default: extract first word
+        const firstWord = name.split(" ")[0].split("-")[0];
+        brandSet.add(firstWord);
+      }
+    });
+    return Array.from(brandSet).sort();
+  }, [vehicles]);
+
+  // Filter by category and brand
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter((v) => {
+      const matchesCategory = !selectedCategory || v.category === selectedCategory;
+      const matchesBrand = !selectedBrand || v.name.toLowerCase().includes(selectedBrand.toLowerCase());
+      return matchesCategory && matchesBrand;
+    });
+  }, [vehicles, selectedCategory, selectedBrand]);
+
+  const handleFilter = (category: string | null, brand: string | null) => {
+    setSelectedCategory(category === "all" ? null : category);
+    setSelectedBrand(brand === "all" ? null : brand);
+  };
+
+  const hasActiveFilters = selectedCategory !== null || selectedBrand !== null;
 
   return (
     <Layout>
@@ -37,43 +73,15 @@ const Fleet = () => {
         </div>
       </section>
 
-      {/* Availability Enquiry */}
+      {/* Fleet Search Filters */}
       <section className="py-8 bg-background border-b border-border/30">
         <div className="container-luxury">
-          <FleetSearch />
-        </div>
-      </section>
-
-      {/* Filter */}
-      <section className="py-8 bg-background border-b border-border/50 sticky top-[73px] z-30 backdrop-blur-sm bg-background/95">
-        <div className="container-luxury">
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className={cn(
-                "text-sm tracking-wide px-5 py-2 border transition-all duration-300",
-                selectedCategory === null
-                  ? "bg-foreground text-primary-foreground border-foreground"
-                  : "bg-transparent text-muted-foreground border-border hover:border-foreground/50"
-              )}
-            >
-              All Vehicles
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={cn(
-                  "text-sm tracking-wide px-5 py-2 border transition-all duration-300",
-                  selectedCategory === category
-                    ? "bg-foreground text-primary-foreground border-foreground"
-                    : "bg-transparent text-muted-foreground border-border hover:border-foreground/50"
-                )}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+          <FleetSearch 
+            categories={categories}
+            brands={brands}
+            onFilter={handleFilter}
+            hasActiveFilters={hasActiveFilters}
+          />
         </div>
       </section>
 
@@ -85,23 +93,32 @@ const Fleet = () => {
               <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {filteredVehicles.map((vehicle, index) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-              ))}
-            </div>
+            <>
+              {hasActiveFilters && (
+                <p className="text-sm text-muted-foreground mb-6">
+                  Showing {filteredVehicles.length} vehicle{filteredVehicles.length !== 1 ? 's' : ''}
+                  {selectedCategory && ` in ${selectedCategory}`}
+                  {selectedBrand && ` by ${selectedBrand}`}
+                </p>
+              )}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {filteredVehicles.map((vehicle, index) => (
+                  <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
+                ))}
+              </div>
+            </>
           )}
           
           {!isLoading && filteredVehicles.length === 0 && (
             <div className="text-center py-20">
               <p className="text-muted-foreground mb-4">
-                No vehicles found in this category.
+                No vehicles found matching your criteria.
               </p>
               <button
-                onClick={() => setSelectedCategory(null)}
+                onClick={() => handleFilter(null, null)}
                 className="text-sm text-foreground underline hover:no-underline transition-all duration-200"
               >
-                View all vehicles
+                Clear filters
               </button>
             </div>
           )}
