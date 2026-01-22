@@ -10,6 +10,7 @@ import {
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { Loader2 } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
+import { VehicleCard } from "@/components/fleet/VehicleCard";
 
 export const FeaturedCarousel = () => {
   const { data: vehicles = [], isLoading } = useVehicles();
@@ -66,36 +67,9 @@ export const FeaturedCarousel = () => {
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {displayVehicles.map((vehicle) => (
+            {displayVehicles.map((vehicle, index) => (
               <CarouselItem key={vehicle.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                <Link 
-                  to={`/fleet/${vehicle.slug || vehicle.id}`}
-                  className="group block"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-muted mb-4">
-                    <img
-                      src={vehicle.cover_image_url || vehicle.image}
-                      alt={vehicle.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      width={400}
-                      height={300}
-                    />
-                    {vehicle.featured && (
-                      <div className="absolute top-3 left-3 bg-brass text-charcoal text-xs font-medium px-2 py-1 rounded-sm">
-                        Featured
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-lg text-foreground group-hover:text-brass transition-colors mb-1">
-                      {vehicle.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      From R{vehicle.daily_rate.toLocaleString()} / day
-                    </p>
-                  </div>
-                </Link>
+                <VehicleCard vehicle={vehicle} index={index} />
               </CarouselItem>
             ))}
           </CarouselContent>
