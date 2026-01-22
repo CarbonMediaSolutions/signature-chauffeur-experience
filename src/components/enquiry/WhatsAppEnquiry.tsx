@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { format } from "date-fns";
+import { useState, useMemo } from "react";
 import { DateRange } from "react-day-picker";
-import { MessageCircle, Copy, Phone, Mail, Check } from "lucide-react";
-import { DateRangePicker } from "@/components/booking/DateRangePicker";
+import { format, differenceInDays } from "date-fns";
+import { MessageCircle, Phone, Mail, Copy, Check } from "lucide-react";
 import { LuxuryButton } from "@/components/ui/luxury-button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { DateRangePicker } from "@/components/booking/DateRangePicker";
+import { PlacesAutocomplete, PlaceResult } from "@/components/ui/places-autocomplete";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { siteConfig } from "@/lib/siteConfig";
 import { toast } from "sonner";
 
@@ -13,35 +20,77 @@ interface WhatsAppEnquiryProps {
   vehicleName: string;
   dailyRate: number;
   unavailableDates?: Date[];
+  multiDayThreshold?: number;
+  multiDayDiscountPercent?: number;
 }
 
-export const WhatsAppEnquiry = ({ 
-  vehicleName, 
-  dailyRate, 
-  unavailableDates = [] 
+const formatCurrency = (amount: number) => {
+  return `R${amount.toLocaleString()}`;
+};
+
+export const WhatsAppEnquiry = ({
+  vehicleName,
+  dailyRate,
+  unavailableDates = [],
+  multiDayThreshold = 4,
+  multiDayDiscountPercent = 10,
 }: WhatsAppEnquiryProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState<PlaceResult>({ address: "" });
+  const [serviceType, setServiceType] = useState<string>("");
   const [notes, setNotes] = useState("");
   const [dateError, setDateError] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const buildMessage = (): string => {
-    if (!dateRange?.from || !dateRange?.to) return "";
-
-    const startDate = format(dateRange.from, "d MMM yyyy");
-    const endDate = format(dateRange.to, "d MMM yyyy");
-    
-    let message = `Hi Signature Car Rentals, I'm interested in the ${vehicleName} from ${startDate} to ${endDate}.`;
-    
-    if (location.trim()) {
-      message += `\n\nPickup/Delivery: ${location.trim()}`;
+  // Calculate pricing
+  const pricing = useMemo(() => {
+    if (!dateRange?.from || !dateRange?.to) {
+      return null;
     }
-    
+
+    const numDays = differenceInDays(dateRange.to, dateRange.from) + 1;
+    const qualifiesForDiscount = numDays >= multiDayThreshold;
+    const discountedDailyRate = Math.round(dailyRate * (1 - multiDayDiscountPercent / 100));
+    const effectiveRate = qualifiesForDiscount ? discountedDailyRate : dailyRate;
+    const totalEstimate = numDays * effectiveRate;
+    const savings = qualifiesForDiscount ? numDays * (dailyRate - discountedDailyRate) : 0;
+
+    return {
+      numDays,
+      qualifiesForDiscount,
+      discountedDailyRate,
+      effectiveRate,
+      totalEstimate,
+      savings,
+    };
+  }, [dateRange, dailyRate, multiDayThreshold, multiDayDiscountPercent]);
+
+  const buildMessage = (): string => {
+    let message = `Hi Signature Car Rentals, I'm interested in the ${vehicleName}.`;
+
+    if (dateRange?.from && dateRange?.to) {
+      const startDate = format(dateRange.from, "d MMM yyyy");
+      const endDate = format(dateRange.to, "d MMM yyyy");
+      message += `\n\nPreferred Dates: ${startDate} to ${endDate}`;
+      if (pricing) {
+        message += ` (${pricing.numDays} day${pricing.numDays !== 1 ? 's' : ''})`;
+      }
+    }
+
+    if (serviceType) {
+      message += `\n\nService Type: ${serviceType}`;
+    }
+
+    if (location.address.trim()) {
+      message += `\n\nPickup/Delivery: ${location.address.trim()}`;
+    }
+
     if (notes.trim()) {
       message += `\n\nNotes: ${notes.trim()}`;
     }
-    
+
+    message += "\n\nPlease let me know availability and next steps.";
+
     return message;
   };
 
@@ -84,18 +133,38 @@ export const WhatsAppEnquiry = ({
     }
   };
 
+  const handleLocationChange = (result: PlaceResult) => {
+    setLocation(result);
+  };
+
   return (
     <div className="sticky top-[120px] p-8 bg-secondary/50 border border-border">
-      {/* Pricing */}
+      {/* Pricing Header */}
       <p className="text-caption text-muted-foreground tracking-luxury mb-2">
         Starting From
       </p>
-      <p className="text-3xl font-serif font-medium text-foreground mb-1">
-        R{dailyRate.toLocaleString()}
-      </p>
-      <p className="text-sm text-muted-foreground mb-8">
-        per day
-      </p>
+      <div className="flex items-baseline gap-2 flex-wrap">
+        {pricing?.qualifiesForDiscount ? (
+          <>
+            <span className="text-xl text-muted-foreground line-through">
+              {formatCurrency(dailyRate)}
+            </span>
+            <span className="text-3xl font-serif font-medium text-foreground">
+              {formatCurrency(pricing.discountedDailyRate)}
+            </span>
+          </>
+        ) : (
+          <span className="text-3xl font-serif font-medium text-foreground">
+            {formatCurrency(dailyRate)}
+          </span>
+        )}
+        <span className="text-sm text-muted-foreground">per day</span>
+      </div>
+      {multiDayThreshold > 1 && (
+        <p className="text-xs text-muted-foreground mt-1 mb-6">
+          {multiDayDiscountPercent}% off for {multiDayThreshold}+ days
+        </p>
+      )}
 
       {/* Date Picker - Required */}
       <div className="mb-5">
@@ -114,26 +183,68 @@ export const WhatsAppEnquiry = ({
         )}
       </div>
 
-      {/* Date Summary */}
-      {dateRange?.from && dateRange?.to && (
-        <div className="py-3 border-y border-border mb-5">
-          <p className="text-sm text-foreground font-medium">
-            {format(dateRange.from, "d MMM")} – {format(dateRange.to, "d MMM yyyy")}
+      {/* Pricing Breakdown */}
+      {pricing && (
+        <div className="bg-background/50 border border-border/50 p-4 mb-5 space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground">
+              {pricing.numDays} day{pricing.numDays !== 1 ? 's' : ''} × {formatCurrency(pricing.effectiveRate)}/day
+            </span>
+            <span className="text-sm font-medium text-foreground">
+              {formatCurrency(pricing.totalEstimate)}
+            </span>
+          </div>
+          {pricing.qualifiesForDiscount && (
+            <div className="flex justify-between items-center text-accent">
+              <span className="text-sm">
+                Multi-day discount ({multiDayDiscountPercent}%)
+              </span>
+              <span className="text-sm font-medium">
+                Save {formatCurrency(pricing.savings)}
+              </span>
+            </div>
+          )}
+          <div className="border-t border-border pt-3 flex justify-between items-center">
+            <span className="text-sm font-medium text-foreground">
+              Estimated Total
+            </span>
+            <span className="text-xl font-serif text-foreground">
+              {formatCurrency(pricing.totalEstimate)}
+            </span>
+          </div>
+          <p className="text-[10px] text-muted-foreground italic">
+            Prices are indicative. Final pricing confirmed upon enquiry.
           </p>
         </div>
       )}
 
-      {/* Pickup/Delivery Location - Optional */}
+      {/* Pickup/Delivery Location with Google Places */}
       <div className="mb-4">
         <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
           Pickup / Delivery Location
         </p>
-        <Input
-          value={location}
-          onChange={(e) => setLocation(e.target.value.slice(0, 200))}
+        <PlacesAutocomplete
+          value={location.address}
+          onChange={handleLocationChange}
           placeholder="e.g. Cape Town Airport"
-          className="h-11 bg-background border-border"
         />
+      </div>
+
+      {/* Service Type Dropdown */}
+      <div className="mb-4">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+          Service Type
+        </p>
+        <Select value={serviceType} onValueChange={setServiceType}>
+          <SelectTrigger className="h-11 bg-background border-border">
+            <SelectValue placeholder="Select service type" />
+          </SelectTrigger>
+          <SelectContent className="bg-background">
+            <SelectItem value="Self-Drive">Self-Drive</SelectItem>
+            <SelectItem value="Chauffeur">Chauffeur</SelectItem>
+            <SelectItem value="Events">Events</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Notes - Optional */}
@@ -166,7 +277,7 @@ export const WhatsAppEnquiry = ({
           title="Copy message to clipboard"
         >
           {copied ? (
-            <Check className="w-4 h-4 text-green-600" />
+            <Check className="w-4 h-4 text-accent" />
           ) : (
             <Copy className="w-4 h-4 text-muted-foreground" />
           )}

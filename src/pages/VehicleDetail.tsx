@@ -45,6 +45,10 @@ const VehicleDetail = () => {
   // Cast to any to access new fields until types are regenerated
   const v = vehicle as any;
 
+  // Multi-day pricing configuration
+  const multiDayThreshold = v.multi_day_threshold || 4;
+  const multiDayDiscountPercent = v.multi_day_discount_percent || 10;
+
   const vehicleSpecs = [
     { icon: Settings, label: "Engine", value: vehicle.engine || "-" },
     { icon: Zap, label: "Acceleration", value: v.acceleration || "-" },
@@ -271,6 +275,8 @@ const VehicleDetail = () => {
                 vehicleName={vehicle.name}
                 dailyRate={vehicle.daily_rate}
                 unavailableDates={unavailableDates}
+                multiDayThreshold={multiDayThreshold}
+                multiDayDiscountPercent={multiDayDiscountPercent}
               />
             </div>
           </div>
