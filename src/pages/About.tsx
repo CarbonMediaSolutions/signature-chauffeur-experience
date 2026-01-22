@@ -6,11 +6,12 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Sparkles, Shield, Heart } from "lucide-react";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import aboutDean from "@/assets/about-dean-placeholder.jpg";
 
 // Video configuration - replace with actual URL when ready
-const ABOUT_VIDEO_URL: string | null = null; // e.g., "https://your-storage.com/brand-video.mp4"
+const ABOUT_VIDEO_URL: string | null = null;
 const ABOUT_VIDEO_POSTER = capeTownRoad;
 
 const About = () => {
@@ -40,34 +41,36 @@ const About = () => {
         </div>
       </section>
 
-      {/* Section 1: Our Story - Quote first, then two columns */}
+      {/* Section 1: Our Story - Centred layout for better flow */}
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
-          <div className="max-w-4xl mx-auto text-center mb-16">
+          {/* Centred heading and quote */}
+          <div className="max-w-4xl mx-auto text-center mb-12">
             <p className="text-caption text-muted-foreground mb-4 tracking-[0.25em]">
               OUR STORY
             </p>
             <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground italic leading-relaxed">
-              "Cars have always meant more than the destination."
+              "Cars aren't just driven. They're felt."
             </h1>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-            <div className="space-y-6">
-              <p className="text-body-lg text-muted-foreground leading-relaxed">
-                Cars have always meant more than the destination. Long before status or success, they live in our imagination. Symbols of confidence, freedom, and possibility. As we grow, that meaning evolves. Cars become part of our milestones: how we arrive, how we're perceived, and how we feel stepping into moments that matter.
-              </p>
-              <p className="text-body-lg text-muted-foreground leading-relaxed">
-                Signature Car Rentals was created from that understanding. We don't see cars as machines alone, but as emotional experiences shaped by design, sound, and the feeling they create behind the wheel. A great car doesn't just take you somewhere. It changes how you show up.
-              </p>
-              <p className="text-body-lg text-muted-foreground leading-relaxed">
-                Signature exists to give people access to that feeling. For moments where ambition meets emotion.
-              </p>
-              <p className="font-serif text-lg text-foreground italic">
-                Because cars aren't just driven. They're felt.
-              </p>
-            </div>
-            {/* Video placeholder - will show video when URL is set */}
+          <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
+          
+          {/* Centred story content */}
+          <div className="max-w-3xl mx-auto text-center space-y-6 mb-16">
+            <p className="text-body-lg text-muted-foreground leading-relaxed">
+              Cars have always meant more than the destination. Long before status or success, they live in our imagination. Symbols of confidence, freedom, and possibility. As we grow, that meaning evolves. Cars become part of our milestones: how we arrive, how we're perceived, and how we feel stepping into moments that matter.
+            </p>
+            <p className="text-body-lg text-muted-foreground leading-relaxed">
+              Signature Car Rentals was created from that understanding. We don't see cars as machines alone, but as emotional experiences shaped by design, sound, and the feeling they create behind the wheel. A great car doesn't just take you somewhere. It changes how you show up.
+            </p>
+            <p className="text-body-lg text-muted-foreground leading-relaxed">
+              Signature exists to give people access to that feeling. For moments where ambition meets emotion.
+            </p>
+          </div>
+
+          {/* Video placeholder - centred below text */}
+          <div className="max-w-4xl mx-auto">
             <div className="aspect-video bg-charcoal rounded-sm overflow-hidden relative">
               {ABOUT_VIDEO_URL ? (
                 <video
@@ -99,7 +102,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Section 2: The Signature Experience */}
+      {/* Section 2: The Signature Experience - 2 columns only */}
       <section className="py-24 md:py-32 bg-background">
         <div className="container-luxury">
           <div className="max-w-5xl mx-auto">
@@ -108,10 +111,10 @@ const About = () => {
             </p>
             <div className="w-16 h-px bg-primary/30 mx-auto mb-16" />
             
-            {/* Desktop: 3-column grid */}
-            <div className="hidden md:grid md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Desktop: 2-column grid */}
+            <div className="hidden md:grid md:grid-cols-2 gap-12 lg:gap-24">
               {/* Why Signature */}
-              <div className="text-left">
+              <div className="text-center">
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   Why Signature
                 </h3>
@@ -121,7 +124,7 @@ const About = () => {
               </div>
               
               {/* Who We Serve */}
-              <div className="text-left">
+              <div className="text-center">
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   Who We Serve
                 </h3>
@@ -132,27 +135,6 @@ const About = () => {
                   <li>Business leaders arriving with presence</li>
                   <li>Travellers seeking something extraordinary</li>
                   <li>Those celebrating milestones worth remembering</li>
-                </ul>
-              </div>
-              
-              {/* Our Values */}
-              <div className="text-left">
-                <h3 className="font-serif text-xl text-foreground mb-4">
-                  Our Values
-                </h3>
-                <ul className="space-y-3 text-body text-muted-foreground">
-                  <li>
-                    <span className="text-foreground font-medium">Possibility</span>
-                    <span className="block text-sm mt-1">Access to experiences once only dreamed of</span>
-                  </li>
-                  <li>
-                    <span className="text-foreground font-medium">Discretion</span>
-                    <span className="block text-sm mt-1">Personal, attentive, never transactional</span>
-                  </li>
-                  <li>
-                    <span className="text-foreground font-medium">Humanity</span>
-                    <span className="block text-sm mt-1">A family-led business with a face behind the name</span>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -189,34 +171,10 @@ const About = () => {
                       </ul>
                     </div>
                   </CarouselItem>
-                  
-                  {/* Our Values */}
-                  <CarouselItem>
-                    <div className="text-center px-4">
-                      <h3 className="font-serif text-xl text-foreground mb-4">
-                        Our Values
-                      </h3>
-                      <ul className="space-y-3 text-body text-muted-foreground">
-                        <li>
-                          <span className="text-foreground font-medium">Possibility</span>
-                          <span className="block text-sm mt-1">Access to experiences once only dreamed of</span>
-                        </li>
-                        <li>
-                          <span className="text-foreground font-medium">Discretion</span>
-                          <span className="block text-sm mt-1">Personal, attentive, never transactional</span>
-                        </li>
-                        <li>
-                          <span className="text-foreground font-medium">Humanity</span>
-                          <span className="block text-sm mt-1">A family-led business with a face behind the name</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </CarouselItem>
                 </CarouselContent>
               </Carousel>
               {/* Carousel dots indicator */}
               <div className="flex justify-center gap-2 mt-6">
-                <div className="w-2 h-2 rounded-full bg-primary/30" />
                 <div className="w-2 h-2 rounded-full bg-primary/30" />
                 <div className="w-2 h-2 rounded-full bg-primary/30" />
               </div>
@@ -225,17 +183,65 @@ const About = () => {
         </div>
       </section>
 
-      {/* Section 3: Founder Story */}
-      <section className="py-24 md:py-32 bg-ivory">
+      {/* Section: Our Values - Standalone icon-based section */}
+      <section className="py-16 md:py-20 bg-ivory">
+        <div className="container-luxury">
+          <p className="text-caption text-muted-foreground mb-8 tracking-[0.25em] text-center">
+            OUR VALUES
+          </p>
+          <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-4xl mx-auto">
+            {/* Possibility */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-background border border-border mb-4 group-hover:border-brass/50 transition-colors">
+                <Sparkles className="w-6 h-6 text-brass" />
+              </div>
+              <h3 className="font-serif text-lg md:text-xl text-foreground mb-2">
+                Possibility
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Access to experiences once only dreamed of
+              </p>
+            </div>
+            
+            {/* Discretion */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-background border border-border mb-4 group-hover:border-brass/50 transition-colors">
+                <Shield className="w-6 h-6 text-brass" />
+              </div>
+              <h3 className="font-serif text-lg md:text-xl text-foreground mb-2">
+                Discretion
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Personal, attentive, never transactional
+              </p>
+            </div>
+            
+            {/* Humanity */}
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-background border border-border mb-4 group-hover:border-brass/50 transition-colors">
+                <Heart className="w-6 h-6 text-brass" />
+              </div>
+              <h3 className="font-serif text-lg md:text-xl text-foreground mb-2">
+                Humanity
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                A family-led business with a face behind the name
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3: Founder Story - No intro sentence */}
+      <section className="py-24 md:py-32 bg-background">
         <div className="container-luxury">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
               MEET THE FOUNDER
             </p>
-            <div className="w-16 h-px bg-primary/30 mx-auto mb-12" />
-            <p className="font-serif text-2xl md:text-3xl text-foreground leading-relaxed">
-              "I'm Dean Oliver, founder of Signature Car Rentals."
-            </p>
+            <div className="w-16 h-px bg-primary/30 mx-auto" />
           </div>
           
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -275,7 +281,6 @@ const About = () => {
         </div>
       </section>
 
-
       {/* Section 5: Final Statement + CTA */}
       <section className="py-24 md:py-32 bg-ivory">
         <div className="container-luxury">
@@ -286,12 +291,12 @@ const About = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/fleet">
                 <LuxuryButton variant="default" size="lg">
-                  Explore the Fleet
+                  Explore Your Dream Ride
                 </LuxuryButton>
               </Link>
               <Link to="/contact">
                 <LuxuryButton variant="outline" size="lg">
-                  Begin Your Enquiry
+                  Enquire Now
                 </LuxuryButton>
               </Link>
             </div>
