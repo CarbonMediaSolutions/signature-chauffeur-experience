@@ -19,7 +19,7 @@ const navigation = [{
   name: "List Your Vehicle",
   href: "/list-vehicle"
 }, {
-  name: "Contact",
+  name: "Contact Us",
   href: "/contact"
 }];
 export const Header = () => {
@@ -41,7 +41,7 @@ export const Header = () => {
       <nav className="container-luxury flex items-center justify-between py-5">
         {/* Logo */}
         <Link to="/">
-          <img src={logo} alt="Signature Car Rentals" className="h-12 md:h-14 w-auto" />
+          <img src={logo} alt="Signature Car Rentals" className="h-16 md:h-20 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -74,7 +74,7 @@ export const Header = () => {
         {/* Overlay header with logo and close button */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-border/30">
           <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-            <img src={logo} alt="Signature Car Rentals" className="h-12 w-auto" />
+            <img src={logo} alt="Signature Car Rentals" className="h-16 w-auto" />
           </Link>
           <button type="button" className="p-2 -mr-2" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
             <X className="h-6 w-6" />
