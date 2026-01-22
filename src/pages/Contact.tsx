@@ -6,9 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 import { vehicles } from "@/data/fleet";
 
 const enquiryTypes = [
-  "Rental",
-  "Chauffeur",
-  "List Your Vehicle",
+  "Self-Drive Rental",
+  "Chauffeur Service",
+  "Events",
+  "List Your Vehicle for Investment",
 ];
 
 const Contact = () => {
