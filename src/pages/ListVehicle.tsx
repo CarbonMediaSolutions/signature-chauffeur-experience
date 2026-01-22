@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3 } from "lucide-react";
+import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // Import images
 import capeRoadImage from "@/assets/cape-town-road.jpg";
@@ -20,22 +21,108 @@ const ListVehicle = () => {
     vehicleYear: "",
     message: "",
   });
+  const [vehicleImages, setVehicleImages] = useState<File[]>([]);
+  const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(file => {
+      const isValidType = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+      if (!isValidType) {
+        toast({
+          title: "Invalid file type",
+          description: `${file.name} is not a supported format. Use JPG, PNG or WebP.`,
+          variant: "destructive",
+        });
+      }
+      if (!isValidSize) {
+        toast({
+          title: "File too large",
+          description: `${file.name} exceeds 5MB limit.`,
+          variant: "destructive",
+        });
+      }
+      return isValidType && isValidSize;
+    });
+    
+    // Limit to 3 images total
+    const newImages = [...vehicleImages, ...validFiles].slice(0, 3);
+    setVehicleImages(newImages);
+    
+    // Generate previews
+    const previews = newImages.map(file => URL.createObjectURL(file));
+    setUploadPreviews(previews);
+  };
+
+  const removeImage = (index: number) => {
+    // Revoke the old preview URL to prevent memory leaks
+    URL.revokeObjectURL(uploadPreviews[index]);
+    const newImages = vehicleImages.filter((_, i) => i !== index);
+    const newPreviews = uploadPreviews.filter((_, i) => i !== index);
+    setVehicleImages(newImages);
+    setUploadPreviews(newPreviews);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Submission Received",
-      description: "Thank you for your interest. Our team will review your submission and be in touch shortly.",
-    });
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      vehicleMake: "",
-      vehicleModel: "",
-      vehicleYear: "",
-      message: "",
-    });
+    setIsSubmitting(true);
+    
+    try {
+      // Upload images to storage
+      const imageUrls: string[] = [];
+      for (const file of vehicleImages) {
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name}`;
+        const { data, error } = await supabase.storage
+          .from('vehicle-submissions')
+          .upload(fileName, file);
+        
+        if (error) {
+          console.error('Upload error:', error);
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+        
+        if (data) {
+          const { data: urlData } = supabase.storage
+            .from('vehicle-submissions')
+            .getPublicUrl(data.path);
+          imageUrls.push(urlData.publicUrl);
+        }
+      }
+      
+      // For now, just show toast (could save to DB or send via email later)
+      console.log('Submission data:', { ...formData, imageUrls });
+      
+      toast({
+        title: "Submission Received",
+        description: "Thank you for your interest. Our team will review your submission and be in touch shortly.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        vehicleMake: "",
+        vehicleModel: "",
+        vehicleYear: "",
+        message: "",
+      });
+      // Revoke all preview URLs
+      uploadPreviews.forEach(url => URL.revokeObjectURL(url));
+      setVehicleImages([]);
+      setUploadPreviews([]);
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast({
+        title: "Upload Error",
+        description: "There was an issue uploading your images. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const benefits = [
@@ -390,9 +477,67 @@ const ListVehicle = () => {
                 />
               </div>
 
+              {/* Vehicle Photos Upload */}
+              <div>
+                <label className="block text-sm text-foreground mb-2">
+                  Vehicle Photos (Optional)
+                </label>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Upload up to 3 clear photos of your vehicle. JPG, PNG or WebP. Max 5MB each.
+                </p>
+                
+                <div className="space-y-4">
+                  {/* Upload previews */}
+                  {uploadPreviews.length > 0 && (
+                    <div className="grid grid-cols-3 gap-4">
+                      {uploadPreviews.map((preview, index) => (
+                        <div key={index} className="relative aspect-video group">
+                          <img
+                            src={preview}
+                            alt={`Vehicle preview ${index + 1}`}
+                            className="w-full h-full object-cover border border-border"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                            aria-label="Remove image"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Upload button */}
+                  {vehicleImages.length < 3 && (
+                    <label className="flex items-center justify-center gap-2 px-4 py-6 border border-dashed border-border hover:border-foreground cursor-pointer transition-colors">
+                      <Upload className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        {vehicleImages.length === 0 ? 'Add vehicle photos' : 'Add more photos'}
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+              </div>
+
               <div className="pt-4">
-                <LuxuryButton type="submit" variant="default" size="lg" className="w-full md:w-auto">
-                  Submit for Consideration
+                <LuxuryButton 
+                  type="submit" 
+                  variant="default" 
+                  size="lg" 
+                  className="w-full md:w-auto"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit for Consideration'}
                 </LuxuryButton>
               </div>
             </form>

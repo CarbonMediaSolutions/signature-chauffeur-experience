@@ -215,18 +215,12 @@ const Contact = () => {
 
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <div className="sticky top-[120px] space-y-10">
+            <div className="sticky top-[120px] space-y-10">
                 <div>
                   <h3 className="font-serif text-lg font-medium text-foreground mb-4">
                     Direct Contact
                   </h3>
                   <div className="space-y-4 text-muted-foreground">
-                    <a
-                      href="mailto:hello@signaturecarrentals.co.za"
-                      className="block hover:text-foreground transition-colors"
-                    >
-                      hello@signaturecarrentals.co.za
-                    </a>
                     <a
                       href="https://wa.me/27000000000"
                       target="_blank"
