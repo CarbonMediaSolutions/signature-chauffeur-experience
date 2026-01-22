@@ -224,6 +224,7 @@ export type Database = {
           cta_link: string
           cta_text: string
           description: string | null
+          discount_percent: number | null
           display_order: number | null
           end_date: string | null
           id: string
@@ -239,6 +240,7 @@ export type Database = {
           cta_link: string
           cta_text: string
           description?: string | null
+          discount_percent?: number | null
           display_order?: number | null
           end_date?: string | null
           id?: string
@@ -254,6 +256,7 @@ export type Database = {
           cta_link?: string
           cta_text?: string
           description?: string | null
+          discount_percent?: number | null
           display_order?: number | null
           end_date?: string | null
           id?: string

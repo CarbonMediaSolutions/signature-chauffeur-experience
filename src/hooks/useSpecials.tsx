@@ -13,6 +13,7 @@ export interface Special {
   display_order: number;
   start_date: string | null;
   end_date: string | null;
+  discount_percent: number | null;
   created_at: string;
   updated_at: string;
 }

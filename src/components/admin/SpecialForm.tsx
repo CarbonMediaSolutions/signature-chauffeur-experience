@@ -31,6 +31,7 @@ const specialSchema = z.object({
   display_order: z.number().int().min(0),
   start_date: z.string().optional(),
   end_date: z.string().optional(),
+  discount_percent: z.number().int().min(0).max(100).optional(),
 });
 
 type SpecialFormValues = z.infer<typeof specialSchema>;
@@ -61,6 +62,7 @@ export const SpecialForm = ({
       display_order: special?.display_order || 0,
       start_date: special?.start_date || "",
       end_date: special?.end_date || "",
+      discount_percent: special?.discount_percent ?? undefined,
     },
   });
 
@@ -115,6 +117,7 @@ export const SpecialForm = ({
       image_url: values.image_url || null,
       start_date: values.start_date || null,
       end_date: values.end_date || null,
+      discount_percent: values.discount_percent ?? null,
     };
     await onSubmit(data);
   };
@@ -266,7 +269,7 @@ export const SpecialForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Display Order */}
           <FormField
             control={form.control}
@@ -288,6 +291,34 @@ export const SpecialForm = ({
             )}
           />
 
+          {/* Discount Percentage */}
+          <FormField
+            control={form.control}
+            name="discount_percent"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Discount Percentage (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={100}
+                    placeholder="e.g., 15"
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseInt(val));
+                    }}
+                  />
+                </FormControl>
+                <FormDescription>Displays as corner badge (e.g., "15% OFF")</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Start Date */}
           <FormField
             control={form.control}

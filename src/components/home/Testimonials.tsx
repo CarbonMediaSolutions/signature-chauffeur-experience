@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { Quote } from "lucide-react";
 
 const testimonials = [
@@ -26,28 +27,75 @@ const testimonials = [
 ];
 
 export const Testimonials = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  // Mobile carousel with autoplay
+  const mobileAutoplay = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false })
+  );
+  const [mobileRef, mobileApi] = useEmblaCarousel({ loop: true }, [mobileAutoplay.current]);
+  const [mobileSelectedIndex, setMobileSelectedIndex] = useState(0);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
+  // Desktop carousel with autoplay (only used when >4 testimonials)
+  const desktopAutoplay = useRef(
+    Autoplay({ delay: 6000, stopOnInteraction: false })
+  );
+  const [desktopRef, desktopApi] = useEmblaCarousel(
+    { loop: true, slidesToScroll: 1 },
+    [desktopAutoplay.current]
+  );
+  const [desktopSelectedIndex, setDesktopSelectedIndex] = useState(0);
+
+  const shouldDesktopScroll = testimonials.length > 4;
+
+  // Mobile carousel callbacks
+  const onMobileSelect = useCallback(() => {
+    if (!mobileApi) return;
+    setMobileSelectedIndex(mobileApi.selectedScrollSnap());
+  }, [mobileApi]);
 
   useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
+    if (!mobileApi) return;
+    onMobileSelect();
+    mobileApi.on("select", onMobileSelect);
     return () => {
-      emblaApi.off("select", onSelect);
+      mobileApi.off("select", onMobileSelect);
     };
-  }, [emblaApi, onSelect]);
+  }, [mobileApi, onMobileSelect]);
 
-  const scrollTo = useCallback(
+  const scrollToMobile = useCallback(
     (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
+      if (mobileApi) mobileApi.scrollTo(index);
     },
-    [emblaApi]
+    [mobileApi]
+  );
+
+  // Desktop carousel callbacks
+  const onDesktopSelect = useCallback(() => {
+    if (!desktopApi) return;
+    setDesktopSelectedIndex(desktopApi.selectedScrollSnap());
+  }, [desktopApi]);
+
+  useEffect(() => {
+    if (!desktopApi || !shouldDesktopScroll) return;
+    onDesktopSelect();
+    desktopApi.on("select", onDesktopSelect);
+    return () => {
+      desktopApi.off("select", onDesktopSelect);
+    };
+  }, [desktopApi, onDesktopSelect, shouldDesktopScroll]);
+
+  const TestimonialCard = ({ testimonial, centered = false }: { testimonial: typeof testimonials[0]; centered?: boolean }) => (
+    <div className={`bg-background rounded-sm p-6 md:p-8 ${centered ? 'text-center' : 'text-center'}`}>
+      <Quote className="w-6 h-6 md:w-8 md:h-8 text-brass mx-auto mb-4 md:mb-6" />
+      <blockquote className="font-serif text-sm md:text-base text-foreground italic mb-4 md:mb-6 leading-relaxed">
+        "{testimonial.quote}"
+      </blockquote>
+      <p className="text-sm font-medium text-foreground">
+        {testimonial.name}
+      </p>
+      <p className="text-xs text-muted-foreground mt-1">
+        {testimonial.title}
+      </p>
+    </div>
   );
 
   return (
@@ -60,24 +108,13 @@ export const Testimonials = () => {
           What Our Clients Say
         </h2>
 
-        {/* Mobile: Carousel */}
+        {/* Mobile: Always carousel with autoplay */}
         <div className="md:hidden">
-          <div className="overflow-hidden" ref={emblaRef}>
+          <div className="overflow-hidden" ref={mobileRef}>
             <div className="flex">
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="flex-[0_0_100%] min-w-0 px-4">
-                  <div className="bg-background rounded-sm p-8 text-center">
-                    <Quote className="w-8 h-8 text-brass mx-auto mb-6" />
-                    <blockquote className="font-serif text-lg text-foreground italic mb-6 leading-relaxed">
-                      "{testimonial.quote}"
-                    </blockquote>
-                    <p className="text-sm font-medium text-foreground">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {testimonial.title}
-                    </p>
-                  </div>
+                  <TestimonialCard testimonial={testimonial} centered />
                 </div>
               ))}
             </div>
@@ -88,9 +125,9 @@ export const Testimonials = () => {
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => scrollTo(index)}
+                onClick={() => scrollToMobile(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === selectedIndex
+                  index === mobileSelectedIndex
                     ? "bg-brass w-6"
                     : "bg-muted-foreground/30"
                 }`}
@@ -100,26 +137,44 @@ export const Testimonials = () => {
           </div>
         </div>
 
-        {/* Desktop: Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-background rounded-sm p-6 text-center"
-            >
-              <Quote className="w-6 h-6 text-brass mx-auto mb-4" />
-              <blockquote className="font-serif text-sm text-foreground italic mb-4 leading-relaxed">
-                "{testimonial.quote}"
-              </blockquote>
-              <p className="text-sm font-medium text-foreground">
-                {testimonial.name}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {testimonial.title}
-              </p>
+        {/* Desktop: Static grid if ≤4, carousel if >4 */}
+        {shouldDesktopScroll ? (
+          // Desktop carousel for >4 testimonials
+          <div className="hidden md:block">
+            <div className="overflow-hidden" ref={desktopRef}>
+              <div className="flex">
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="flex-[0_0_25%] min-w-0 px-3">
+                    <TestimonialCard testimonial={testimonial} />
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+            
+            {/* Minimal dot indicators for desktop carousel */}
+            <div className="flex justify-center gap-2 mt-8">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => desktopApi?.scrollTo(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === desktopSelectedIndex
+                      ? "bg-brass w-4"
+                      : "bg-muted-foreground/20"
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          // Desktop static grid for ≤4 testimonials
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <TestimonialCard key={index} testimonial={testimonial} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
