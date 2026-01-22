@@ -68,13 +68,13 @@ export const FeaturedCarousel = () => {
         >
           <CarouselContent className="-ml-4">
             {displayVehicles.map((vehicle, index) => (
-              <CarouselItem key={vehicle.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+              <CarouselItem key={vehicle.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
                 <VehicleCard vehicle={vehicle} index={index} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex -left-4 bg-background border-border hover:bg-muted" />
-          <CarouselNext className="hidden md:flex -right-4 bg-background border-border hover:bg-muted" />
+          <CarouselPrevious className="hidden md:flex left-2 top-[120px] -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-muted z-10" />
+          <CarouselNext className="hidden md:flex right-2 top-[120px] -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border hover:bg-muted z-10" />
         </Carousel>
       </div>
     </section>

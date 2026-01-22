@@ -76,7 +76,10 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         </span>
         
         {/* Vehicle name - bolder */}
-        <h3 className="font-serif text-2xl font-semibold text-foreground mb-4 group-hover:text-foreground/80 transition-colors duration-500 leading-tight">
+        <h3 
+          className="font-serif text-xl font-semibold text-foreground mb-4 group-hover:text-foreground/80 transition-colors duration-500 leading-tight line-clamp-1" 
+          title={vehicle.name}
+        >
           {vehicle.name}
         </h3>
         
