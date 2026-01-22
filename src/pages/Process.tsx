@@ -188,8 +188,8 @@ const Process = () => {
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact">
-              <LuxuryButton variant="hero" size="lg">
-                Start Your Enquiry
+            <LuxuryButton variant="hero" size="lg">
+                Enquire Now
               </LuxuryButton>
             </Link>
             <Link to="/terms">
