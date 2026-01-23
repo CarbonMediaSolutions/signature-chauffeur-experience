@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { vehicles } from "@/data/fleet";
+import { siteConfig } from "@/lib/siteConfig";
 
 const enquiryTypes = [
   "Self-Drive Rental",
@@ -222,12 +223,12 @@ const Contact = () => {
                   </h3>
                   <div className="space-y-4 text-muted-foreground">
                     <a
-                      href="https://wa.me/27000000000"
+                      href={`https://wa.me/${siteConfig.whatsapp.number}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block hover:text-foreground transition-colors"
                     >
-                      WhatsApp: +27 00 000 0000
+                      WhatsApp: {siteConfig.whatsapp.displayNumber}
                     </a>
                   </div>
                 </div>
