@@ -11,7 +11,7 @@ import logo from "@/assets/logo.png";
 const Index = () => {
   return <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center md:justify-start">
+      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Luxury vehicle on Cape Town coastal road" className="w-full h-full object-cover" width={1920} height={1080} fetchPriority="high" />
           <div className="absolute inset-0 hero-vignette" />
@@ -33,13 +33,13 @@ const Index = () => {
               <span className="block">created for moments that matter.</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link to="/contact">
-                <LuxuryButton variant="hero" size="lg" className="w-full sm:w-auto sm:min-w-[220px]">
+              <Link to="/contact" className="w-full sm:w-[220px]">
+                <LuxuryButton variant="hero" size="lg" className="w-full">
                   Book Now
                 </LuxuryButton>
               </Link>
-              <Link to="/fleet">
-                <LuxuryButton variant="heroInverse" size="lg" className="w-full sm:w-auto sm:min-w-[220px]">
+              <Link to="/fleet" className="w-full sm:w-[220px]">
+                <LuxuryButton variant="heroInverse" size="lg" className="w-full">
                   Explore Your Dream Ride
                 </LuxuryButton>
               </Link>
