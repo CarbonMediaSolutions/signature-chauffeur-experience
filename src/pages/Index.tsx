@@ -13,14 +13,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center md:justify-start">
         <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="Luxury vehicle on Cape Town coastal road" 
-            className="w-full h-full object-cover"
-            width={1920}
-            height={1080}
-            fetchPriority="high"
-          />
+          <img src={heroImage} alt="Luxury vehicle on Cape Town coastal road" className="w-full h-full object-cover" width={1920} height={1080} fetchPriority="high" />
           <div className="absolute inset-0 hero-vignette" />
         </div>
         
@@ -31,7 +24,7 @@ const Index = () => {
               <img src={logo} alt="Signature Car Rentals" className="h-20 md:h-28 lg:h-32 w-auto brightness-0 invert" width={300} height={96} />
             </div>
             <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
-              <span className="block">DREAM IT.</span>
+              <span className="block mx-0 px-0 ml-0 mr-0">DREAM IT.</span>
               <span className="block">DRIVE IT.</span>
               <span className="block">LIVE IT.</span>
             </h1>
