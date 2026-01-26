@@ -18,7 +18,7 @@ const Index = () => {
         </div>
         
         <div className="relative container-luxury py-24 md:py-32">
-          <div className="max-w-3xl mx-auto text-center md:text-left md:mx-0 animate-fade-in-up">
+          <div className="max-w-3xl mx-auto text-center md:text-left md:mx-0 lg:ml-28 animate-fade-in-up">
             {/* Logo above headline */}
             <div className="mb-8 flex justify-center md:justify-start">
               <img src={logo} alt="Signature Car Rentals" className="h-20 md:h-28 lg:h-32 w-auto brightness-0 invert" width={300} height={96} />
@@ -33,13 +33,13 @@ const Index = () => {
               <span className="block">created for moments that matter.</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link to="/contact" className="w-full sm:w-[220px]">
-                <LuxuryButton variant="hero" size="lg" className="w-full">
+              <Link to="/contact" className="w-full sm:w-[260px]">
+                <LuxuryButton variant="hero" size="lg" className="w-full whitespace-nowrap">
                   Book Now
                 </LuxuryButton>
               </Link>
-              <Link to="/fleet" className="w-full sm:w-[220px]">
-                <LuxuryButton variant="heroInverse" size="lg" className="w-full">
+              <Link to="/fleet" className="w-full sm:w-[260px]">
+                <LuxuryButton variant="heroInverse" size="lg" className="w-full whitespace-nowrap">
                   Explore Your Dream Ride
                 </LuxuryButton>
               </Link>
