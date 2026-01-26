@@ -125,7 +125,7 @@ export const HowItWorks = () => {
         <div className="text-center">
           <Link to="/contact">
             <LuxuryButton variant="hero" size="lg">
-              Start Your Enquiry
+              Start Your Booking
             </LuxuryButton>
           </Link>
         </div>

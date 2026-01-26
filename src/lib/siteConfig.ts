@@ -1,10 +1,10 @@
 export const siteConfig = {
   whatsapp: {
-    number: "27827830342",
-    displayNumber: "+27 82 783 0342"
+    number: "27716649603",
+    displayNumber: "+27 71 664 9603"
   },
   contact: {
     email: "enquiries@signaturecarrentals.co.za",
-    phone: "+27 82 783 0342"
+    phone: "+27 71 664 9603"
   }
 };

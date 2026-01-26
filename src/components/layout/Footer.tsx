@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { Instagram, Facebook } from "lucide-react";
+import { siteConfig } from "@/lib/siteConfig";
+import logo from "@/assets/logo.png";
 
 const footerLinks = {
   explore: [
@@ -22,12 +25,11 @@ export const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block">
-              <span className="font-serif text-2xl font-medium tracking-tight">
-                Signature
-              </span>
-              <span className="block text-caption text-primary-foreground/60 tracking-luxury text-[10px] mt-1">
-                Car Rentals
-              </span>
+              <img 
+                src={logo} 
+                alt="Signature Car Rentals" 
+                className="h-16 md:h-20 w-auto brightness-0 invert" 
+              />
             </Link>
             <p className="mt-6 text-body text-primary-foreground/70 max-w-md">
               Bespoke luxury vehicle hire in Cape Town. Every detail considered, 
@@ -94,7 +96,25 @@ export const Footer = () => {
           </p>
           <div className="flex items-center gap-6">
             <a
-              href="https://wa.me/27000000000"
+              href="https://instagram.com/signaturecarrentals"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a
+              href="https://facebook.com/signaturecarrentals"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
+              aria-label="Facebook"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a
+              href={`https://wa.me/${siteConfig.whatsapp.number}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
@@ -102,7 +122,7 @@ export const Footer = () => {
               WhatsApp
             </a>
             <a
-              href="mailto:hello@signaturecarrentals.co.za"
+              href={`mailto:${siteConfig.contact.email}`}
               className="text-xs text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
             >
               Email

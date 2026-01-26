@@ -296,7 +296,7 @@ const About = () => {
               </Link>
               <Link to="/contact">
                 <LuxuryButton variant="outline" size="lg">
-                  Enquire Now
+                  Book Now
                 </LuxuryButton>
               </Link>
             </div>
