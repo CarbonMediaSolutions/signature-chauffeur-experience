@@ -189,7 +189,7 @@ const Process = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact">
             <LuxuryButton variant="hero" size="lg">
-                Enquire Now
+                Book Now
               </LuxuryButton>
             </Link>
             <Link to="/terms">

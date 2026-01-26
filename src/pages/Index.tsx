@@ -39,14 +39,14 @@ const Index = () => {
               <span className="block">Luxury Car Rental</span>
               <span className="block">created for moments that matter.</span>
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Link to="/contact">
-                <LuxuryButton variant="hero" size="lg">
-                  Enquire Now
+                <LuxuryButton variant="hero" size="lg" className="w-full sm:w-auto sm:min-w-[220px]">
+                  Book Now
                 </LuxuryButton>
               </Link>
               <Link to="/fleet">
-                <LuxuryButton variant="heroInverse" size="lg">
+                <LuxuryButton variant="heroInverse" size="lg" className="w-full sm:w-auto sm:min-w-[220px]">
                   Explore Your Dream Ride
                 </LuxuryButton>
               </Link>
@@ -97,7 +97,7 @@ const Index = () => {
           </p>
           <Link to="/contact">
             <LuxuryButton variant="default" size="xl">
-              Start Your Enquiry
+              Start Your Booking
             </LuxuryButton>
           </Link>
         </div>

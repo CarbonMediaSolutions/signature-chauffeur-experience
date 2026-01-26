@@ -169,7 +169,7 @@ const FAQ = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/contact">
               <LuxuryButton variant="hero" size="lg">
-                Enquire Now
+                Book Now
               </LuxuryButton>
             </Link>
             <Link to="/contact">
