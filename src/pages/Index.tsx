@@ -11,7 +11,7 @@ import logo from "@/assets/logo.png";
 const Index = () => {
   return <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center">
+      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center justify-center md:justify-start">
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
