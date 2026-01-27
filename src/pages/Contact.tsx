@@ -3,28 +3,30 @@ import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { vehicles } from "@/data/fleet";
+import { useVehicles } from "@/hooks/useVehicles";
 import { siteConfig } from "@/lib/siteConfig";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const enquiryTypes = [
   "Self-Drive Rental",
   "Chauffeur Service",
-  "Events",
+  "Events (Matric Ball, Music Videos, Corporate Functions)",
   "List Your Vehicle for Investment",
 ];
 
 const Contact = () => {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
+  const { data: fleetVehicles = [] } = useVehicles();
   const preselectedVehicle = searchParams.get("vehicle");
   const vehicle = preselectedVehicle
-    ? vehicles.find((v) => v.id === preselectedVehicle)
+    ? fleetVehicles.find((v) => v.id === preselectedVehicle)
     : null;
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone: "+27 ",
     enquiryType: vehicle ? "Vehicle Rental" : "",
     preferredVehicle: vehicle?.name || "",
     startDate: "",
@@ -41,7 +43,7 @@ const Contact = () => {
     setFormData({
       name: "",
       email: "",
-      phone: "",
+      phone: "+27 ",
       enquiryType: "",
       preferredVehicle: "",
       startDate: "",
@@ -112,12 +114,10 @@ const Contact = () => {
                     <label className="block text-sm text-foreground mb-2">
                       Contact Number *
                     </label>
-                    <input
-                      type="tel"
-                      required
+                    <PhoneInput
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-foreground"
+                      onChange={(value) => setFormData({ ...formData, phone: value })}
+                      required
                     />
                   </div>
                 </div>
@@ -157,7 +157,7 @@ const Contact = () => {
                         className="w-full px-4 py-3 bg-background border border-border focus:border-foreground outline-none transition-colors text-foreground"
                       >
                         <option value="">No preference / Not sure yet</option>
-                        {vehicles.map((v) => (
+                        {fleetVehicles.map((v) => (
                           <option key={v.id} value={v.name}>
                             {v.name}
                           </option>
