@@ -22,6 +22,9 @@ import {
 import capeRoadImage from "@/assets/cape-town-road.jpg";
 import interiorImage from "@/assets/detail-interior.jpg";
 import businessImage from "@/assets/lifestyle-business.jpg";
+import photoExampleFront from "@/assets/photo-example-front.jpg";
+import photoExampleSide from "@/assets/photo-example-side.jpg";
+import photoExampleRear from "@/assets/photo-example-rear.jpg";
 
 // Generate years from current year down to 1970
 const currentYear = new Date().getFullYear();
@@ -188,15 +191,18 @@ const ListVehicle = () => {
   const photoExamples = [
     {
       title: "Front View",
-      description: "Capture your vehicle head-on, showing the grille, headlights, and overall front profile. Ensure good lighting and a clean background."
+      description: "Capture your vehicle head-on, showing the grille, headlights, and overall front profile. Ensure good lighting and a clean background.",
+      image: photoExampleFront
     },
     {
       title: "Side Profile",
-      description: "A full side view showcasing the vehicle's silhouette and proportions. Stand back to capture the entire vehicle in frame."
+      description: "A full side view showcasing the vehicle's silhouette and proportions. Stand back to capture the entire vehicle in frame.",
+      image: photoExampleSide
     },
     {
       title: "Rear Three-Quarter",
-      description: "The classic automotive angle showing the rear and one side. This view highlights the vehicle's character and stance."
+      description: "The classic automotive angle showing the rear and one side. This view highlights the vehicle's character and stance.",
+      image: photoExampleRear
     }
   ];
 
@@ -536,8 +542,12 @@ const ListVehicle = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-secondary/30 border border-border/50">
                       {photoExamples.map((example) => (
                         <div key={example.title} className="text-center">
-                          <div className="aspect-[4/3] bg-muted mb-3 flex items-center justify-center border border-border/30">
-                            <Camera className="w-8 h-8 text-muted-foreground/50" />
+                          <div className="aspect-[4/3] mb-3 overflow-hidden border border-border/30">
+                            <img 
+                              src={example.image} 
+                              alt={`Example ${example.title}`}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                           <h4 className="text-sm font-medium text-foreground mb-1">
                             {example.title}
