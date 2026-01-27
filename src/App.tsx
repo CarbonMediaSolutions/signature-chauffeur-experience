@@ -31,6 +31,7 @@ import AdminBulkImport from "./pages/admin/AdminBulkImport";
 import AdminSpecials from "./pages/admin/AdminSpecials";
 import AdminSpecialNew from "./pages/admin/AdminSpecialNew";
 import AdminSpecialEdit from "./pages/admin/AdminSpecialEdit";
+import AdminSettings from "./pages/admin/AdminSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App = () => (
               <Route path="specials" element={<AdminSpecials />} />
               <Route path="specials/new" element={<AdminSpecialNew />} />
               <Route path="specials/:id/edit" element={<AdminSpecialEdit />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

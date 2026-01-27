@@ -217,6 +217,24 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          id: string
+          updated_at: string | null
+          value: string | null
+        }
+        Insert: {
+          id: string
+          updated_at?: string | null
+          value?: string | null
+        }
+        Update: {
+          id?: string
+          updated_at?: string | null
+          value?: string | null
+        }
+        Relationships: []
+      }
       specials: {
         Row: {
           category_tag: string
@@ -311,6 +329,7 @@ export type Database = {
           image: string
           insurance_excess: number | null
           is_active: boolean | null
+          is_hot: boolean | null
           limited_availability: boolean | null
           luggage_capacity: string | null
           mileage_limit: string | null
@@ -351,6 +370,7 @@ export type Database = {
           image: string
           insurance_excess?: number | null
           is_active?: boolean | null
+          is_hot?: boolean | null
           limited_availability?: boolean | null
           luggage_capacity?: string | null
           mileage_limit?: string | null
@@ -391,6 +411,7 @@ export type Database = {
           image?: string
           insurance_excess?: number | null
           is_active?: boolean | null
+          is_hot?: boolean | null
           limited_availability?: boolean | null
           luggage_capacity?: string | null
           mileage_limit?: string | null

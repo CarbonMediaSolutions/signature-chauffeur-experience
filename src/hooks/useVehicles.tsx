@@ -32,6 +32,7 @@ export interface Vehicle {
   doors: number | null;
   acceleration: string | null;
   power_kw: number | null;
+  is_hot: boolean | null;
 }
 
 export const useVehicles = () => {

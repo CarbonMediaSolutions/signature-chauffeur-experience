@@ -9,7 +9,8 @@ import {
   LogOut,
   Menu,
   X,
-  Tag
+  Tag,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -21,6 +22,7 @@ const navItems = [
   { name: "Availability", href: "/admin/availability", icon: CalendarOff },
   { name: "Fleet", href: "/admin/fleet", icon: Car },
   { name: "Specials", href: "/admin/specials", icon: Tag },
+  { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 const AdminLayout = () => {

@@ -47,6 +47,7 @@ export interface VehicleFormData {
   multi_day_threshold: number;
   multi_day_discount_percent: number;
   has_aircon: boolean;
+  is_hot: boolean;
 }
 
 interface VehicleFormProps {
@@ -107,6 +108,7 @@ export const VehicleForm = ({
     multi_day_threshold: (initialData as any)?.multi_day_threshold || 4,
     multi_day_discount_percent: (initialData as any)?.multi_day_discount_percent ?? 10,
     has_aircon: (initialData as any)?.has_aircon ?? true,
+    is_hot: (initialData as any)?.is_hot || false,
   });
 
   const [featuresInput, setFeaturesInput] = useState(
@@ -196,7 +198,7 @@ export const VehicleForm = ({
             />
           </div>
 
-          <div className="flex items-center justify-between py-2 md:col-span-2">
+          <div className="flex items-center justify-between py-2">
             <Label htmlFor="limited_availability">Limited Availability</Label>
             <Switch
               id="limited_availability"
@@ -204,6 +206,20 @@ export const VehicleForm = ({
               onCheckedChange={(checked) =>
                 updateField("limited_availability", checked)
               }
+            />
+          </div>
+
+          <div className="flex items-center justify-between py-2">
+            <div>
+              <Label htmlFor="is_hot">Hot Right Now</Label>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Display a red "Hot Right Now" banner
+              </p>
+            </div>
+            <Switch
+              id="is_hot"
+              checked={formData.is_hot}
+              onCheckedChange={(checked) => updateField("is_hot", checked)}
             />
           </div>
         </div>

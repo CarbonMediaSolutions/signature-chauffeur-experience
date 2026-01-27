@@ -122,11 +122,11 @@ const AdminSpecials = () => {
                       <>
                         {special.start_date
                           ? format(new Date(special.start_date), "MMM d, yyyy")
-                          : "—"}{" "}
+                          : "-"}{" "}
                         to{" "}
                         {special.end_date
                           ? format(new Date(special.end_date), "MMM d, yyyy")
-                          : "—"}
+                          : "-"}
                       </>
                     ) : (
                       "Always"
