@@ -215,6 +215,11 @@ const AdminFleet = () => {
                     Featured
                   </div>
                 )}
+                {(vehicle as any).is_hot && (
+                  <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded-sm">
+                    Hot
+                  </div>
+                )}
               </div>
               <div className="p-4">
                 <div className="flex items-start justify-between mb-2">

@@ -9,12 +9,16 @@ import {
 import { Sparkles, Shield, Heart } from "lucide-react";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import aboutDean from "@/assets/about-dean-placeholder.jpg";
+import { useSiteSetting } from "@/hooks/useSiteSettings";
 
 // Video configuration - replace with actual URL when ready
 const ABOUT_VIDEO_URL: string | null = null;
 const ABOUT_VIDEO_POSTER = capeTownRoad;
 
 const About = () => {
+  const { data: founderImageUrl } = useSiteSetting("founder_image_url");
+  const founderImage = founderImageUrl || aboutDean;
+  
   return (
     <Layout>
       {/* Hero Video/Image Section */}
@@ -119,7 +123,7 @@ const About = () => {
                   Why Signature
                 </h3>
                 <p className="text-body text-muted-foreground leading-relaxed">
-                  We focus on how a drive makes you feel — not just what you drive. Every booking, every car, every interaction is handled with intention.
+                  We focus on how a drive makes you feel - not just what you drive. Every booking, every car, every interaction is handled with intention.
                 </p>
               </div>
               
@@ -150,7 +154,7 @@ const About = () => {
                         Why Signature
                       </h3>
                       <p className="text-body text-muted-foreground leading-relaxed">
-                        We focus on how a drive makes you feel — not just what you drive. Every booking, every car, every interaction is handled with intention.
+                        We focus on how a drive makes you feel - not just what you drive. Every booking, every car, every interaction is handled with intention.
                       </p>
                     </div>
                   </CarouselItem>
@@ -247,14 +251,14 @@ const About = () => {
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div className="aspect-square overflow-hidden rounded-sm">
               <img
-                src={aboutDean}
+                src={founderImage}
                 alt="Dean Oliver - Founder"
                 className="w-full h-full object-cover"
               />
             </div>
             <div>
               <p className="text-body-lg text-muted-foreground leading-relaxed">
-                My love for cars started with a Ferrari F40 poster and weekends watching Formula One. To me, they symbolised possibility — the belief that one day, more was achievable. That fascination never left. When I eventually owned the cars I once dreamed about, what stayed with me wasn't status, but how they made me feel: focused, confident, fully present. Signature was born from that feeling.
+                My love for cars started with a Ferrari F40 poster and weekends watching Formula One. To me, they symbolised possibility - the belief that one day, more was achievable. That fascination never left. When I eventually owned the cars I once dreamed about, what stayed with me wasn't status, but how they made me feel: focused, confident, fully present. Signature was born from that feeling.
               </p>
             </div>
           </div>
@@ -276,7 +280,7 @@ const About = () => {
             "To let someone sit behind the wheel of a car they once dreamed about, and feel like that kid staring at a poster on the wall."
           </blockquote>
           <p className="text-center text-primary-foreground/80 text-sm tracking-[0.15em]">
-            — Dean Oliver, Founder
+            - Dean Oliver, Founder
           </p>
         </div>
       </section>

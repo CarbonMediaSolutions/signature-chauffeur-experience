@@ -51,6 +51,15 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/40 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
+        {/* Hot Right Now badge */}
+        {vehicle.is_hot && (
+          <div className="absolute top-4 left-4">
+            <span className="text-[10px] tracking-[0.15em] uppercase bg-red-600/90 text-white px-3 py-1.5 rounded-sm">
+              Hot Right Now
+            </span>
+          </div>
+        )}
+        
         {/* Limited availability badge */}
         {vehicle.limited_availability && (
           <div className="absolute top-4 right-4">
