@@ -2,20 +2,37 @@ import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X } from "lucide-react";
+import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { PhoneInput } from "@/components/ui/phone-input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 // Import images
 import capeRoadImage from "@/assets/cape-town-road.jpg";
 import interiorImage from "@/assets/detail-interior.jpg";
 import businessImage from "@/assets/lifestyle-business.jpg";
 
+// Generate years from current year down to 1970
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: currentYear - 1970 + 1 }, (_, i) => currentYear - i);
+
 const ListVehicle = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone: "+27 ",
     vehicleMake: "",
     vehicleModel: "",
     vehicleYear: "",
@@ -24,6 +41,7 @@ const ListVehicle = () => {
   const [vehicleImages, setVehicleImages] = useState<File[]>([]);
   const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [photoGuideOpen, setPhotoGuideOpen] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -103,7 +121,7 @@ const ListVehicle = () => {
       setFormData({
         name: "",
         email: "",
-        phone: "",
+        phone: "+27 ",
         vehicleMake: "",
         vehicleModel: "",
         vehicleYear: "",
@@ -165,6 +183,21 @@ const ListVehicle = () => {
     "Secure Handovers & Returns",
     "Pre & Post-Rental Inspections",
     "Transparent Reporting & Payouts",
+  ];
+
+  const photoExamples = [
+    {
+      title: "Front View",
+      description: "Capture your vehicle head-on, showing the grille, headlights, and overall front profile. Ensure good lighting and a clean background."
+    },
+    {
+      title: "Side Profile",
+      description: "A full side view showcasing the vehicle's silhouette and proportions. Stand back to capture the entire vehicle in frame."
+    },
+    {
+      title: "Rear Three-Quarter",
+      description: "The classic automotive angle showing the rear and one side. This view highlights the vehicle's character and stance."
+    }
   ];
 
   return (
@@ -413,12 +446,10 @@ const ListVehicle = () => {
                 <label className="block text-sm text-foreground mb-2">
                   Contact Number *
                 </label>
-                <input
-                  type="tel"
-                  required
+                <PhoneInput
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-foreground"
+                  onChange={(value) => setFormData({ ...formData, phone: value })}
+                  required
                 />
               </div>
 
@@ -453,14 +484,22 @@ const ListVehicle = () => {
                   <label className="block text-sm text-foreground mb-2">
                     Year *
                   </label>
-                  <input
-                    type="text"
+                  <Select 
+                    value={formData.vehicleYear} 
+                    onValueChange={(val) => setFormData({ ...formData, vehicleYear: val })}
                     required
-                    placeholder="e.g. 2023"
-                    value={formData.vehicleYear}
-                    onChange={(e) => setFormData({ ...formData, vehicleYear: e.target.value })}
-                    className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                  />
+                  >
+                    <SelectTrigger className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground h-auto">
+                      <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border max-h-60">
+                      {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -485,6 +524,36 @@ const ListVehicle = () => {
                 <p className="text-xs text-muted-foreground mb-4">
                   Upload up to 3 clear photos of your vehicle. JPG, PNG or WebP. Max 5MB each.
                 </p>
+                
+                {/* Photo Guidelines Collapsible */}
+                <Collapsible open={photoGuideOpen} onOpenChange={setPhotoGuideOpen} className="mb-6">
+                  <CollapsibleTrigger className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 transition-colors">
+                    <Camera className="w-4 h-4" />
+                    <span>Photo Guidelines - What We Need</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${photoGuideOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-secondary/30 border border-border/50">
+                      {photoExamples.map((example) => (
+                        <div key={example.title} className="text-center">
+                          <div className="aspect-[4/3] bg-muted mb-3 flex items-center justify-center border border-border/30">
+                            <Camera className="w-8 h-8 text-muted-foreground/50" />
+                          </div>
+                          <h4 className="text-sm font-medium text-foreground mb-1">
+                            {example.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            {example.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground italic mt-4">
+                      Quality photos help us assess your vehicle quickly. Clear, well-lit images in outdoor 
+                      settings work best. Avoid clutter in the background.
+                    </p>
+                  </CollapsibleContent>
+                </Collapsible>
                 
                 <div className="space-y-4">
                   {/* Upload previews */}
