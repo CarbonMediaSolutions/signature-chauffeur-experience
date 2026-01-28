@@ -1,173 +1,134 @@
 
 
-# Form Enhancements: List Your Vehicle & Contact Us
+# Vehicle Detail Page - Gallery Grid & Pricing Enhancements
 
 ## Summary
-This plan implements four key enhancements across both forms:
-1. Country code dropdown for phone numbers on both forms
-2. Vehicle year dropdown (1970-current year) on List Your Vehicle form
-3. Photo examples section with expandable guidance on List Your Vehicle form
-4. Contact Us form updates: dynamic fleet vehicles & Events dropdown specification
+Two main enhancements for the vehicle detail page:
+1. Replace the carousel gallery with a grid of clickable images that open in fullscreen with navigation
+2. Update the pricing summary to show security deposit and total with/without deposit
 
 ---
 
-## 1. Reusable Country Code Phone Input Component
+## 1. Gallery Grid with Fullscreen Lightbox
 
-Create a new reusable component that combines a country code dropdown with a phone number input field.
+### Current State
+- The page uses an Embla Carousel showing 4 images at a time
+- Images are not clickable for fullscreen view
+- The `MediaGallery` component exists with lightbox functionality but isn't used
 
-### New File: `src/components/ui/phone-input.tsx`
+### Proposed Changes
 
-This component will:
-- Display a dropdown with common country codes (defaulting to South Africa +27)
-- Include major countries: South Africa (+27), United Kingdom (+44), United States (+1), Namibia (+264), Botswana (+267), Zimbabwe (+263), etc.
-- Combine the country code and phone number into a single value
-- Match the existing form styling (transparent background, border-border, etc.)
+**File:** `src/pages/VehicleDetail.tsx`
+
+Replace the carousel section with the existing `MediaGallery` component, which already includes:
+- A responsive grid layout (2 columns on mobile, 3 on desktop)
+- Click-to-open fullscreen lightbox
+- Left/right navigation arrows in lightbox
+- Image counter (e.g., "3 / 10")
+- Keyboard-friendly navigation
+
+**Changes needed:**
+- Import `MediaGallery` component
+- Remove Carousel imports (no longer needed)
+- Replace the carousel section with `MediaGallery`
+- Pass `gallery_urls` to the `images` prop
 
 ```tsx
-// Structure:
-// [+27 ▼] [Phone Number Input]
+// Before: Carousel
+<Carousel>
+  <CarouselContent>
+    {galleryImages.map(...)}
+  </CarouselContent>
+</Carousel>
 
-interface PhoneInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  className?: string;
-}
-
-const countryCodes = [
-  { code: "+27", country: "South Africa", flag: "🇿🇦" },
-  { code: "+44", country: "United Kingdom", flag: "🇬🇧" },
-  { code: "+1", country: "United States", flag: "🇺🇸" },
-  { code: "+264", country: "Namibia", flag: "🇳🇦" },
-  { code: "+267", country: "Botswana", flag: "🇧🇼" },
-  { code: "+263", country: "Zimbabwe", flag: "🇿🇼" },
-  { code: "+61", country: "Australia", flag: "🇦🇺" },
-  { code: "+49", country: "Germany", flag: "🇩🇪" },
-  { code: "+33", country: "France", flag: "🇫🇷" },
-  { code: "+971", country: "UAE", flag: "🇦🇪" },
-  // ... more as needed
-];
+// After: Grid with lightbox
+<MediaGallery 
+  images={galleryImages} 
+  vehicleName={vehicle.name} 
+/>
 ```
+
+**Grid Layout:**
+- 2 columns on mobile
+- 3 columns on tablet/desktop
+- 4:3 aspect ratio per image (matching site standards)
+- Hover effect with slight zoom
 
 ---
 
-## 2. Vehicle Year Dropdown (1970 - Current Year)
+## 2. Pricing Summary with Security Deposit
 
-### File: `src/pages/ListVehicle.tsx`
+### Current State
+The pricing breakdown shows:
+- Days × Rate
+- Multi-day discount (if applicable)
+- Estimated Total
 
-Replace the text input for vehicle year with a Select dropdown.
+### Proposed Changes
 
-**Changes:**
-- Import Select components from `@/components/ui/select`
-- Add `countryCode` to form state (default: "+27")
-- Generate year options dynamically from current year down to 1970
-- Update form state to use `vehicleYear` as a select value
+**File:** `src/components/enquiry/WhatsAppEnquiry.tsx`
 
-```tsx
-// Generate years from current year down to 1970
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: currentYear - 1970 + 1 }, (_, i) => currentYear - i);
+Add `securityDeposit` as a new prop and update the pricing breakdown to show:
 
-// In the form:
-<Select value={formData.vehicleYear} onValueChange={(val) => setFormData({...formData, vehicleYear: val})}>
-  <SelectTrigger className="w-full px-4 py-3 bg-transparent border border-border">
-    <SelectValue placeholder="Select year" />
-  </SelectTrigger>
-  <SelectContent className="bg-background max-h-60">
-    {years.map((year) => (
-      <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-```
-
----
-
-## 3. Photo Examples Section with Collapsible Expander
-
-### File: `src/pages/ListVehicle.tsx`
-
-Add an expandable section above the photo upload area that shows example photos and guidance.
+| Line Item | Example |
+|-----------|---------|
+| 4 days × R4,050/day | R16,200 |
+| Multi-day discount (10%) | Save R1,800 |
+| **Estimated Rental Total** | **R16,200** |
+| Security Deposit (refundable) | R10,000 |
+| **Total Payable** | **R26,200** |
 
 **Implementation:**
-- Use the existing `Collapsible` component from `@/components/ui/collapsible`
-- Create three example cards with placeholder images and descriptions
-- Include clear guidance text
-
-**Photo Types to Display:**
-1. **Front View** - "Capture your vehicle head-on, showing the grille, headlights, and overall front profile. Ensure good lighting and a clean background."
-2. **Side Profile** - "A full side view showcasing the vehicle's silhouette and proportions. Stand back to capture the entire vehicle in frame."
-3. **Rear Three-Quarter** - "The classic automotive angle showing the rear and one side. This view highlights the vehicle's character and stance."
-
 ```tsx
-<Collapsible>
-  <CollapsibleTrigger className="flex items-center gap-2 text-sm text-accent hover:underline mb-4">
-    <Camera className="w-4 h-4" />
-    <span>Photo Guidelines - What We Need</span>
-    <ChevronDown className="w-4 h-4 transition-transform data-[state=open]:rotate-180" />
-  </CollapsibleTrigger>
-  <CollapsibleContent>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-secondary/30 border border-border/50">
-      {/* Front View Card */}
-      <div className="text-center">
-        <div className="aspect-[4/3] bg-muted mb-3 flex items-center justify-center">
-          <Camera className="w-8 h-8 text-muted-foreground/50" />
-        </div>
-        <h4 className="text-sm font-medium text-foreground mb-1">Front View</h4>
-        <p className="text-xs text-muted-foreground">
-          Capture your vehicle head-on, showing the grille, headlights, and front profile.
-        </p>
-      </div>
-      {/* Side Profile Card */}
-      {/* Rear Three-Quarter Card */}
-    </div>
-    <p className="text-xs text-muted-foreground italic mb-4">
-      Quality photos help us assess your vehicle quickly. Clear, well-lit images in outdoor 
-      settings work best. Avoid clutter in the background.
-    </p>
-  </CollapsibleContent>
-</Collapsible>
-```
-
----
-
-## 4. Contact Us Form Updates
-
-### File: `src/pages/Contact.tsx`
-
-**4a. Add Country Code Dropdown for Phone**
-- Import and use the new `PhoneInput` component
-- Add `countryCode` to form state
-
-**4b. Preferred Vehicles - Use Database Fleet**
-- Import `useVehicles` hook from `@/hooks/useVehicles`
-- Replace the static `vehicles` import from `@/data/fleet.ts`
-- Use the dynamic database-driven vehicle list
-
-```tsx
-import { useVehicles } from "@/hooks/useVehicles";
-
-const Contact = () => {
-  const { data: fleetVehicles = [] } = useVehicles();
-  // ...
-  
-  // In the select:
-  {fleetVehicles.map((v) => (
-    <option key={v.id} value={v.name}>{v.name}</option>
-  ))}
+interface WhatsAppEnquiryProps {
+  // ... existing props
+  securityDeposit?: number;
 }
+
+// In the pricing breakdown section:
+{pricing && (
+  <div className="...">
+    {/* Existing rental calculation */}
+    
+    {/* New: Rental Total line */}
+    <div className="flex justify-between">
+      <span>Estimated Rental Total</span>
+      <span>{formatCurrency(pricing.totalEstimate)}</span>
+    </div>
+    
+    {/* New: Security Deposit line */}
+    {securityDeposit && securityDeposit > 0 && (
+      <div className="flex justify-between text-muted-foreground">
+        <span>Security Deposit (refundable)</span>
+        <span>{formatCurrency(securityDeposit)}</span>
+      </div>
+    )}
+    
+    {/* New: Total Payable line */}
+    {securityDeposit && securityDeposit > 0 && (
+      <div className="border-t pt-3 flex justify-between">
+        <span className="font-medium">Total Payable</span>
+        <span className="text-xl font-serif">
+          {formatCurrency(pricing.totalEstimate + securityDeposit)}
+        </span>
+      </div>
+    )}
+  </div>
+)}
 ```
 
-**4c. Events Dropdown - Add Event Type Specification**
-- Update the "Events" option in `enquiryTypes` to include examples
+**File:** `src/pages/VehicleDetail.tsx`
 
+Pass the security deposit to the enquiry component:
 ```tsx
-const enquiryTypes = [
-  "Self-Drive Rental",
-  "Chauffeur Service",
-  "Events (Matric Ball, Music Videos, Corporate Functions)",
-  "List Your Vehicle for Investment",
-];
+<WhatsAppEnquiry
+  vehicleName={vehicle.name}
+  dailyRate={vehicle.daily_rate}
+  unavailableDates={unavailableDates}
+  multiDayThreshold={multiDayThreshold}
+  multiDayDiscountPercent={multiDayDiscountPercent}
+  securityDeposit={vehicle.security_deposit}  // NEW
+/>
 ```
 
 ---
@@ -176,17 +137,15 @@ const enquiryTypes = [
 
 | File | Action |
 |------|--------|
-| `src/components/ui/phone-input.tsx` | **New file** - Reusable phone input with country code dropdown |
-| `src/pages/ListVehicle.tsx` | Add phone input component, year dropdown, photo examples collapsible |
-| `src/pages/Contact.tsx` | Add phone input component, use dynamic fleet, update Events text |
+| `src/pages/VehicleDetail.tsx` | Replace Carousel with MediaGallery, pass securityDeposit prop |
+| `src/components/enquiry/WhatsAppEnquiry.tsx` | Add securityDeposit prop, update pricing breakdown |
 
 ---
 
 ## Technical Notes
 
-- The phone input stores the full number with country code (e.g., "+27 72 123 4567")
-- Year dropdown generates years dynamically, so it will automatically include future years
-- Photo examples use placeholder icons initially; can be replaced with actual example images later
-- The Collapsible component from Radix UI is already installed and configured
-- Database vehicles are fetched using the existing `useVehicles` hook with React Query caching
+- The `MediaGallery` component is already built and tested with a fullscreen Dialog lightbox
+- Security deposit is already available on the vehicle object (`vehicle.security_deposit`)
+- The lightbox supports keyboard navigation (arrow keys work out of the box with Radix Dialog)
+- Grid uses the standard 4:3 aspect ratio for consistency with fleet cards
 
