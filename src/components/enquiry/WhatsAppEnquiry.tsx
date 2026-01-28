@@ -295,7 +295,7 @@ export const WhatsAppEnquiry = ({
         </LuxuryButton>
         <button
           onClick={handleCopyMessage}
-          className="h-12 w-12 flex items-center justify-center border border-border bg-background hover:bg-secondary transition-colors duration-200 rounded-sm"
+          className="w-12 py-4 flex items-center justify-center border border-border bg-background hover:bg-secondary transition-colors duration-200 rounded-sm"
           title="Copy message to clipboard"
         >
           {copied ? (
