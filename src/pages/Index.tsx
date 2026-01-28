@@ -9,19 +9,33 @@ import { Testimonials } from "@/components/home/Testimonials";
 import heroImage from "@/assets/hero-home.webp";
 import logo from "@/assets/logo.png";
 const Index = () => {
-  return <Layout>
+  return (
+    <Layout>
       {/* Hero Section */}
       <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Luxury vehicle on Cape Town coastal road" className="w-full h-full object-cover" width={1920} height={1080} fetchPriority="high" />
+          <img
+            src={heroImage}
+            alt="Luxury vehicle on Cape Town coastal road"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+          />
           <div className="absolute inset-0 hero-vignette" />
         </div>
-        
+
         <div className="relative container-luxury py-24 md:py-32">
-          <div className="max-w-3xl mx-auto text-center md:text-left md:mx-0 md:ml-[50px] animate-fade-in-up">
+          <div className="max-w-3xl text-left ml-0 md:ml-0 animate-fade-in-up">
             {/* Logo above headline */}
             <div className="mb-8 flex justify-center md:justify-start">
-              <img src={logo} alt="Signature Car Rentals" className="h-20 md:h-28 lg:h-32 w-auto brightness-0 invert" width={300} height={96} />
+              <img
+                src={logo}
+                alt="Signature Car Rentals"
+                className="h-20 md:h-28 lg:h-32 w-auto brightness-0 invert"
+                width={300}
+                height={96}
+              />
             </div>
             <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
               <span className="block mx-0 px-0 ml-0 mr-0">DREAM IT.</span>
@@ -66,15 +80,21 @@ const Index = () => {
       {/* Mission Statement - Full Width */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Background" className="w-full h-full object-cover" loading="lazy" width={1920} height={1080} />
+          <img
+            src={heroImage}
+            alt="Background"
+            className="w-full h-full object-cover"
+            loading="lazy"
+            width={1920}
+            height={1080}
+          />
           <div className="absolute inset-0 bg-charcoal/85" />
         </div>
         <div className="relative container-luxury text-center max-w-4xl mx-auto">
-          <p className="text-caption text-primary-foreground/60 mb-6 tracking-[0.25em]">
-            Our Mission
-          </p>
+          <p className="text-caption text-primary-foreground/60 mb-6 tracking-[0.25em]">Our Mission</p>
           <blockquote className="font-serif text-2xl md:text-3xl lg:text-4xl text-primary-foreground leading-relaxed">
-            "Our mission is to transform luxury car rental into an <span className="text-brass">experience</span>. One that inspires confidence, ambition, and belief."
+            "Our mission is to transform luxury car rental into an <span className="text-brass">experience</span>. One
+            that inspires confidence, ambition, and belief."
           </blockquote>
         </div>
       </section>
@@ -82,9 +102,7 @@ const Index = () => {
       {/* CTA Section */}
       <section className="section-padding bg-background">
         <div className="container-luxury text-center max-w-3xl mx-auto">
-          <h2 className="text-headline text-foreground mb-8">
-            Begin your Signature experience
-          </h2>
+          <h2 className="text-headline text-foreground mb-8">Begin your Signature experience</h2>
           <p className="text-body-lg text-muted-foreground mb-12">
             Our team will personally guide you to the perfect vehicle.
           </p>
@@ -95,6 +113,7 @@ const Index = () => {
           </Link>
         </div>
       </section>
-    </Layout>;
+    </Layout>
+  );
 };
 export default Index;
