@@ -2,17 +2,11 @@ import { useParams, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { WhatsAppEnquiry } from "@/components/enquiry/WhatsAppEnquiry";
+import { MediaGallery } from "@/components/vehicle/MediaGallery";
 
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
 import { ArrowLeft, Loader2, Play, Gauge, Zap, Car, Users, Settings, Calendar, Shield, Route } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -146,33 +140,14 @@ const VehicleDetail = () => {
         </div>
       </section>
 
-      {/* Image Carousel Gallery */}
+      {/* Image Gallery Grid with Lightbox */}
       {galleryImages.length > 0 && (
         <section className="pb-8">
           <div className="container-luxury">
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-2 md:-ml-4">
-                {galleryImages.map((image, index) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
-                    <div className="aspect-[4/3] overflow-hidden bg-muted rounded-sm">
-                      <img
-                        src={image}
-                        alt={`${vehicle.name} - Image ${index + 1}`}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
+            <MediaGallery 
+              images={galleryImages} 
+              vehicleName={vehicle.name} 
+            />
           </div>
         </section>
       )}
@@ -277,6 +252,7 @@ const VehicleDetail = () => {
                 unavailableDates={unavailableDates}
                 multiDayThreshold={multiDayThreshold}
                 multiDayDiscountPercent={multiDayDiscountPercent}
+                securityDeposit={vehicle.security_deposit}
               />
             </div>
           </div>

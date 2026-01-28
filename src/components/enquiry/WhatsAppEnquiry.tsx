@@ -22,6 +22,7 @@ interface WhatsAppEnquiryProps {
   unavailableDates?: Date[];
   multiDayThreshold?: number;
   multiDayDiscountPercent?: number;
+  securityDeposit?: number | null;
 }
 
 const formatCurrency = (amount: number) => {
@@ -34,6 +35,7 @@ export const WhatsAppEnquiry = ({
   unavailableDates = [],
   multiDayThreshold = 4,
   multiDayDiscountPercent = 10,
+  securityDeposit,
 }: WhatsAppEnquiryProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [location, setLocation] = useState<PlaceResult>({ address: "" });
@@ -206,12 +208,32 @@ export const WhatsAppEnquiry = ({
           )}
           <div className="border-t border-border pt-3 flex justify-between items-center">
             <span className="text-sm font-medium text-foreground">
-              Estimated Total
+              Estimated Rental Total
             </span>
-            <span className="text-xl font-serif text-foreground">
+            <span className="text-lg font-serif text-foreground">
               {formatCurrency(pricing.totalEstimate)}
             </span>
           </div>
+          {securityDeposit && securityDeposit > 0 && (
+            <>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">
+                  Security Deposit (refundable)
+                </span>
+                <span className="text-sm font-medium text-foreground">
+                  {formatCurrency(securityDeposit)}
+                </span>
+              </div>
+              <div className="border-t border-border pt-3 flex justify-between items-center">
+                <span className="text-sm font-medium text-foreground">
+                  Total Payable
+                </span>
+                <span className="text-xl font-serif text-foreground">
+                  {formatCurrency(pricing.totalEstimate + securityDeposit)}
+                </span>
+              </div>
+            </>
+          )}
           <p className="text-[10px] text-muted-foreground italic">
             Prices are indicative. Final pricing confirmed upon enquiry.
           </p>
