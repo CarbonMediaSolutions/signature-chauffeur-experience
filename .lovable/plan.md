@@ -1,48 +1,66 @@
 
 
-# Hero Layout - Mobile Centered, Desktop Left Offset
+# Homepage SEO Improvements
 
 ## Summary
-Adjust the hero content alignment to be centered on mobile but pushed left by 50px on desktop.
+Enhance search engine optimization with structured data, local SEO signals, and technical improvements to boost visibility for "luxury car rental Cape Town" searches.
 
 ---
 
-## Current State
-```tsx
-<div className="max-w-3xl text-left ml-0 animate-fade-in-up">
-```
+## 1. Add JSON-LD Structured Data
 
-Currently left-aligned at all breakpoints with no offset.
+**Why**: Helps Google understand your business and enables rich snippets in search results.
 
----
-
-## Proposed Change
-
-**File:** `src/pages/Index.tsx`
-
-Update the hero content wrapper to:
-```tsx
-<div className="max-w-3xl mx-auto text-center md:text-left md:mx-0 md:ml-[50px] animate-fade-in-up">
-```
-
-**Changes:**
-- `mx-auto` - center on mobile
-- `text-center` - center text on mobile
-- `md:text-left` - left-align text on desktop
-- `md:mx-0` - remove auto margins on desktop
-- `md:ml-[50px]` - push 50px from left on desktop
-
-Also update the logo container to match:
-```tsx
-<div className="mb-8 flex justify-center md:justify-start">
-```
-(This is already correct in the current code)
+**Add to `index.html`**:
+- LocalBusiness schema with name, address, phone, opening hours
+- Organization schema with logo and social profiles
+- Service schema for car rental offerings
 
 ---
 
-## Visual Result
-- **Mobile**: Centered content as shown in the first screenshot
-- **Desktop**: Content anchored 50px from the left edge of the container
+## 2. Add Sitemap
+
+**Why**: Helps search engines discover all your pages.
+
+**Create `public/sitemap.xml`** with URLs for:
+- Homepage (/)
+- Fleet (/fleet)
+- About (/about)
+- Contact (/contact)
+- FAQ (/faq)
+- Process (/process)
+- Terms (/terms)
+- List Your Vehicle (/list-your-vehicle)
+
+**Update `public/robots.txt`** to include sitemap reference.
+
+---
+
+## 3. Add Missing Meta Tags
+
+**Add to `index.html`**:
+- `og:url` - Full canonical URL
+- `og:locale` - en_ZA for South Africa
+- `canonical` link tag
+- Geographic meta tags (geo.region, geo.placename, geo.position)
+- `keywords` meta tag for luxury car rental terms
+
+---
+
+## 4. Improve Semantic Content
+
+**Why**: The H1 ("DREAM IT. DRIVE IT. LIVE IT.") is catchy but not keyword-rich.
+
+**Solution**: Add a visually hidden SEO H1 tag with descriptive text like:
+*"Luxury Car Rental Cape Town - Premium Vehicle Hire"*
+
+This preserves the creative headline while giving search engines keyword-rich content.
+
+---
+
+## 5. Add Page-Specific Meta Tags
+
+**Install react-helmet-async** to dynamically set meta tags per page, so each route (Fleet, About, etc.) has unique titles and descriptions.
 
 ---
 
@@ -50,5 +68,40 @@ Also update the logo container to match:
 
 | File | Action |
 |------|--------|
-| `src/pages/Index.tsx` | Update hero content container classes |
+| `index.html` | Add structured data, canonical, geo tags |
+| `public/sitemap.xml` | Create new sitemap |
+| `public/robots.txt` | Add sitemap reference |
+| `src/pages/Index.tsx` | Add SEO-friendly hidden H1 |
+| `package.json` | Add react-helmet-async |
+| `src/components/layout/Layout.tsx` | Wrap with HelmetProvider |
+
+---
+
+## Technical Details
+
+**JSON-LD Schema Example:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Signature Car Rentals",
+  "description": "Bespoke luxury vehicle hire in Cape Town",
+  "url": "https://signature-chauffeur-experience.lovable.app",
+  "telephone": "+27...",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Cape Town",
+    "addressRegion": "Western Cape",
+    "addressCountry": "ZA"
+  },
+  "priceRange": "$$$$"
+}
+```
+
+**Hidden SEO H1 Pattern:**
+```tsx
+<h1 className="sr-only">
+  Luxury Car Rental Cape Town - Premium Vehicle Hire | Signature Car Rentals
+</h1>
+```
 
