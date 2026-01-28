@@ -11,6 +11,11 @@ import logo from "@/assets/logo.png";
 const Index = () => {
   return (
     <Layout>
+      {/* SEO H1 - Visually hidden but readable by search engines */}
+      <h1 className="sr-only">
+        Luxury Car Rental Cape Town - Premium Vehicle Hire | Signature Car Rentals
+      </h1>
+
       {/* Hero Section */}
       <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[75vh] flex items-center">
         <div className="absolute inset-0">
@@ -37,11 +42,11 @@ const Index = () => {
                 height={96}
               />
             </div>
-            <h1 className="text-display text-primary-foreground mb-6 tracking-tight">
+            <p className="text-display text-primary-foreground mb-6 tracking-tight" aria-hidden="true">
               <span className="block mx-0 px-0 ml-0 mr-0">DREAM IT.</span>
               <span className="block">DRIVE IT.</span>
               <span className="block">LIVE IT.</span>
-            </h1>
+            </p>
             <p className="font-serif text-lg md:text-xl lg:text-2xl text-primary-foreground/80 mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
               <span className="block">Luxury Car Rental</span>
               <span className="block">created for moments that matter.</span>
