@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useVehicles } from "@/hooks/useVehicles";
 import { siteConfig } from "@/lib/siteConfig";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 
 const enquiryTypes = [
   "Self-Drive Rental",
@@ -250,6 +251,9 @@ const Contact = () => {
                     the perfect vehicle."
                   </p>
                 </div>
+
+                {/* Newsletter Signup */}
+                <NewsletterSignup variant="compact" />
               </div>
             </div>
           </div>
