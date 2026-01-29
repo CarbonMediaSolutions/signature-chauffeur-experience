@@ -6,6 +6,7 @@ import { SpecialsCarousel } from "@/components/home/SpecialsCarousel";
 import { MissionIcons } from "@/components/home/MissionIcons";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import heroImage from "@/assets/hero-home.webp";
 import logo from "@/assets/logo.png";
 const Index = () => {
@@ -103,6 +104,9 @@ const Index = () => {
           </blockquote>
         </div>
       </section>
+
+      {/* Newsletter Signup */}
+      <NewsletterSignup />
 
       {/* CTA Section */}
       <section className="section-padding bg-background">
