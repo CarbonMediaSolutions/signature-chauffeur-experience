@@ -1,66 +1,37 @@
 
 
-# Homepage SEO Improvements
+# Add Klaviyo Onsite Tracking
 
 ## Summary
-Enhance search engine optimization with structured data, local SEO signals, and technical improvements to boost visibility for "luxury car rental Cape Town" searches.
+Add Klaviyo's tracking scripts to enable email marketing features like popups, forms, and visitor tracking across the site.
 
 ---
 
-## 1. Add JSON-LD Structured Data
+## Implementation
 
-**Why**: Helps Google understand your business and enables rich snippets in search results.
+**File:** `index.html`
 
-**Add to `index.html`**:
-- LocalBusiness schema with name, address, phone, opening hours
-- Organization schema with logo and social profiles
-- Service schema for car rental offerings
+Add the Klaviyo scripts just before the closing `</body>` tag:
 
----
-
-## 2. Add Sitemap
-
-**Why**: Helps search engines discover all your pages.
-
-**Create `public/sitemap.xml`** with URLs for:
-- Homepage (/)
-- Fleet (/fleet)
-- About (/about)
-- Contact (/contact)
-- FAQ (/faq)
-- Process (/process)
-- Terms (/terms)
-- List Your Vehicle (/list-your-vehicle)
-
-**Update `public/robots.txt`** to include sitemap reference.
+```html
+    <!-- Klaviyo Onsite Tracking -->
+    <script async type='text/javascript' src='https://static.klaviyo.com/onsite/js/TVBPXs/klaviyo.js?company_id=TVBPXs'></script>
+    <script type="text/javascript">
+      //Initialize Klaviyo object on page load
+      !function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();
+    </script>
+  </body>
+</html>
+```
 
 ---
 
-## 3. Add Missing Meta Tags
+## What This Enables
 
-**Add to `index.html`**:
-- `og:url` - Full canonical URL
-- `og:locale` - en_ZA for South Africa
-- `canonical` link tag
-- Geographic meta tags (geo.region, geo.placename, geo.position)
-- `keywords` meta tag for luxury car rental terms
-
----
-
-## 4. Improve Semantic Content
-
-**Why**: The H1 ("DREAM IT. DRIVE IT. LIVE IT.") is catchy but not keyword-rich.
-
-**Solution**: Add a visually hidden SEO H1 tag with descriptive text like:
-*"Luxury Car Rental Cape Town - Premium Vehicle Hire"*
-
-This preserves the creative headline while giving search engines keyword-rich content.
-
----
-
-## 5. Add Page-Specific Meta Tags
-
-**Install react-helmet-async** to dynamically set meta tags per page, so each route (Fleet, About, etc.) has unique titles and descriptions.
+- Klaviyo popup forms and embedded signup forms
+- Visitor tracking for email marketing segmentation
+- Abandoned browse/cart tracking (if integrated with checkout)
+- Back-in-stock notifications
 
 ---
 
@@ -68,40 +39,5 @@ This preserves the creative headline while giving search engines keyword-rich co
 
 | File | Action |
 |------|--------|
-| `index.html` | Add structured data, canonical, geo tags |
-| `public/sitemap.xml` | Create new sitemap |
-| `public/robots.txt` | Add sitemap reference |
-| `src/pages/Index.tsx` | Add SEO-friendly hidden H1 |
-| `package.json` | Add react-helmet-async |
-| `src/components/layout/Layout.tsx` | Wrap with HelmetProvider |
-
----
-
-## Technical Details
-
-**JSON-LD Schema Example:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Signature Car Rentals",
-  "description": "Bespoke luxury vehicle hire in Cape Town",
-  "url": "https://signature-chauffeur-experience.lovable.app",
-  "telephone": "+27...",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Cape Town",
-    "addressRegion": "Western Cape",
-    "addressCountry": "ZA"
-  },
-  "priceRange": "$$$$"
-}
-```
-
-**Hidden SEO H1 Pattern:**
-```tsx
-<h1 className="sr-only">
-  Luxury Car Rental Cape Town - Premium Vehicle Hire | Signature Car Rentals
-</h1>
-```
+| `index.html` | Add Klaviyo scripts before `</body>` |
 
