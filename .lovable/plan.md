@@ -1,147 +1,116 @@
 
 
-# Add Newsletter Subscribe Forms with Klaviyo Integration
+# Add 4 New Vehicles to Fleet
 
 ## Summary
-Add email subscription forms to the homepage and contact page that integrate with the already-installed Klaviyo tracking to capture leads and automate email marketing flows.
+Add four new luxury vehicles to the database with their specifications extracted from the provided reference images.
 
 ---
 
-## Implementation Overview
+## Vehicles to Add
 
-### 1. Create Reusable Newsletter Component
-
-**New file:** `src/components/newsletter/NewsletterSignup.tsx`
-
-A reusable component with:
-- Email input field matching the luxury brand aesthetic
-- Submit button using `LuxuryButton` component
-- Loading and success states
-- Klaviyo API integration using `window.klaviyo.identify()`
-- Optional checkbox for marketing consent
+| Vehicle | Category | Daily Rate | Seats | Engine | Acceleration |
+|---------|----------|------------|-------|--------|--------------|
+| Mercedes-Benz CLS 400d | Executive | R8,000 | 4 | 3.0L Turbo-Diesel | - |
+| Porsche 911 Carrera GTS | Sports | R8,000 | 4 | 3.6L Twin-Turbo Flat-Six | 3.5s |
+| Porsche Macan S | Luxury SUV | R5,000 | 5 | Twin-Turbo V6 | - |
+| Porsche Cayman | Sports | R6,500 | 2 | 2.5L Turbo Flat-Four | 4.2s |
 
 ---
 
-### 2. Homepage Integration
+## Implementation
 
-**File:** `src/pages/Index.tsx`
+### Database Insert
 
-Add the newsletter signup in one of two strategic locations:
-- **Option A**: After the "Mission Statement" section (recommended - high engagement point)
-- **Option B**: Before the final CTA section
+Use SQL INSERT statements to add vehicles to the `vehicles` table with:
 
-The section will include:
-- Elegant heading: "Stay in the Loop"
-- Subtext about exclusive offers and new arrivals
-- Inline email signup form
-- Matching the luxury magazine aesthetic
+- Unique slug IDs (e.g., `mercedes-cls-400d`, `porsche-911-gts`)
+- Full descriptions from the reference images
+- Placeholder images (stock photos) until you upload actual vehicle photos
+- All specifications: transmission, seats, fuel type, acceleration, engine details
+- Set `is_active = true` so they appear on the fleet page immediately
 
 ---
 
-### 3. Contact Page Integration
+## Vehicle Details
 
-**File:** `src/pages/Contact.tsx`
+### 1. Mercedes-Benz CLS 400d
+- **ID**: `mercedes-cls-400d`
+- **Category**: Executive
+- **Rate**: R8,000
+- **Engine**: 3.0L Turbo-Diesel
+- **Transmission**: Automatic
+- **Seats**: 4
+- **Fuel**: Diesel
+- **Description**: Sleek luxury coupe combining elegance with dynamic performance
 
-Add newsletter opt-in in the sidebar area:
-- Positioned after the "Response Time" info card
-- Compact design with heading and email input
-- Integrates seamlessly with existing sidebar layout
+### 2. Porsche 911 Carrera GTS
+- **ID**: `porsche-911-carrera-gts`
+- **Category**: Sports
+- **Rate**: R8,000
+- **Engine**: 3.6L Twin-Turbo Flat-Six
+- **Transmission**: Automatic
+- **Seats**: 4
+- **Fuel**: Petrol
+- **Acceleration**: 0-100 km/h in 3.5 seconds
+- **Description**: High-performance sports car with thrilling speed and elegant design
 
----
+### 3. Porsche Macan S
+- **ID**: `porsche-macan-s`
+- **Category**: Luxury SUV
+- **Rate**: R5,000
+- **Engine**: Twin-Turbo V6
+- **Transmission**: Automatic
+- **Seats**: 5
+- **Fuel**: Petrol
+- **Description**: Refined performance SUV blending practicality with Porsche sportiness
 
-### 4. Footer Newsletter (Global)
-
-**File:** `src/components/layout/Footer.tsx`
-
-Add a newsletter signup section:
-- Positioned in the brand column
-- Simple inline form (email + subscribe button)
-- Appears on all pages for maximum capture
-
----
-
-## Technical Approach
-
-### Klaviyo Integration
-Since Klaviyo is already loaded on the page, we'll use the JavaScript API:
-
-```typescript
-// Subscribe user to Klaviyo
-const subscribeToKlaviyo = async (email: string) => {
-  if (window.klaviyo) {
-    window.klaviyo.identify({
-      email: email,
-      $consent: ['email'],
-    });
-    
-    // Track the signup event
-    window.klaviyo.track('Newsletter Signup', {
-      source: 'website',
-      page: window.location.pathname,
-    });
-  }
-};
-```
-
-### TypeScript Declaration
-Add Klaviyo type declaration for TypeScript support:
-
-```typescript
-// In src/vite-env.d.ts or new types file
-declare global {
-  interface Window {
-    klaviyo?: {
-      identify: (properties: Record<string, unknown>) => void;
-      track: (event: string, properties?: Record<string, unknown>) => void;
-      push: (args: unknown[]) => void;
-    };
-  }
-}
-```
+### 4. Porsche Cayman
+- **ID**: `porsche-cayman`
+- **Category**: Sports
+- **Rate**: R6,500
+- **Engine**: 2.5L Turbo Flat-Four
+- **Transmission**: Automatic
+- **Seats**: 2
+- **Fuel**: Petrol
+- **Acceleration**: 0-100 km/h in 4.2 seconds
+- **Top Speed**: 285 km/h
+- **Description**: Mid-engine roadster with precision engineering and open-top exhilaration
 
 ---
 
-## Visual Design
+## Technical Details
 
-The newsletter form will follow the existing luxury aesthetic:
-- Minimal border styling matching other form inputs
-- Serif headings for section titles
-- Muted color palette with brass/gold accents
-- Smooth transitions and loading states
-
-### Homepage Section Layout:
-```text
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│              Stay in the Loop                   │
-│   Be the first to know about new arrivals,     │
-│   exclusive offers, and curated experiences.   │
-│                                                 │
-│   ┌──────────────────────┐ ┌─────────────┐    │
-│   │ Your email address   │ │  Subscribe  │    │
-│   └──────────────────────┘ └─────────────┘    │
-│                                                 │
-└─────────────────────────────────────────────────┘
+### SQL Insert Statement (Example)
+```sql
+INSERT INTO vehicles (
+  id, name, category, daily_rate, image, description, 
+  engine, transmission, seats, fuel_type, drive_type,
+  acceleration, top_speed, is_active, featured
+) VALUES (
+  'porsche-911-carrera-gts',
+  'Porsche 911 Carrera GTS',
+  'Sports',
+  8000,
+  'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800',
+  'The Porsche 911 Carrera GTS is a high-performance sports car...',
+  '3.6L Twin-Turbo Flat-Six',
+  'Automatic',
+  4,
+  'Petrol',
+  'Rear-Wheel Drive',
+  '0-100 km/h in 3.5 seconds',
+  NULL,
+  true,
+  false
+);
 ```
 
 ---
 
-## Files Summary
+## Notes
 
-| File | Action |
-|------|--------|
-| `src/components/newsletter/NewsletterSignup.tsx` | Create - Reusable component |
-| `src/pages/Index.tsx` | Update - Add newsletter section |
-| `src/pages/Contact.tsx` | Update - Add sidebar newsletter |
-| `src/components/layout/Footer.tsx` | Update - Add footer newsletter |
-| `src/vite-env.d.ts` | Update - Add Klaviyo type declarations |
-
----
-
-## Benefits
-
-1. **Automated Lead Capture**: Every subscriber is automatically added to your Klaviyo list
-2. **Event Tracking**: Klaviyo tracks where signups came from for segmentation
-3. **Consistent Branding**: Forms match the luxury aesthetic
-4. **Multiple Touchpoints**: Homepage, contact page, and footer maximize capture opportunities
+- **Images**: Will use high-quality stock photos from Unsplash as placeholders
+- **"Hot" Badge**: Can mark any of these as `is_hot = true` if you want them featured
+- **Featured**: Can set `featured = true` to show in homepage carousel
 
