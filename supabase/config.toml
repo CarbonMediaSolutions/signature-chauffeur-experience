@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.generate-special-image]
 verify_jwt = false
+
+[functions.fetch-google-reviews]
+verify_jwt = false

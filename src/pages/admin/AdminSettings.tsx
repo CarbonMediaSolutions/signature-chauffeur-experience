@@ -2,23 +2,38 @@ import { useState, useEffect, useRef } from "react";
 import { useSiteSetting, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Settings, Upload, X } from "lucide-react";
+import { Loader2, Settings, Upload, X, MapPin, RefreshCw } from "lucide-react";
 
 const AdminSettings = () => {
   const { toast } = useToast();
-  const { data: founderImageUrl, isLoading } = useSiteSetting("founder_image_url");
-  const updateSetting = useUpdateSiteSetting();
   
+  // Founder image settings
+  const { data: founderImageUrl, isLoading: founderLoading } = useSiteSetting("founder_image_url");
   const [founderImage, setFounderImage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
+  // Google Place ID settings
+  const { data: googlePlaceId, isLoading: placeIdLoading } = useSiteSetting("google_place_id");
+  const [placeId, setPlaceId] = useState("");
+  const [fetchingReviews, setFetchingReviews] = useState(false);
+  
+  const updateSetting = useUpdateSiteSetting();
+
   useEffect(() => {
     if (founderImageUrl !== undefined) {
       setFounderImage(founderImageUrl);
     }
   }, [founderImageUrl]);
+
+  useEffect(() => {
+    if (googlePlaceId !== undefined) {
+      setPlaceId(googlePlaceId || "");
+    }
+  }, [googlePlaceId]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,12 +95,64 @@ const AdminSettings = () => {
     setFounderImage(null);
   };
 
+  const handleFetchReviews = async () => {
+    if (!placeId.trim()) {
+      toast({
+        title: "Place ID required",
+        description: "Please enter a Google Place ID first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setFetchingReviews(true);
+
+    try {
+      // First save the Place ID
+      await updateSetting.mutateAsync({ 
+        key: "google_place_id", 
+        value: placeId.trim() 
+      });
+
+      // Then trigger the edge function
+      const { data, error } = await supabase.functions.invoke("fetch-google-reviews");
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.success) {
+        toast({
+          title: "Reviews fetched successfully",
+          description: `Found ${data.fiveStarReviews} five-star reviews out of ${data.totalReviews} total`,
+        });
+      } else {
+        throw new Error(data?.error || "Failed to fetch reviews");
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      toast({
+        title: "Failed to fetch reviews",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setFetchingReviews(false);
+    }
+  };
+
   const handleSave = async () => {
     try {
-      await updateSetting.mutateAsync({ 
-        key: "founder_image_url", 
-        value: founderImage 
-      });
+      await Promise.all([
+        updateSetting.mutateAsync({ 
+          key: "founder_image_url", 
+          value: founderImage 
+        }),
+        updateSetting.mutateAsync({ 
+          key: "google_place_id", 
+          value: placeId.trim() || null 
+        }),
+      ]);
       toast({ title: "Settings saved successfully" });
     } catch (error) {
       toast({ 
@@ -94,6 +161,8 @@ const AdminSettings = () => {
       });
     }
   };
+
+  const isLoading = founderLoading || placeIdLoading;
 
   if (isLoading) {
     return (
@@ -108,7 +177,7 @@ const AdminSettings = () => {
       <div>
         <h1 className="font-serif text-3xl text-foreground mb-2">Site Settings</h1>
         <p className="text-muted-foreground">
-          Manage site-wide content and images
+          Manage site-wide content and integrations
         </p>
       </div>
 
@@ -187,23 +256,84 @@ const AdminSettings = () => {
             )}
           </div>
         </div>
+      </section>
 
-        <div className="mt-8 pt-6 border-t border-border">
-          <Button 
-            onClick={handleSave} 
-            disabled={updateSetting.isPending}
-          >
-            {updateSetting.isPending ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Save Settings"
-            )}
-          </Button>
+      {/* Google Reviews Section */}
+      <section className="border border-border rounded-sm p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <MapPin className="h-5 w-5 text-muted-foreground" />
+          <h2 className="font-serif text-xl text-foreground">Google Reviews</h2>
+        </div>
+
+        <div className="space-y-6">
+          <div>
+            <Label htmlFor="google-place-id" className="text-sm font-medium text-foreground mb-2 block">
+              Google Place ID
+            </Label>
+            <p className="text-sm text-muted-foreground mb-4">
+              Enter your Google Place ID to display 5-star reviews in the Testimonials section.
+              Find your Place ID at{" "}
+              <a 
+                href="https://developers.google.com/maps/documentation/places/web-service/place-id" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-brass underline hover:no-underline"
+              >
+                Google's Place ID Finder
+              </a>
+              .
+            </p>
+            
+            <div className="flex gap-3 max-w-lg">
+              <Input
+                id="google-place-id"
+                value={placeId}
+                onChange={(e) => setPlaceId(e.target.value)}
+                placeholder="ChIJ..."
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleFetchReviews}
+                disabled={fetchingReviews || !placeId.trim()}
+              >
+                {fetchingReviews ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Fetching...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Fetch Reviews
+                  </>
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Only 5-star reviews with written text will be displayed. The API returns up to 5 reviews.
+            </p>
+          </div>
         </div>
       </section>
+
+      {/* Save Button */}
+      <div className="pt-4 border-t border-border">
+        <Button 
+          onClick={handleSave} 
+          disabled={updateSetting.isPending}
+        >
+          {updateSetting.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            "Save Settings"
+          )}
+        </Button>
+      </div>
     </div>
   );
 };

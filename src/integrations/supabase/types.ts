@@ -155,6 +155,36 @@ export type Database = {
         }
         Relationships: []
       }
+      google_reviews: {
+        Row: {
+          author_name: string
+          fetched_at: string
+          id: string
+          profile_photo_url: string | null
+          rating: number
+          text: string
+          time: string
+        }
+        Insert: {
+          author_name: string
+          fetched_at?: string
+          id: string
+          profile_photo_url?: string | null
+          rating: number
+          text: string
+          time: string
+        }
+        Update: {
+          author_name?: string
+          fetched_at?: string
+          id?: string
+          profile_photo_url?: string | null
+          rating?: number
+          text?: string
+          time?: string
+        }
+        Relationships: []
+      }
       holds: {
         Row: {
           created_at: string
