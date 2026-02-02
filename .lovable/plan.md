@@ -1,130 +1,71 @@
 
 
-# Integrate Google Reviews into Testimonials Section
+# Add TrustIndex Widget for Google Reviews
 
 ## Summary
-Connect the homepage Testimonials section to Google Places API to display only 5-star reviews with written text, keeping the existing luxury magazine aesthetic.
+Replace the current custom Google reviews implementation with the TrustIndex widget you've configured. This third-party solution handles review fetching, filtering, and display automatically.
 
 ---
 
-## How It Will Work
+## What Will Change
 
-1. A backend function fetches reviews from Google Places API every few hours
-2. Reviews are cached in your database to avoid hitting API limits
-3. The Testimonials component displays only 5-star reviews with text
-4. If no 5-star reviews are available, the current manual testimonials serve as fallback
-
----
-
-## What You'll Need to Provide
-
-| Requirement | Description |
-|-------------|-------------|
-| **Google Place ID** | The unique identifier for your business on Google Maps |
-
-To find your Place ID:
-1. Go to [Google's Place ID Finder](https://developers.google.com/maps/documentation/places/web-service/place-id)
-2. Search for "Signature Car Rentals Cape Town"
-3. Copy the Place ID (looks like `ChIJ...`)
-
-Your existing `GOOGLE_MAPS_API_KEY` will be used - it just needs the Places API enabled.
+The Testimonials section will be simplified to embed your TrustIndex widget, which will display your Google reviews with their pre-built styling.
 
 ---
 
 ## Implementation Steps
 
-### 1. Create Database Table for Cached Reviews
+### 1. Update Testimonials Component
 
-Store fetched reviews to reduce API calls and improve performance:
+Simplify `src/components/home/Testimonials.tsx` to:
+- Remove the custom Google Reviews API integration
+- Add a container div where the TrustIndex widget will load
+- Use a `useEffect` hook to dynamically load the TrustIndex script
+- Keep the section styling (background, heading) consistent with your luxury aesthetic
 
-```text
-Table: google_reviews
-- id (text, primary key)
-- author_name (text)
-- rating (integer)
-- text (text)
-- time (timestamp)
-- profile_photo_url (text, nullable)
-- fetched_at (timestamp)
-```
+### 2. Clean Up Unused Code
 
-### 2. Create Edge Function: fetch-google-reviews
+The following can be removed since TrustIndex handles everything:
+- `useGoogleReviews` hook calls
+- Custom testimonial cards for Google reviews
+- Google icon component
+- Star rating component
 
-Backend function that:
-- Calls Google Places API with your Place ID
-- Returns all reviews (API provides max 5)
-- Filters to only 5-star reviews with text
-- Caches results in database
-
-### 3. Store Place ID in Admin Settings
-
-Add a "Google Place ID" field to Admin Settings:
-- Saves to `site_settings` table with key `google_place_id`
-- Easy to update without code changes
-
-### 4. Update Testimonials Component
-
-Modify `Testimonials.tsx` to:
-- Fetch reviews from the `google_reviews` table
-- Filter for 5-star reviews only
-- Fall back to hardcoded testimonials if no 5-star reviews exist
-- Add subtle Google attribution (required by Terms of Service)
+The fallback testimonials will be kept as a backup in case the widget fails to load.
 
 ---
 
-## Visual Changes
+## Technical Details
 
-The design stays the same with these additions:
+The TrustIndex script will be loaded dynamically when the Testimonials section mounts:
 
-- Small Google "G" icon next to reviewer names (for authenticity)
-- "Reviews from Google" subtle text below the section (required attribution)
-- Star rating display (5 stars in brass color)
-- Reviewer profile photos (optional, if available from Google)
-
----
-
-## Technical Architecture
-
-```text
-+------------------+     +----------------------+     +----------------+
-|   Admin Settings | --> | google_place_id      | --> | Edge Function  |
-|   (Place ID)     |     | (site_settings)      |     | fetch-google-  |
-+------------------+     +----------------------+     | reviews        |
-                                                      +-------+--------+
-                                                              |
-                                                              v
-+------------------+     +----------------------+     +----------------+
-|   Testimonials   | <-- | google_reviews       | <-- | Google Places  |
-|   Component      |     | (cached reviews)     |     | API            |
-+------------------+     +----------------------+     +----------------+
+```typescript
+useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.trustindex.io/loader.js?b8da22a6312c812b39766d27171';
+  script.defer = true;
+  script.async = true;
+  containerRef.current?.appendChild(script);
+  
+  return () => {
+    // Cleanup on unmount
+  };
+}, []);
 ```
 
 ---
 
-## API Limitations to Be Aware Of
-
-| Limitation | Impact |
-|------------|--------|
-| Max 5 reviews per API call | You may get fewer than 5 five-star reviews |
-| No rating filter | We filter client-side after fetching |
-| Reviews sorted by "relevance" | Google decides which 5 reviews to return |
-| Requires Places API enabled | Your existing Maps API key works if Places is enabled |
-
----
-
-## Files to Create/Modify
+## Files to Modify
 
 | File | Change |
 |------|--------|
-| `supabase/functions/fetch-google-reviews/index.ts` | New edge function |
-| `src/components/home/Testimonials.tsx` | Fetch from database, add Google styling |
-| `src/pages/admin/AdminSettings.tsx` | Add Google Place ID input field |
-| `src/hooks/useGoogleReviews.tsx` | New hook for fetching cached reviews |
-| Database migration | Create `google_reviews` table |
+| `src/components/home/Testimonials.tsx` | Simplify to embed TrustIndex widget |
 
 ---
 
-## Fallback Behavior
+## Considerations
 
-If no 5-star reviews with text are found, the component will automatically display the existing hardcoded testimonials. This ensures the section is never empty.
+- **Styling**: TrustIndex has its own styling. The widget appearance is configured in your TrustIndex dashboard
+- **Loading**: The widget loads asynchronously, so there may be a brief delay before reviews appear
+- **Admin Settings**: The Google Place ID field in Admin Settings can be kept for reference or removed since TrustIndex manages everything
 
