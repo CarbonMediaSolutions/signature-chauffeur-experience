@@ -1,116 +1,130 @@
 
 
-# Add 4 New Vehicles to Fleet
+# Integrate Google Reviews into Testimonials Section
 
 ## Summary
-Add four new luxury vehicles to the database with their specifications extracted from the provided reference images.
+Connect the homepage Testimonials section to Google Places API to display only 5-star reviews with written text, keeping the existing luxury magazine aesthetic.
 
 ---
 
-## Vehicles to Add
+## How It Will Work
 
-| Vehicle | Category | Daily Rate | Seats | Engine | Acceleration |
-|---------|----------|------------|-------|--------|--------------|
-| Mercedes-Benz CLS 400d | Executive | R8,000 | 4 | 3.0L Turbo-Diesel | - |
-| Porsche 911 Carrera GTS | Sports | R8,000 | 4 | 3.6L Twin-Turbo Flat-Six | 3.5s |
-| Porsche Macan S | Luxury SUV | R5,000 | 5 | Twin-Turbo V6 | - |
-| Porsche Cayman | Sports | R6,500 | 2 | 2.5L Turbo Flat-Four | 4.2s |
+1. A backend function fetches reviews from Google Places API every few hours
+2. Reviews are cached in your database to avoid hitting API limits
+3. The Testimonials component displays only 5-star reviews with text
+4. If no 5-star reviews are available, the current manual testimonials serve as fallback
 
 ---
 
-## Implementation
+## What You'll Need to Provide
 
-### Database Insert
+| Requirement | Description |
+|-------------|-------------|
+| **Google Place ID** | The unique identifier for your business on Google Maps |
 
-Use SQL INSERT statements to add vehicles to the `vehicles` table with:
+To find your Place ID:
+1. Go to [Google's Place ID Finder](https://developers.google.com/maps/documentation/places/web-service/place-id)
+2. Search for "Signature Car Rentals Cape Town"
+3. Copy the Place ID (looks like `ChIJ...`)
 
-- Unique slug IDs (e.g., `mercedes-cls-400d`, `porsche-911-gts`)
-- Full descriptions from the reference images
-- Placeholder images (stock photos) until you upload actual vehicle photos
-- All specifications: transmission, seats, fuel type, acceleration, engine details
-- Set `is_active = true` so they appear on the fleet page immediately
-
----
-
-## Vehicle Details
-
-### 1. Mercedes-Benz CLS 400d
-- **ID**: `mercedes-cls-400d`
-- **Category**: Executive
-- **Rate**: R8,000
-- **Engine**: 3.0L Turbo-Diesel
-- **Transmission**: Automatic
-- **Seats**: 4
-- **Fuel**: Diesel
-- **Description**: Sleek luxury coupe combining elegance with dynamic performance
-
-### 2. Porsche 911 Carrera GTS
-- **ID**: `porsche-911-carrera-gts`
-- **Category**: Sports
-- **Rate**: R8,000
-- **Engine**: 3.6L Twin-Turbo Flat-Six
-- **Transmission**: Automatic
-- **Seats**: 4
-- **Fuel**: Petrol
-- **Acceleration**: 0-100 km/h in 3.5 seconds
-- **Description**: High-performance sports car with thrilling speed and elegant design
-
-### 3. Porsche Macan S
-- **ID**: `porsche-macan-s`
-- **Category**: Luxury SUV
-- **Rate**: R5,000
-- **Engine**: Twin-Turbo V6
-- **Transmission**: Automatic
-- **Seats**: 5
-- **Fuel**: Petrol
-- **Description**: Refined performance SUV blending practicality with Porsche sportiness
-
-### 4. Porsche Cayman
-- **ID**: `porsche-cayman`
-- **Category**: Sports
-- **Rate**: R6,500
-- **Engine**: 2.5L Turbo Flat-Four
-- **Transmission**: Automatic
-- **Seats**: 2
-- **Fuel**: Petrol
-- **Acceleration**: 0-100 km/h in 4.2 seconds
-- **Top Speed**: 285 km/h
-- **Description**: Mid-engine roadster with precision engineering and open-top exhilaration
+Your existing `GOOGLE_MAPS_API_KEY` will be used - it just needs the Places API enabled.
 
 ---
 
-## Technical Details
+## Implementation Steps
 
-### SQL Insert Statement (Example)
-```sql
-INSERT INTO vehicles (
-  id, name, category, daily_rate, image, description, 
-  engine, transmission, seats, fuel_type, drive_type,
-  acceleration, top_speed, is_active, featured
-) VALUES (
-  'porsche-911-carrera-gts',
-  'Porsche 911 Carrera GTS',
-  'Sports',
-  8000,
-  'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800',
-  'The Porsche 911 Carrera GTS is a high-performance sports car...',
-  '3.6L Twin-Turbo Flat-Six',
-  'Automatic',
-  4,
-  'Petrol',
-  'Rear-Wheel Drive',
-  '0-100 km/h in 3.5 seconds',
-  NULL,
-  true,
-  false
-);
+### 1. Create Database Table for Cached Reviews
+
+Store fetched reviews to reduce API calls and improve performance:
+
+```text
+Table: google_reviews
+- id (text, primary key)
+- author_name (text)
+- rating (integer)
+- text (text)
+- time (timestamp)
+- profile_photo_url (text, nullable)
+- fetched_at (timestamp)
+```
+
+### 2. Create Edge Function: fetch-google-reviews
+
+Backend function that:
+- Calls Google Places API with your Place ID
+- Returns all reviews (API provides max 5)
+- Filters to only 5-star reviews with text
+- Caches results in database
+
+### 3. Store Place ID in Admin Settings
+
+Add a "Google Place ID" field to Admin Settings:
+- Saves to `site_settings` table with key `google_place_id`
+- Easy to update without code changes
+
+### 4. Update Testimonials Component
+
+Modify `Testimonials.tsx` to:
+- Fetch reviews from the `google_reviews` table
+- Filter for 5-star reviews only
+- Fall back to hardcoded testimonials if no 5-star reviews exist
+- Add subtle Google attribution (required by Terms of Service)
+
+---
+
+## Visual Changes
+
+The design stays the same with these additions:
+
+- Small Google "G" icon next to reviewer names (for authenticity)
+- "Reviews from Google" subtle text below the section (required attribution)
+- Star rating display (5 stars in brass color)
+- Reviewer profile photos (optional, if available from Google)
+
+---
+
+## Technical Architecture
+
+```text
++------------------+     +----------------------+     +----------------+
+|   Admin Settings | --> | google_place_id      | --> | Edge Function  |
+|   (Place ID)     |     | (site_settings)      |     | fetch-google-  |
++------------------+     +----------------------+     | reviews        |
+                                                      +-------+--------+
+                                                              |
+                                                              v
++------------------+     +----------------------+     +----------------+
+|   Testimonials   | <-- | google_reviews       | <-- | Google Places  |
+|   Component      |     | (cached reviews)     |     | API            |
++------------------+     +----------------------+     +----------------+
 ```
 
 ---
 
-## Notes
+## API Limitations to Be Aware Of
 
-- **Images**: Will use high-quality stock photos from Unsplash as placeholders
-- **"Hot" Badge**: Can mark any of these as `is_hot = true` if you want them featured
-- **Featured**: Can set `featured = true` to show in homepage carousel
+| Limitation | Impact |
+|------------|--------|
+| Max 5 reviews per API call | You may get fewer than 5 five-star reviews |
+| No rating filter | We filter client-side after fetching |
+| Reviews sorted by "relevance" | Google decides which 5 reviews to return |
+| Requires Places API enabled | Your existing Maps API key works if Places is enabled |
+
+---
+
+## Files to Create/Modify
+
+| File | Change |
+|------|--------|
+| `supabase/functions/fetch-google-reviews/index.ts` | New edge function |
+| `src/components/home/Testimonials.tsx` | Fetch from database, add Google styling |
+| `src/pages/admin/AdminSettings.tsx` | Add Google Place ID input field |
+| `src/hooks/useGoogleReviews.tsx` | New hook for fetching cached reviews |
+| Database migration | Create `google_reviews` table |
+
+---
+
+## Fallback Behavior
+
+If no 5-star reviews with text are found, the component will automatically display the existing hardcoded testimonials. This ensures the section is never empty.
 
