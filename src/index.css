@@ -292,4 +292,14 @@
   .tracking-elegant {
     letter-spacing: 0.05em;
   }
+
+  /* Hide Klaviyo embedded signup on mobile to prevent overlap with WhatsApp button */
+  @media (max-width: 767px) {
+    .klaviyo-form,
+    div[data-testid="POPUP"],
+    .klaviyo_embed_footer_module,
+    .go3958317564 {
+      display: none !important;
+    }
+  }
 }
