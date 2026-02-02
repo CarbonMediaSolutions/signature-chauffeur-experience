@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { Sparkles, Shield, Heart } from "lucide-react";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
-import aboutDean from "@/assets/about-dean-placeholder.jpg";
+import aboutDean from "@/assets/about-dean.jpg";
 import { useSiteSetting } from "@/hooks/useSiteSettings";
 
 // Video configuration - replace with actual URL when ready
