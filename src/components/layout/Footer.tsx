@@ -172,7 +172,7 @@ export const Footer = () => {
           </p>
           <div className="flex items-center gap-6">
             <a
-              href="https://instagram.com/signaturecarrentals"
+              href="https://www.instagram.com/signature_car_rental?igsh=MXJxYWxuZnlpc2Jycw=="
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
@@ -181,7 +181,7 @@ export const Footer = () => {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="https://facebook.com/signaturecarrentals"
+              href="https://www.facebook.com/share/1DuB6RTeRk/?mibextid=wwXIfr"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300"
