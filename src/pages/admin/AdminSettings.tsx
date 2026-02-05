@@ -48,10 +48,10 @@ const AdminSettings = () => {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 100 * 1024 * 1024) {
       toast({
         title: "File too large",
-        description: "Maximum file size is 10MB",
+        description: "Maximum file size is 100MB",
         variant: "destructive",
       });
       return;
