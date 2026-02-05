@@ -21,7 +21,7 @@ interface UploadProgress {
   [key: string]: number;
 }
 
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_IMAGE_SIZE = 100 * 1024 * 1024; // 100MB
 const MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200MB
 
 export const MediaManager = ({
