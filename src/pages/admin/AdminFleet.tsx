@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Pencil, Trash2, Search, Eye } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Search, Eye, Copy } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type SortOption = "newest" | "updated" | "name" | "price";
@@ -31,7 +31,7 @@ type StatusFilter = "all" | "active" | "inactive";
 const AdminFleet = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data: vehicles, isLoading } = useVehicles();
+  const { data: vehicles, isLoading } = useVehicles(true); // Include inactive for admin
 
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -54,6 +54,60 @@ const AdminFleet = () => {
     },
     onError: () => {
       toast({ title: "Failed to deactivate vehicle", variant: "destructive" });
+    },
+  });
+
+  const duplicateVehicle = useMutation({
+    mutationFn: async (vehicle: typeof vehicles extends (infer T)[] ? T : never) => {
+      const newId = `${vehicle.id}-copy-${Date.now()}`;
+      const { error } = await supabase.from("vehicles").insert({
+        id: newId,
+        name: `${vehicle.name} (Copy)`,
+        category: vehicle.category,
+        daily_rate: vehicle.daily_rate,
+        image: vehicle.image,
+        description: vehicle.description,
+        engine: vehicle.engine,
+        transmission: vehicle.transmission,
+        seats: vehicle.seats,
+        features: vehicle.features,
+        why_we_chose: vehicle.why_we_chose,
+        limited_availability: vehicle.limited_availability,
+        is_active: false, // Start as inactive so admin can review
+        featured: false,
+        fuel_type: vehicle.fuel_type,
+        drive_type: vehicle.drive_type,
+        luggage_capacity: vehicle.luggage_capacity,
+        mileage_limit: vehicle.mileage_limit,
+        security_deposit: vehicle.security_deposit,
+        insurance_excess: vehicle.insurance_excess,
+        cover_image_url: vehicle.cover_image_url,
+        gallery_urls: vehicle.gallery_urls,
+        video_urls: vehicle.video_urls,
+        multi_day_threshold: vehicle.multi_day_threshold,
+        multi_day_discount_percent: vehicle.multi_day_discount_percent,
+        has_aircon: vehicle.has_aircon,
+        doors: vehicle.doors,
+        acceleration: vehicle.acceleration,
+        power_kw: vehicle.power_kw,
+        is_hot: false,
+      });
+      if (error) throw error;
+      return newId;
+    },
+    onSuccess: (newId) => {
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast({ 
+        title: "Vehicle duplicated", 
+        description: "The copy is set to inactive. Edit it to make changes and activate." 
+      });
+    },
+    onError: (error) => {
+      toast({ 
+        title: "Failed to duplicate vehicle", 
+        description: error.message,
+        variant: "destructive" 
+      });
     },
   });
 
@@ -242,6 +296,15 @@ const AdminFleet = () => {
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => duplicateVehicle.mutate(vehicle)}
+                      disabled={duplicateVehicle.isPending}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
                     <Link to={`/admin/fleet/${vehicle.id}/edit`}>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Pencil className="h-4 w-4" />

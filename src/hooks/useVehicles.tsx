@@ -35,15 +35,17 @@ export interface Vehicle {
   is_hot: boolean | null;
 }
 
-export const useVehicles = () => {
+export const useVehicles = (includeInactive = false) => {
   return useQuery({
-    queryKey: ["vehicles"],
+    queryKey: ["vehicles", { includeInactive }],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("vehicles")
-        .select("*")
-        .eq("is_active", true)
-        .order("name");
+      let query = supabase.from("vehicles").select("*");
+      
+      if (!includeInactive) {
+        query = query.eq("is_active", true);
+      }
+      
+      const { data, error } = await query.order("name");
       
       if (error) throw error;
       return data as Vehicle[];
