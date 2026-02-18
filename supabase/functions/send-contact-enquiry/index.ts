@@ -22,7 +22,9 @@ Deno.serve(async (req) => {
       referralSource,
     } = await req.json();
 
-    if (!name || !email || !phone || !enquiryType || !message || !referralSource) {
+    const safeReferralSource = referralSource || "Not specified";
+
+    if (!name || !email || !phone || !enquiryType || !message) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -46,7 +48,7 @@ Deno.serve(async (req) => {
         start_date: startDate || null,
         end_date: endDate || null,
         message,
-        referral_source: referralSource,
+        referral_source: safeReferralSource,
       });
 
     if (dbError) {
