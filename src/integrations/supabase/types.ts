@@ -128,6 +128,48 @@ export type Database = {
           },
         ]
       }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          end_date: string | null
+          enquiry_type: string
+          id: string
+          message: string
+          name: string
+          phone: string
+          preferred_vehicle: string | null
+          referral_source: string
+          start_date: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          end_date?: string | null
+          enquiry_type: string
+          id?: string
+          message: string
+          name: string
+          phone: string
+          preferred_vehicle?: string | null
+          referral_source: string
+          start_date?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          end_date?: string | null
+          enquiry_type?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string
+          preferred_vehicle?: string | null
+          referral_source?: string
+          start_date?: string | null
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string

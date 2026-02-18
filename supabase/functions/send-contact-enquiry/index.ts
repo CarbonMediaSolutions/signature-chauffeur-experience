@@ -1,4 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const TO_EMAIL = "info@signaturecarrentals.co.za";
@@ -28,6 +29,31 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Save to database
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    const { error: dbError } = await supabaseAdmin
+      .from("contact_submissions")
+      .insert({
+        name,
+        email,
+        phone,
+        enquiry_type: enquiryType,
+        preferred_vehicle: preferredVehicle || null,
+        start_date: startDate || null,
+        end_date: endDate || null,
+        message,
+        referral_source: referralSource,
+      });
+
+    if (dbError) {
+      console.error("DB insert error:", dbError);
+    }
+
+    // Send email
     const htmlBody = `
       <h2>New Enquiry from Signature Car Rentals Website</h2>
       <table style="border-collapse:collapse;width:100%;max-width:600px;">
