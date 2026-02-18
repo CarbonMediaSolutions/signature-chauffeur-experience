@@ -1,62 +1,41 @@
 
 
-# Update WhatsApp Number, Email, and Add "How Did You Hear About Us" Field
+# Make "Email us" Send Enquiry Silently via Backend
 
-## Summary of Changes
+## What Changes
 
-Three updates across a few files:
-
----
-
-## 1. Update WhatsApp Number
-
-**File: `src/lib/siteConfig.ts`**
-- Change `number` from `"27716649603"` to `"27827830342"`
-- Change `displayNumber` from `"+27 71 664 9603"` to `"+27 82 783 0342"`
-- Change `phone` from `"+27 71 664 9603"` to `"+27 82 783 0342"`
-
-This single change will automatically update the WhatsApp number across the entire site (floating button, footer, contact page sidebar, vehicle enquiry panel).
-
-**File: `index.html`**
-- Update the structured data `telephone` from `"+27716649603"` to `"+27827830342"`
+The "Email us" button on the vehicle enquiry panel currently opens your device's email app. Instead, it will silently send the enquiry details (vehicle name, dates, location, service type, notes) directly to info@signaturecarrentals.co.za via the backend -- no pop-ups, no new windows.
 
 ---
 
-## 2. Update Contact Email
+## How It Will Work
 
-**File: `src/lib/siteConfig.ts`**
-- Change `email` from `"enquiries@signaturecarrentals.co.za"` to `"info@signaturecarrentals.co.za"`
-
-**File: `index.html`**
-- Update the structured data `email` from `"enquiries@signaturecarrentals.co.za"` to `"info@signaturecarrentals.co.za"`
-
----
-
-## 3. Add "How Did You Hear About Us" to Contact Form
-
-**File: `src/pages/Contact.tsx`**
-- Add `referralSource` field to form state (default empty string)
-- Add a required dropdown field after the Message field with the label **"How did you hear about Signature Car Rentals? *"**
-- Options:
-  - Instagram
-  - Facebook
-  - TikTok
-  - Google Search
-  - Google Ads
-  - YouTube
-  - Referred by a friend / client
-  - Referred by a partner / business
-  - Saw one of your cars in person
-  - Other
-- Reset `referralSource` on form submit
+1. User fills in the enquiry form (dates, location, etc.) on the vehicle page
+2. Clicks "Email us"
+3. If dates are not selected, a validation message appears (same as WhatsApp button)
+4. The enquiry is sent silently in the background using the existing `send-contact-enquiry` backend function
+5. A success toast notification confirms "Enquiry sent successfully"
+6. The submission is also saved to the database and visible in Admin > Enquiries
 
 ---
 
 ## Technical Details
 
-| File | Change |
-|------|--------|
-| `src/lib/siteConfig.ts` | Update WhatsApp number and email |
-| `index.html` | Update structured data (telephone + email) |
-| `src/pages/Contact.tsx` | Add `referralSource` to form state + new required dropdown field |
+**File: `src/components/enquiry/WhatsAppEnquiry.tsx`**
+
+- Change the "Email us" `<a>` tag from a `mailto:` link to a `<button>` with an `onClick` handler
+- Add `isSendingEmail` state for loading feedback
+- Add a `handleEmailEnquiry` function that:
+  - Validates dates are selected (reuses existing validation)
+  - Calls `supabase.functions.invoke("send-contact-enquiry")` with the form data, using the vehicle name as both the enquiry type and preferred vehicle
+  - Sets `referralSource` to "Vehicle Page Enquiry" (since this form doesn't have that field)
+  - Shows a success/error toast
+- The `message` field will use the same `buildMessage()` output already used for WhatsApp
+- Import `supabase` client and `toast` (sonner already imported)
+- While sending, show a small spinner or disabled state on the button
+
+**File: `supabase/functions/send-contact-enquiry/index.ts`**
+
+- Make `referralSource` optional in validation (since vehicle page enquiries won't have the full contact form fields)
+- Default `referralSource` to "Not specified" if not provided
 
