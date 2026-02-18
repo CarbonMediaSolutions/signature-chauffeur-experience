@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays } from "date-fns";
-import { MessageCircle, Phone, Mail, Copy, Check } from "lucide-react";
+import { MessageCircle, Phone, Mail, Copy, Check, Loader2 } from "lucide-react";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { Textarea } from "@/components/ui/textarea";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { siteConfig } from "@/lib/siteConfig";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WhatsAppEnquiryProps {
   vehicleName: string;
@@ -43,6 +44,7 @@ export const WhatsAppEnquiry = ({
   const [notes, setNotes] = useState("");
   const [dateError, setDateError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   // Calculate pricing
   const pricing = useMemo(() => {
@@ -125,6 +127,44 @@ export const WhatsAppEnquiry = ({
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("Failed to copy message");
+    }
+  };
+
+  const handleEmailEnquiry = async () => {
+    if (!dateRange?.from || !dateRange?.to) {
+      setDateError(true);
+      return;
+    }
+
+    setDateError(false);
+    setIsSendingEmail(true);
+
+    try {
+      const message = buildMessage();
+      const startDate = format(dateRange.from, "yyyy-MM-dd");
+      const endDate = format(dateRange.to, "yyyy-MM-dd");
+
+      const { error } = await supabase.functions.invoke("send-contact-enquiry", {
+        body: {
+          name: "Vehicle Page Enquiry",
+          email: siteConfig.contact.email,
+          phone: "N/A",
+          enquiryType: vehicleName,
+          preferredVehicle: vehicleName,
+          startDate,
+          endDate,
+          message,
+          referralSource: "Vehicle Page Enquiry",
+        },
+      });
+
+      if (error) throw error;
+      toast.success("Enquiry sent successfully! We'll be in touch shortly.");
+    } catch (err) {
+      console.error("Email enquiry error:", err);
+      toast.error("Failed to send enquiry. Please try again or use WhatsApp.");
+    } finally {
+      setIsSendingEmail(false);
     }
   };
 
@@ -316,13 +356,18 @@ export const WhatsAppEnquiry = ({
           Call us
         </a>
         <span className="text-border">•</span>
-        <a
-          href={`mailto:${siteConfig.contact.email}`}
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+        <button
+          onClick={handleEmailEnquiry}
+          disabled={isSendingEmail}
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 disabled:opacity-50"
         >
-          <Mail className="w-4 h-4" />
-          Email us
-        </a>
+          {isSendingEmail ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Mail className="w-4 h-4" />
+          )}
+          {isSendingEmail ? "Sending..." : "Email us"}
+        </button>
       </div>
 
       <p className="text-xs text-muted-foreground mt-6 text-center leading-relaxed">
