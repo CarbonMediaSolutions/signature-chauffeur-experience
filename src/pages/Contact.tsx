@@ -33,6 +33,7 @@ const Contact = () => {
     startDate: "",
     endDate: "",
     message: "",
+    referralSource: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,6 +51,7 @@ const Contact = () => {
       startDate: "",
       endDate: "",
       message: "",
+      referralSource: "",
     });
   };
 
@@ -203,6 +205,30 @@ const Contact = () => {
                         placeholder="Tell us about your requirements, preferences, or any special requests..."
                         className="w-full px-4 py-3 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-foreground placeholder:text-muted-foreground resize-none"
                       />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-foreground mb-2">
+                        How did you hear about Signature Car Rentals? *
+                      </label>
+                      <select
+                        required
+                        value={formData.referralSource}
+                        onChange={(e) => setFormData({ ...formData, referralSource: e.target.value })}
+                        className="w-full px-4 py-3 bg-background border border-border focus:border-foreground outline-none transition-colors text-foreground"
+                      >
+                        <option value="">Select an option</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="Google Search">Google Search</option>
+                        <option value="Google Ads">Google Ads</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="Referred by a friend / client">Referred by a friend / client</option>
+                        <option value="Referred by a partner / business">Referred by a partner / business</option>
+                        <option value="Saw one of your cars in person">Saw one of your cars in person</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                   </div>
                 </div>
