@@ -32,6 +32,7 @@ import AdminSpecials from "./pages/admin/AdminSpecials";
 import AdminSpecialNew from "./pages/admin/AdminSpecialNew";
 import AdminSpecialEdit from "./pages/admin/AdminSpecialEdit";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -72,6 +73,7 @@ const App = () => (
               <Route path="specials" element={<AdminSpecials />} />
               <Route path="specials/new" element={<AdminSpecialNew />} />
               <Route path="specials/:id/edit" element={<AdminSpecialEdit />} />
+              <Route path="enquiries" element={<AdminEnquiries />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             
