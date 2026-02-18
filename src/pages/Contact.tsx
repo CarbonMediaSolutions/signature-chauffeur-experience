@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useVehicles } from "@/hooks/useVehicles";
 import { siteConfig } from "@/lib/siteConfig";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { supabase } from "@/integrations/supabase/client";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 
 const enquiryTypes = [
@@ -36,23 +37,44 @@ const Contact = () => {
     referralSource: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Enquiry Submitted",
-      description: "Thank you for your enquiry. Our team will respond within 24 hours.",
-    });
-    setFormData({
-      name: "",
-      email: "",
-      phone: "+27 ",
-      enquiryType: "",
-      preferredVehicle: "",
-      startDate: "",
-      endDate: "",
-      message: "",
-      referralSource: "",
-    });
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-contact-enquiry", {
+        body: formData,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Enquiry Submitted",
+        description: "Thank you for your enquiry. Our team will respond within 24 hours.",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "+27 ",
+        enquiryType: "",
+        preferredVehicle: "",
+        startDate: "",
+        endDate: "",
+        message: "",
+        referralSource: "",
+      });
+    } catch (error) {
+      console.error("Submit error:", error);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or contact us via WhatsApp.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -234,8 +256,8 @@ const Contact = () => {
                 </div>
 
                 <div className="pt-4">
-                  <LuxuryButton type="submit" variant="default" size="lg">
-                    Submit Enquiry
+                  <LuxuryButton type="submit" variant="default" size="lg" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : "Submit Enquiry"}
                   </LuxuryButton>
                 </div>
               </form>
