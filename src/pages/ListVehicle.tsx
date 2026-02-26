@@ -112,9 +112,31 @@ const ListVehicle = () => {
         }
       }
       
-      // For now, just show toast (could save to DB or send via email later)
-      console.log('Submission data:', { ...formData, imageUrls });
-      
+      // Build message with image URLs
+      const vehicleDescription = `${formData.vehicleYear} ${formData.vehicleMake} ${formData.vehicleModel}`.trim();
+      let fullMessage = formData.message || "No additional message provided.";
+      if (imageUrls.length > 0) {
+        fullMessage += "\n\n--- Uploaded Vehicle Photos ---\n" + imageUrls.map((url, i) => `Photo ${i + 1}: ${url}`).join("\n");
+      }
+
+      // Send enquiry email and save to database
+      const { error: fnError } = await supabase.functions.invoke("send-contact-enquiry", {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          enquiryType: "List Your Vehicle",
+          preferredVehicle: vehicleDescription || null,
+          message: fullMessage,
+          referralSource: "List Your Vehicle Page",
+        },
+      });
+
+      if (fnError) {
+        console.error("Edge function error:", fnError);
+        throw new Error("Failed to send submission");
+      }
+
       toast({
         title: "Submission Received",
         description: "Thank you for your interest. Our team will review your submission and be in touch shortly.",
