@@ -1,41 +1,33 @@
 
 
-# Make "Email us" Send Enquiry Silently via Backend
+# Send "List Your Vehicle" Submissions to Info Email
+
+## Problem
+
+The "List Your Vehicle" form currently uploads images to storage and logs the submission to the browser console, but **never sends an email or saves to the database**. The comment on line 115 literally says: "For now, just show toast (could save to DB or send via email later)."
+
+## Solution
+
+After the image uploads succeed, call the existing `send-contact-enquiry` backend function to email the submission details to `info@signaturecarrentals.co.za` and persist it in the `contact_submissions` table.
 
 ## What Changes
 
-The "Email us" button on the vehicle enquiry panel currently opens your device's email app. Instead, it will silently send the enquiry details (vehicle name, dates, location, service type, notes) directly to info@signaturecarrentals.co.za via the backend -- no pop-ups, no new windows.
+**File: `src/pages/ListVehicle.tsx`**
 
----
+After the image upload loop (line 113), add a call to `supabase.functions.invoke("send-contact-enquiry")` with:
+- `name`: from form
+- `email`: from form
+- `phone`: from form
+- `enquiryType`: "List Your Vehicle"
+- `preferredVehicle`: constructed as `{year} {make} {model}`
+- `message`: the user's message plus a list of uploaded image URLs
+- `referralSource`: "List Your Vehicle Page"
 
-## How It Will Work
+Replace the console.log placeholder (line 115-116) with this invocation. If the function call fails, show an error toast. On success, keep the existing success toast and form reset.
 
-1. User fills in the enquiry form (dates, location, etc.) on the vehicle page
-2. Clicks "Email us"
-3. If dates are not selected, a validation message appears (same as WhatsApp button)
-4. The enquiry is sent silently in the background using the existing `send-contact-enquiry` backend function
-5. A success toast notification confirms "Enquiry sent successfully"
-6. The submission is also saved to the database and visible in Admin > Enquiries
+**No other files need to change** -- the existing edge function already handles optional fields and saves to the database.
 
----
+## Technical Detail
 
-## Technical Details
-
-**File: `src/components/enquiry/WhatsAppEnquiry.tsx`**
-
-- Change the "Email us" `<a>` tag from a `mailto:` link to a `<button>` with an `onClick` handler
-- Add `isSendingEmail` state for loading feedback
-- Add a `handleEmailEnquiry` function that:
-  - Validates dates are selected (reuses existing validation)
-  - Calls `supabase.functions.invoke("send-contact-enquiry")` with the form data, using the vehicle name as both the enquiry type and preferred vehicle
-  - Sets `referralSource` to "Vehicle Page Enquiry" (since this form doesn't have that field)
-  - Shows a success/error toast
-- The `message` field will use the same `buildMessage()` output already used for WhatsApp
-- Import `supabase` client and `toast` (sonner already imported)
-- While sending, show a small spinner or disabled state on the button
-
-**File: `supabase/functions/send-contact-enquiry/index.ts`**
-
-- Make `referralSource` optional in validation (since vehicle page enquiries won't have the full contact form fields)
-- Default `referralSource` to "Not specified" if not provided
+The message body sent to the edge function will concatenate the user's freeform message with the uploaded image URLs so the admin email contains clickable links to the submitted vehicle photos.
 
