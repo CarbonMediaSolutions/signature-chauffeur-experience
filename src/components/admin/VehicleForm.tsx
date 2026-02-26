@@ -48,6 +48,8 @@ export interface VehicleFormData {
   multi_day_discount_percent: number;
   has_aircon: boolean;
   is_hot: boolean;
+  self_drive_rate: number | null;
+  chauffeur_rate: number | null;
 }
 
 interface VehicleFormProps {
@@ -109,6 +111,8 @@ export const VehicleForm = ({
     multi_day_discount_percent: (initialData as any)?.multi_day_discount_percent ?? 10,
     has_aircon: (initialData as any)?.has_aircon ?? true,
     is_hot: (initialData as any)?.is_hot || false,
+    self_drive_rate: (initialData as any)?.self_drive_rate ?? null,
+    chauffeur_rate: (initialData as any)?.chauffeur_rate ?? null,
   });
 
   const [featuresInput, setFeaturesInput] = useState(
@@ -479,6 +483,45 @@ export const VehicleForm = ({
             </p>
           </div>
         )}
+      </section>
+
+      {/* Service Type Pricing */}
+      <section>
+        <h3 className="font-serif text-lg text-foreground mb-4 pb-2 border-b border-border">
+          Service Type Pricing
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Set custom daily rates per service type. Leave blank to use the base daily rate for Self-Drive, or to show "Request Pricing" for Chauffeur. Events is always enquiry-only.
+        </p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="self_drive_rate">Self-Drive Daily Rate (R)</Label>
+            <Input
+              id="self_drive_rate"
+              type="number"
+              value={formData.self_drive_rate ?? ""}
+              onChange={(e) =>
+                updateField("self_drive_rate", e.target.value ? parseInt(e.target.value) : null)
+              }
+              placeholder={`Leave empty to use base rate (R${formData.daily_rate})`}
+              min={0}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="chauffeur_rate">Chauffeur Daily Rate (R)</Label>
+            <Input
+              id="chauffeur_rate"
+              type="number"
+              value={formData.chauffeur_rate ?? ""}
+              onChange={(e) =>
+                updateField("chauffeur_rate", e.target.value ? parseInt(e.target.value) : null)
+              }
+              placeholder="Leave empty for Request Pricing"
+              min={0}
+            />
+          </div>
+        </div>
       </section>
 
       {/* Content */}

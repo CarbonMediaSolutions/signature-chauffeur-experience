@@ -253,6 +253,8 @@ const VehicleDetail = () => {
                 multiDayThreshold={multiDayThreshold}
                 multiDayDiscountPercent={multiDayDiscountPercent}
                 securityDeposit={vehicle.security_deposit}
+                selfDriveRate={v.self_drive_rate}
+                chauffeurRate={v.chauffeur_rate}
               />
             </div>
           </div>
