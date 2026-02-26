@@ -24,6 +24,8 @@ interface WhatsAppEnquiryProps {
   multiDayThreshold?: number;
   multiDayDiscountPercent?: number;
   securityDeposit?: number | null;
+  selfDriveRate?: number | null;
+  chauffeurRate?: number | null;
 }
 
 const formatCurrency = (amount: number) => {
@@ -37,6 +39,8 @@ export const WhatsAppEnquiry = ({
   multiDayThreshold = 4,
   multiDayDiscountPercent = 10,
   securityDeposit,
+  selfDriveRate,
+  chauffeurRate,
 }: WhatsAppEnquiryProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [location, setLocation] = useState<PlaceResult>({ address: "" });
@@ -46,18 +50,33 @@ export const WhatsAppEnquiry = ({
   const [copied, setCopied] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
 
+  // Determine if we're in "Request Pricing" mode
+  const isRequestPricing = serviceType === "Events" || 
+    (serviceType === "Chauffeur" && (!chauffeurRate || chauffeurRate <= 0));
+
+  // Determine the effective base daily rate based on service type
+  const effectiveBaseDailyRate = useMemo(() => {
+    if (serviceType === "Chauffeur" && chauffeurRate && chauffeurRate > 0) {
+      return chauffeurRate;
+    }
+    if (serviceType === "Self-Drive" && selfDriveRate && selfDriveRate > 0) {
+      return selfDriveRate;
+    }
+    return dailyRate;
+  }, [serviceType, selfDriveRate, chauffeurRate, dailyRate]);
+
   // Calculate pricing
   const pricing = useMemo(() => {
-    if (!dateRange?.from || !dateRange?.to) {
+    if (!dateRange?.from || !dateRange?.to || isRequestPricing) {
       return null;
     }
 
     const numDays = differenceInDays(dateRange.to, dateRange.from) + 1;
     const qualifiesForDiscount = numDays >= multiDayThreshold;
-    const discountedDailyRate = Math.round(dailyRate * (1 - multiDayDiscountPercent / 100));
-    const effectiveRate = qualifiesForDiscount ? discountedDailyRate : dailyRate;
+    const discountedDailyRate = Math.round(effectiveBaseDailyRate * (1 - multiDayDiscountPercent / 100));
+    const effectiveRate = qualifiesForDiscount ? discountedDailyRate : effectiveBaseDailyRate;
     const totalEstimate = numDays * effectiveRate;
-    const savings = qualifiesForDiscount ? numDays * (dailyRate - discountedDailyRate) : 0;
+    const savings = qualifiesForDiscount ? numDays * (effectiveBaseDailyRate - discountedDailyRate) : 0;
 
     return {
       numDays,
@@ -67,7 +86,7 @@ export const WhatsAppEnquiry = ({
       totalEstimate,
       savings,
     };
-  }, [dateRange, dailyRate, multiDayThreshold, multiDayDiscountPercent]);
+  }, [dateRange, effectiveBaseDailyRate, multiDayThreshold, multiDayDiscountPercent, isRequestPricing]);
 
   const buildMessage = (): string => {
     let message = `Hi Signature Car Rentals, I'm interested in the ${vehicleName}.`;
@@ -75,10 +94,8 @@ export const WhatsAppEnquiry = ({
     if (dateRange?.from && dateRange?.to) {
       const startDate = format(dateRange.from, "d MMM yyyy");
       const endDate = format(dateRange.to, "d MMM yyyy");
-      message += `\n\nPreferred Dates: ${startDate} to ${endDate}`;
-      if (pricing) {
-        message += ` (${pricing.numDays} day${pricing.numDays !== 1 ? 's' : ''})`;
-      }
+      const numDays = differenceInDays(dateRange.to, dateRange.from) + 1;
+      message += `\n\nPreferred Dates: ${startDate} to ${endDate} (${numDays} day${numDays !== 1 ? 's' : ''})`;
     }
 
     if (serviceType) {
@@ -182,30 +199,48 @@ export const WhatsAppEnquiry = ({
   return (
     <div className="sticky top-[120px] p-8 bg-secondary/50 border border-border">
       {/* Pricing Header */}
-      <p className="text-caption text-muted-foreground tracking-luxury mb-2">
-        Starting From
-      </p>
-      <div className="flex items-baseline gap-2 flex-wrap">
-        {pricing?.qualifiesForDiscount ? (
-          <>
-            <span className="text-xl text-muted-foreground line-through">
-              {formatCurrency(dailyRate)}
-            </span>
-            <span className="text-3xl font-serif font-medium text-foreground">
-              {formatCurrency(pricing.discountedDailyRate)}
-            </span>
-          </>
-        ) : (
-          <span className="text-3xl font-serif font-medium text-foreground">
-            {formatCurrency(dailyRate)}
-          </span>
-        )}
-        <span className="text-sm text-muted-foreground">per day</span>
-      </div>
-      {multiDayThreshold > 1 && (
-        <p className="text-xs text-muted-foreground mt-1 mb-6">
-          {multiDayDiscountPercent}% off for {multiDayThreshold}+ days
-        </p>
+      {isRequestPricing ? (
+        <div className="mb-6">
+          <p className="text-caption text-muted-foreground tracking-luxury mb-2">
+            Pricing
+          </p>
+          <p className="text-2xl font-serif font-medium text-foreground mb-1">
+            Request Pricing
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {serviceType === "Events" 
+              ? "Please enquire for a custom quote tailored to your event."
+              : "Please enquire for chauffeur service pricing."}
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className="text-caption text-muted-foreground tracking-luxury mb-2">
+            Starting From
+          </p>
+          <div className="flex items-baseline gap-2 flex-wrap">
+            {pricing?.qualifiesForDiscount ? (
+              <>
+                <span className="text-xl text-muted-foreground line-through">
+                  {formatCurrency(effectiveBaseDailyRate)}
+                </span>
+                <span className="text-3xl font-serif font-medium text-foreground">
+                  {formatCurrency(pricing.discountedDailyRate)}
+                </span>
+              </>
+            ) : (
+              <span className="text-3xl font-serif font-medium text-foreground">
+                {formatCurrency(effectiveBaseDailyRate)}
+              </span>
+            )}
+            <span className="text-sm text-muted-foreground">per day</span>
+          </div>
+          {multiDayThreshold > 1 && (
+            <p className="text-xs text-muted-foreground mt-1 mb-6">
+              {multiDayDiscountPercent}% off for {multiDayThreshold}+ days
+            </p>
+          )}
+        </>
       )}
 
       {/* Date Picker - Required */}

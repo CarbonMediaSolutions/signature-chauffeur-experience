@@ -383,6 +383,7 @@ export type Database = {
         Row: {
           acceleration: string | null
           category: string
+          chauffeur_rate: number | null
           cover_image_url: string | null
           created_at: string
           daily_rate: number
@@ -414,6 +415,7 @@ export type Database = {
           power_kw: number | null
           seats: number | null
           security_deposit: number | null
+          self_drive_rate: number | null
           slug: string | null
           top_speed: string | null
           transmission: string | null
@@ -424,6 +426,7 @@ export type Database = {
         Insert: {
           acceleration?: string | null
           category: string
+          chauffeur_rate?: number | null
           cover_image_url?: string | null
           created_at?: string
           daily_rate: number
@@ -455,6 +458,7 @@ export type Database = {
           power_kw?: number | null
           seats?: number | null
           security_deposit?: number | null
+          self_drive_rate?: number | null
           slug?: string | null
           top_speed?: string | null
           transmission?: string | null
@@ -465,6 +469,7 @@ export type Database = {
         Update: {
           acceleration?: string | null
           category?: string
+          chauffeur_rate?: number | null
           cover_image_url?: string | null
           created_at?: string
           daily_rate?: number
@@ -496,6 +501,7 @@ export type Database = {
           power_kw?: number | null
           seats?: number | null
           security_deposit?: number | null
+          self_drive_rate?: number | null
           slug?: string | null
           top_speed?: string | null
           transmission?: string | null

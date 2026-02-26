@@ -48,6 +48,8 @@ const AdminFleetNew = () => {
         multi_day_threshold: data.multi_day_threshold || 4,
         multi_day_discount_percent: data.multi_day_discount_percent ?? 10,
         is_hot: data.is_hot || false,
+        self_drive_rate: data.self_drive_rate || null,
+        chauffeur_rate: data.chauffeur_rate || null,
       });
 
       if (error) throw error;
