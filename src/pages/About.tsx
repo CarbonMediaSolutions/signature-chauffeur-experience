@@ -10,6 +10,8 @@ import { Sparkles, Shield, Heart } from "lucide-react";
 import capeTownRoad from "@/assets/cape-town-road.jpg";
 import aboutDean from "@/assets/about-dean.jpg";
 import { useSiteSetting } from "@/hooks/useSiteSettings";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 // Video configuration - replace with actual URL when ready
 const ABOUT_VIDEO_URL: string | null = null;
@@ -18,6 +20,19 @@ const ABOUT_VIDEO_POSTER = capeTownRoad;
 const About = () => {
   const { data: founderImageUrl } = useSiteSetting("founder_image_url");
   const founderImage = founderImageUrl || aboutDean;
+
+  const { data: teamMembers = [] } = useQuery({
+    queryKey: ["team_members"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("team_members" as any)
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order");
+      if (error) throw error;
+      return data as any[];
+    },
+  });
   
   return (
     <Layout>
@@ -264,6 +279,44 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* Meet the Team */}
+      {teamMembers.length > 0 && (
+        <section className="py-24 md:py-32 bg-ivory">
+          <div className="container-luxury">
+            <div className="max-w-4xl mx-auto text-center mb-16">
+              <p className="text-caption text-muted-foreground mb-6 tracking-[0.25em]">
+                MEET THE TEAM
+              </p>
+              <div className="w-16 h-px bg-primary/30 mx-auto" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl mx-auto">
+              {teamMembers.map((member: any) => (
+                <div key={member.id} className="text-center">
+                  <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden bg-muted">
+                    {member.image_url ? (
+                      <img
+                        src={member.image_url}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-3xl font-serif text-muted-foreground">
+                        {member.name?.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="font-serif text-lg text-foreground mb-1">{member.name}</h3>
+                  <p className="text-sm text-accent font-medium mb-3">{member.role}</p>
+                  {member.bio && (
+                    <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Founder Vision Quote - Full Width */}
       <section className="relative py-32 md:py-40">

@@ -80,7 +80,7 @@ export const useCategories = () => {
         .eq("is_active", true);
       
       if (error) throw error;
-      const categories = [...new Set(data.map((v) => v.category))];
+      const categories = [...new Set(data.map((v) => v.category).filter((c) => c && c.trim() !== ""))];
       return categories;
     },
   });
