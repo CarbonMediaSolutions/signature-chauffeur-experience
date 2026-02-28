@@ -12,7 +12,10 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
   const displayImage = 
     vehicle.cover_image_url || 
     (vehicle.gallery_urls && vehicle.gallery_urls.length > 0 ? vehicle.gallery_urls[0] : null) || 
-    vehicle.image;
+    vehicle.image || 
+    "/placeholder.svg";
+
+  const displayCategory = vehicle.category?.trim() || "Uncategorised";
 
   // Fallback values for specs if not in database
   const seats = vehicle.seats ?? 4;
@@ -81,7 +84,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
       <div className="pt-6">
         {/* Category badge */}
         <span className="inline-block text-[10px] tracking-[0.2em] uppercase text-accent font-medium mb-3 bg-accent/10 px-2 py-1">
-          {vehicle.category}
+          {displayCategory}
         </span>
         
         {/* Vehicle name - bolder */}

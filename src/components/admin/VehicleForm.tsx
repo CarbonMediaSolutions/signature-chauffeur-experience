@@ -121,6 +121,10 @@ export const VehicleForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.category) {
+      alert("Please select a category before saving.");
+      return;
+    }
     const features = featuresInput
       .split(",")
       .map((f) => f.trim())
