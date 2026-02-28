@@ -1,72 +1,74 @@
 
 
-# Dynamic Service-Type Pricing (Admin-Set Fixed Rates)
+# Fix Fleet Page + Add Team Members to About Page
 
-## Overview
+## Issue 1: Fleet Page Breaking
 
-Each vehicle gets admin-defined daily rates for Self-Drive and Chauffeur services. Events always shows "Request Pricing." The existing `daily_rate` field becomes the Self-Drive rate by default.
+The newly added **BMW i8 Protonic** has an **empty `category`** field (blank string instead of a valid category like "Sports Car" or "Performance"). This causes problems in the fleet filter logic and displays a blank category badge. The `image` field is also empty, though the gallery has valid images.
 
-## How It Works
+### Fixes
 
-**For users on the vehicle detail page:**
-- No service type selected or **Self-Drive** selected: shows `self_drive_rate` (falls back to `daily_rate` if not set)
-- **Chauffeur** selected: shows `chauffeur_rate` per day; if admin left it at 0/null, shows "Request Pricing"
-- **Events** selected: hides all pricing, shows "Request Pricing - please enquire for a custom quote"
-- Multi-day discounts still apply on top of the active service rate
+**Database fix**: Update the BMW i8 to have a proper category (e.g., "Performance" or "Grand Tourer").
 
-**For admins in the fleet editor:**
-- New "Service Type Pricing" section with two simple Rand inputs:
-  - **Self-Drive Daily Rate (R)** - defaults to the base daily rate
-  - **Chauffeur Daily Rate (R)** - admin types in a custom price (0 or empty = "Request Pricing")
-  - Events is always enquiry-only, no price field needed
+**Code resilience** in `src/components/fleet/VehicleCard.tsx`:
+- Add a fallback for empty category: display "Uncategorised" if category is blank
+- Ensure `displayImage` has a placeholder fallback when all image sources are empty
 
-## What Changes
+**Code resilience** in `src/pages/Fleet.tsx`:
+- Filter out empty-string categories from the category list so blank entries don't appear in filters
 
-### 1. Database Migration
+**Code resilience** in `src/components/admin/VehicleForm.tsx`:
+- Make the Category field required with validation so this can't happen again
 
-Add two columns to the `vehicles` table:
+## Issue 2: Team Photos & Bios on About Page (Admin-Managed)
+
+Currently the About page only has a single founder image managed from Admin Settings. There's no team members section and no way to add team bios from the dashboard.
+
+### New `team_members` database table
 
 ```sql
-ALTER TABLE public.vehicles
-  ADD COLUMN self_drive_rate integer DEFAULT NULL,
-  ADD COLUMN chauffeur_rate integer DEFAULT NULL;
+CREATE TABLE public.team_members (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  role text NOT NULL,
+  bio text,
+  image_url text,
+  display_order integer DEFAULT 0,
+  is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.team_members ENABLE ROW LEVEL SECURITY;
+-- Anyone can view active team members
+-- Admins can manage all team members
 ```
 
-Both nullable. When `self_drive_rate` is null, the frontend uses `daily_rate` as fallback. When `chauffeur_rate` is null or 0, the frontend shows "Request Pricing."
+### New admin page: `src/pages/admin/AdminTeam.tsx`
 
-### 2. Admin Vehicle Form (`src/components/admin/VehicleForm.tsx`)
+A CRUD interface to add/edit/remove team members with:
+- Name, role/title, bio text, photo upload, display order, active toggle
+- Reuses the same image upload pattern as the founder image (upload to `specials` bucket under `site-assets/team/`)
 
-- Add `self_drive_rate` and `chauffeur_rate` to `VehicleFormData` interface
-- Add a new "Service Type Pricing" section after the Multi-Day Promotional Pricing section with two number inputs:
-  - Self-Drive Daily Rate (R) - placeholder shows the base daily rate as reference
-  - Chauffeur Daily Rate (R) - placeholder "Leave empty for Request Pricing"
-- Helper text: "These override the base daily rate when a customer selects a specific service type. Leave blank to use the base daily rate for Self-Drive, or to show 'Request Pricing' for Chauffeur."
+### Add route and nav
 
-### 3. Admin Fleet New/Edit pages
+- Add "Team" nav item to `AdminLayout.tsx`
+- Add route `/admin/team` in `App.tsx`
 
-- `AdminFleetNew.tsx`: Include `self_drive_rate` and `chauffeur_rate` in the insert payload
-- `AdminFleetEdit.tsx`: Include both in the update payload
+### New section on About page
 
-### 4. Enquiry Widget (`src/components/enquiry/WhatsAppEnquiry.tsx`)
+- Add a "Meet the Team" section after "Meet the Founder" in `src/pages/About.tsx`
+- Query `team_members` table, display active members ordered by `display_order`
+- Each card shows photo, name, role, and bio
+- Grid layout: 2-3 columns on desktop, single column on mobile
 
-- Accept new props: `selfDriveRate?: number | null`, `chauffeurRate?: number | null`
-- When `serviceType` changes, determine the effective daily rate:
-  - `"Self-Drive"`: use `selfDriveRate ?? dailyRate`
-  - `"Chauffeur"`: if `chauffeurRate` is set and > 0, use it; otherwise set a flag to show "Request Pricing"
-  - `"Events"`: always show "Request Pricing"
-- When in "Request Pricing" mode: replace the entire pricing breakdown with a styled message and change the CTA to just "Enquire" without dollar amounts
-- The `buildMessage()` function includes the service type but omits pricing when in request-pricing mode
-
-### 5. Vehicle Detail Page (`src/pages/VehicleDetail.tsx`)
-
-- Pass `selfDriveRate` and `chauffeurRate` from vehicle data to `WhatsAppEnquiry`
-
-## User Experience
-
-| Service Type | Admin Sets Price? | Customer Sees |
-|---|---|---|
-| Self-Drive | Optional (falls back to base rate) | Full pricing breakdown |
-| Chauffeur | Yes, typed in | Full pricing at chauffeur rate |
-| Chauffeur | Left empty/0 | "Request Pricing" |
-| Events | No field | Always "Request Pricing" |
+### Files changed
+- `src/pages/Fleet.tsx` -- empty category guard
+- `src/components/fleet/VehicleCard.tsx` -- image/category fallbacks
+- `src/components/admin/VehicleForm.tsx` -- category validation
+- `src/pages/admin/AdminLayout.tsx` -- add Team nav
+- `src/pages/admin/AdminTeam.tsx` -- new file
+- `src/pages/About.tsx` -- add team section
+- `src/App.tsx` -- add team admin route
+- Database migration for BMW i8 fix + team_members table
 
