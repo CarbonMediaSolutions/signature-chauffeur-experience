@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Vehicle } from "@/hooks/useVehicles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MediaManager } from "./MediaManager";
-import { Loader2 } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 
 export interface VehicleFormData {
   name: string;
@@ -72,64 +72,119 @@ const TRANSMISSIONS = ["Automatic", "Manual", "DCT", "PDK"];
 const FUEL_TYPES = ["Petrol", "Diesel", "Hybrid", "Electric"];
 const DRIVE_TYPES = ["RWD", "AWD", "4WD", "FWD"];
 
+const DRAFT_KEY_PREFIX = "vehicle-form-draft-";
+
 export const VehicleForm = ({
   initialData,
   onSubmit,
   isSubmitting,
   submitLabel,
 }: VehicleFormProps) => {
-  const [formData, setFormData] = useState<VehicleFormData>({
-    name: initialData?.name || "",
-    category: initialData?.category || "",
-    daily_rate: initialData?.daily_rate || 0,
-    image: initialData?.image || "",
-    description: initialData?.description || "",
-    engine: initialData?.engine || "",
-    transmission: initialData?.transmission || "",
-    seats: initialData?.seats || 4,
-    features: initialData?.features || [],
-    why_we_chose: initialData?.why_we_chose || "",
-    limited_availability: initialData?.limited_availability || false,
-    is_active: initialData?.is_active ?? true,
-    featured: initialData?.featured || false,
-    fuel_type: initialData?.fuel_type || "",
-    drive_type: initialData?.drive_type || "",
-    luggage_capacity: initialData?.luggage_capacity || "",
-    mileage_limit: initialData?.mileage_limit || "",
-    security_deposit: initialData?.security_deposit || 0,
-    insurance_excess: initialData?.insurance_excess || 0,
-    cover_image_url: initialData?.cover_image_url || null,
-    gallery_urls: initialData?.gallery_urls || [],
-    video_urls: initialData?.video_urls || [],
-    hero_video_url: (initialData as any)?.hero_video_url || null,
-    acceleration: (initialData as any)?.acceleration || "",
-    top_speed: (initialData as any)?.top_speed || "",
-    doors: (initialData as any)?.doors || 4,
-    excess_mileage_rate: (initialData as any)?.excess_mileage_rate || 0,
-    minimum_rental_days: (initialData as any)?.minimum_rental_days || 1,
-    multi_day_threshold: (initialData as any)?.multi_day_threshold || 4,
-    multi_day_discount_percent: (initialData as any)?.multi_day_discount_percent ?? 10,
-    has_aircon: (initialData as any)?.has_aircon ?? true,
-    is_hot: (initialData as any)?.is_hot || false,
-    self_drive_rate: (initialData as any)?.self_drive_rate ?? null,
-    chauffeur_rate: (initialData as any)?.chauffeur_rate ?? null,
-  });
+  const draftKey = `${DRAFT_KEY_PREFIX}${initialData?.id || "new"}`;
+  const [draftStatus, setDraftStatus] = useState<string | null>(null);
+  const draftTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const [featuresInput, setFeaturesInput] = useState(
-    initialData?.features?.join(", ") || ""
-  );
+  // Load draft or initial data
+  const getInitialFormData = (): VehicleFormData => {
+    try {
+      const saved = localStorage.getItem(draftKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return { ...parsed.formData };
+      }
+    } catch {}
+    return {
+      name: initialData?.name || "",
+      category: initialData?.category || "",
+      daily_rate: initialData?.daily_rate || 0,
+      image: initialData?.image || "",
+      description: initialData?.description || "",
+      engine: initialData?.engine || "",
+      transmission: initialData?.transmission || "",
+      seats: initialData?.seats || 4,
+      features: initialData?.features || [],
+      why_we_chose: initialData?.why_we_chose || "",
+      limited_availability: initialData?.limited_availability || false,
+      is_active: initialData?.is_active ?? true,
+      featured: initialData?.featured || false,
+      fuel_type: initialData?.fuel_type || "",
+      drive_type: initialData?.drive_type || "",
+      luggage_capacity: initialData?.luggage_capacity || "",
+      mileage_limit: initialData?.mileage_limit || "",
+      security_deposit: initialData?.security_deposit || 0,
+      insurance_excess: initialData?.insurance_excess || 0,
+      cover_image_url: initialData?.cover_image_url || null,
+      gallery_urls: initialData?.gallery_urls || [],
+      video_urls: initialData?.video_urls || [],
+      hero_video_url: (initialData as any)?.hero_video_url || null,
+      acceleration: (initialData as any)?.acceleration || "",
+      top_speed: (initialData as any)?.top_speed || "",
+      doors: (initialData as any)?.doors || 4,
+      excess_mileage_rate: (initialData as any)?.excess_mileage_rate || 0,
+      minimum_rental_days: (initialData as any)?.minimum_rental_days || 1,
+      multi_day_threshold: (initialData as any)?.multi_day_threshold || 4,
+      multi_day_discount_percent: (initialData as any)?.multi_day_discount_percent ?? 10,
+      has_aircon: (initialData as any)?.has_aircon ?? true,
+      is_hot: (initialData as any)?.is_hot || false,
+      self_drive_rate: (initialData as any)?.self_drive_rate ?? null,
+      chauffeur_rate: (initialData as any)?.chauffeur_rate ?? null,
+    };
+  };
+
+  const getInitialFeaturesInput = (): string => {
+    try {
+      const saved = localStorage.getItem(draftKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.featuresInput || "";
+      }
+    } catch {}
+    return initialData?.features?.join(", ") || "";
+  };
+
+  const [formData, setFormData] = useState<VehicleFormData>(getInitialFormData);
+  const [featuresInput, setFeaturesInput] = useState(getInitialFeaturesInput);
+
+  // Auto-save draft to localStorage on changes (debounced)
+  const saveDraft = useCallback(() => {
+    try {
+      localStorage.setItem(draftKey, JSON.stringify({ formData, featuresInput, savedAt: Date.now() }));
+      setDraftStatus("Draft saved");
+      if (draftTimeoutRef.current) clearTimeout(draftTimeoutRef.current);
+      draftTimeoutRef.current = setTimeout(() => setDraftStatus(null), 2000);
+    } catch {}
+  }, [formData, featuresInput, draftKey]);
+
+  useEffect(() => {
+    const timer = setTimeout(saveDraft, 1000);
+    return () => clearTimeout(timer);
+  }, [saveDraft]);
+
+  const clearDraft = useCallback(() => {
+    try { localStorage.removeItem(draftKey); } catch {}
+  }, [draftKey]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.category) {
-      alert("Please select a category before saving.");
+    if (!formData.name.trim()) {
+      alert("Please enter a vehicle name before saving.");
       return;
     }
     const features = featuresInput
       .split(",")
       .map((f) => f.trim())
       .filter(Boolean);
+    clearDraft();
     onSubmit({ ...formData, features });
+  };
+
+  const hasDraft = (() => {
+    try { return !!localStorage.getItem(draftKey); } catch { return false; }
+  })();
+
+  const discardDraft = () => {
+    clearDraft();
+    window.location.reload();
   };
 
   const updateField = <K extends keyof VehicleFormData>(
@@ -141,6 +196,24 @@ export const VehicleForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Draft notice */}
+      {hasDraft && initialData === undefined && (
+        <div className="flex items-center justify-between p-3 bg-muted rounded-md border border-border">
+          <p className="text-sm text-muted-foreground">
+            <Save className="h-4 w-4 inline mr-1.5 -mt-0.5" />
+            You have a saved draft. Your progress was automatically restored.
+          </p>
+          <Button type="button" variant="ghost" size="sm" onClick={discardDraft}>
+            Discard draft
+          </Button>
+        </div>
+      )}
+
+      {/* Draft save indicator */}
+      {draftStatus && (
+        <p className="text-xs text-muted-foreground text-right animate-in fade-in">{draftStatus}</p>
+      )}
+
       {/* Basic Info */}
       <section>
         <h3 className="font-serif text-lg text-foreground mb-4 pb-2 border-b border-border">
@@ -178,13 +251,13 @@ export const VehicleForm = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="daily_rate">Daily Rate (R) *</Label>
+            <Label htmlFor="daily_rate">Daily Rate (R)</Label>
             <Input
               id="daily_rate"
               type="number"
-              value={formData.daily_rate}
+              value={formData.daily_rate || ""}
               onChange={(e) => updateField("daily_rate", parseInt(e.target.value) || 0)}
-              required
+              placeholder="Set when ready"
             />
           </div>
 
