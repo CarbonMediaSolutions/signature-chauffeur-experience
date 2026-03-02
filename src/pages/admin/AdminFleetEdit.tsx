@@ -20,9 +20,9 @@ const AdminFleetEdit = () => {
         .from("vehicles")
         .update({
           name: data.name,
-          category: data.category,
-          daily_rate: data.daily_rate,
-          image: data.cover_image_url || data.image || "",
+          category: data.category || "Uncategorised",
+          daily_rate: data.daily_rate || 0,
+          image: data.cover_image_url || data.image || "/placeholder.svg",
           description: data.description || null,
           engine: data.engine || null,
           transmission: data.transmission || null,
