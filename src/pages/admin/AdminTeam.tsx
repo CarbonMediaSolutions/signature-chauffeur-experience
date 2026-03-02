@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Loader2, Plus, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
+import { ImageCropper } from "@/components/admin/ImageCropper";
 
 interface TeamMember {
   id: string;
@@ -43,7 +44,7 @@ const AdminTeam = () => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<FormData>(emptyForm);
   const [uploading, setUploading] = useState(false);
-
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["team_members_admin"],
     queryFn: async () => {
@@ -123,13 +124,20 @@ const AdminTeam = () => {
     setShowForm(true);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setCropSrc(reader.result as string);
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleCroppedImage = async (blob: Blob) => {
+    setCropSrc(null);
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `site-assets/team/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("specials").upload(path, file);
+    const path = `site-assets/team/${Date.now()}.webp`;
+    const { error } = await supabase.storage.from("specials").upload(path, blob, { contentType: "image/webp" });
     if (error) {
       toast.error("Upload failed: " + error.message);
       setUploading(false);
@@ -191,7 +199,7 @@ const AdminTeam = () => {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Photo</Label>
-              <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+              <Input type="file" accept="image/*" onChange={handleImageSelect} disabled={uploading} />
               {uploading && <p className="text-xs text-muted-foreground">Uploading…</p>}
               {form.image_url && (
                 <img src={form.image_url} alt="Preview" className="w-20 h-20 object-cover rounded-sm mt-2" />
@@ -256,6 +264,15 @@ const AdminTeam = () => {
           ))}
         </div>
       )}
+
+      <ImageCropper
+        open={!!cropSrc}
+        imageSrc={cropSrc || ""}
+        onClose={() => setCropSrc(null)}
+        onCropComplete={handleCroppedImage}
+        aspect={1}
+        cropShape="round"
+      />
     </div>
   );
 };
