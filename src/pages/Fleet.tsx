@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { VehicleCard } from "@/components/fleet/VehicleCard";
+import { VehicleCardErrorBoundary } from "@/components/fleet/VehicleCardErrorBoundary";
 import { FleetSearch } from "@/components/fleet/FleetSearch";
 import { useVehicles, useCategories } from "@/hooks/useVehicles";
 import { useState, useMemo } from "react";
@@ -103,7 +104,9 @@ const Fleet = () => {
               )}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {filteredVehicles.map((vehicle, index) => (
-                  <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
+                  <VehicleCardErrorBoundary key={vehicle.id} vehicleName={vehicle.name}>
+                    <VehicleCard vehicle={vehicle} index={index} />
+                  </VehicleCardErrorBoundary>
                 ))}
               </div>
             </>
