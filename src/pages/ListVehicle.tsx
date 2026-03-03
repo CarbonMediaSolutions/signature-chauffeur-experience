@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageContent, getContent, getJsonContent } from "@/hooks/usePageContent";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
@@ -32,6 +33,7 @@ const years = Array.from({ length: currentYear - 1970 + 1 }, (_, i) => currentYe
 
 const ListVehicle = () => {
   const { toast } = useToast();
+  const { data: pageContent } = usePageContent("listvehicle");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -168,40 +170,20 @@ const ListVehicle = () => {
     }
   };
 
-  const benefits = [
-    { 
-      icon: Users,
-      headline: "Vetted Clients",
-      desc: "Every renter is carefully screened. We select clients who respect exceptional vehicles." 
-    },
-    { 
-      icon: Camera,
-      headline: "Premium Presentation",
-      desc: "Professional photography and compelling copy that reflects your car's true character." 
-    },
-    { 
-      icon: FileCheck,
-      headline: "Zero Admin",
-      desc: "Contracts, communications, coordination. Every detail managed on your behalf." 
-    },
-    { 
-      icon: Shield,
-      headline: "Personal Handovers",
-      desc: "Every rental starts and ends with care. Full familiarisation and secure transfers." 
-    },
-    { 
-      icon: ClipboardCheck,
-      headline: "Full Inspections",
-      desc: "Thorough checks before and after every rental ensure pristine condition." 
-    },
-    { 
-      icon: BarChart3,
-      headline: "Complete Transparency",
-      desc: "Regular updates on bookings, performance, and earnings. No surprises." 
-    },
+  const defaultBenefits = [
+    { icon: Users, headline: "Vetted Clients", desc: "Every renter is carefully screened. We select clients who respect exceptional vehicles." },
+    { icon: Camera, headline: "Premium Presentation", desc: "Professional photography and compelling copy that reflects your car's true character." },
+    { icon: FileCheck, headline: "Zero Admin", desc: "Contracts, communications, coordination. Every detail managed on your behalf." },
+    { icon: Shield, headline: "Personal Handovers", desc: "Every rental starts and ends with care. Full familiarisation and secure transfers." },
+    { icon: ClipboardCheck, headline: "Full Inspections", desc: "Thorough checks before and after every rental ensure pristine condition." },
+    { icon: BarChart3, headline: "Complete Transparency", desc: "Regular updates on bookings, performance, and earnings. No surprises." },
   ];
 
-  const services = [
+  const benefitIconMap: Record<string, any> = { "Vetted Clients": Users, "Premium Presentation": Camera, "Zero Admin": FileCheck, "Personal Handovers": Shield, "Full Inspections": ClipboardCheck, "Complete Transparency": BarChart3 };
+  const benefitsData = getJsonContent(pageContent, "listvehicle.benefits", defaultBenefits.map(b => ({ headline: b.headline, desc: b.desc })));
+  const benefits = benefitsData.map((b: any, i: number) => ({ ...b, icon: benefitIconMap[b.headline] || defaultBenefits[i]?.icon || Users }));
+
+  const defaultServices = [
     "Client Screening & Approval",
     "Professional Photography & Presentation",
     "Full Rental Administration",
@@ -209,6 +191,15 @@ const ListVehicle = () => {
     "Pre & Post-Rental Inspections",
     "Transparent Reporting & Payouts",
   ];
+  const services = getJsonContent(pageContent, "listvehicle.services.list", defaultServices);
+
+  const defaultWhoThisFor = [
+    { title: "Offset Ownership Costs", desc: "Owners who want their vehicle to work for them while it sits in the garage." },
+    { title: "Hands-Off Management", desc: "Those who prefer not to manage rentals, clients, or logistics themselves." },
+    { title: "Discretion & Care", desc: "Individuals who value privacy and careful handling of their prized possession." },
+    { title: "Right Clientele", desc: "Owners who want their vehicle represented to discerning, respectful renters." },
+  ];
+  const whoThisFor = getJsonContent(pageContent, "listvehicle.whothisfor", defaultWhoThisFor);
 
   const photoExamples = [
     {
@@ -236,15 +227,13 @@ const ListVehicle = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center py-16 lg:py-24">
             <div className="order-2 lg:order-1">
               <p className="text-caption text-muted-foreground mb-4 tracking-widest uppercase">
-                For Vehicle Owners
+                {getContent(pageContent, "listvehicle.hero.label", "For Vehicle Owners")}
               </p>
               <h1 className="text-display text-foreground mb-8">
-                Partner With Signature
+                {getContent(pageContent, "listvehicle.hero.heading", "Partner With Signature")}
               </h1>
               <p className="text-body-lg text-muted-foreground mb-8">
-                Own a luxury or performance vehicle? We offer complete concierge 
-                management for a curated selection of exceptional cars. Not a 
-                marketplace, but a partnership built on trust, discretion, and care.
+                {getContent(pageContent, "listvehicle.hero.subheading", "Own a luxury or performance vehicle? We offer complete concierge management for a curated selection of exceptional cars. Not a marketplace, but a partnership built on trust, discretion, and care.")}
               </p>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="w-12 h-px bg-accent"></span>
@@ -270,20 +259,20 @@ const ListVehicle = () => {
         <div className="container-luxury">
           <div className="text-center mb-16">
             <p className="text-caption text-muted-foreground mb-4 tracking-widest uppercase">
-              The Signature Advantage
+              {getContent(pageContent, "listvehicle.benefits.label", "The Signature Advantage")}
             </p>
             <h2 className="text-headline text-foreground">
-              Why Owners Choose Us
+              {getContent(pageContent, "listvehicle.benefits.heading", "Why Owners Choose Us")}
             </h2>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit) => (
+            {benefits.map((benefit: any) => (
               <div 
                 key={benefit.headline} 
                 className="group p-8 border border-border/50 hover:border-accent/50 transition-all duration-300 bg-background"
               >
-                <benefit.icon className="w-8 h-8 text-accent mb-6" strokeWidth={1.5} />
+                {benefit.icon && <benefit.icon className="w-8 h-8 text-accent mb-6" strokeWidth={1.5} />}
                 <h3 className="font-serif text-xl font-medium text-foreground mb-3">
                   {benefit.headline}
                 </h3>
@@ -306,8 +295,7 @@ const ListVehicle = () => {
         <div className="absolute inset-0 bg-charcoal/70"></div>
         <div className="relative z-10 text-center px-6 max-w-3xl">
           <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-ivory italic leading-relaxed">
-            "Your car. Our care.<br />
-            <span className="text-ivory/80">A partnership built on trust."</span>
+            "{getContent(pageContent, "listvehicle.quote", "Your car. Our care. A partnership built on trust.")}"
           </p>
         </div>
       </section>
@@ -340,15 +328,13 @@ const ListVehicle = () => {
             {/* Content */}
             <div>
               <p className="text-caption text-muted-foreground mb-4 tracking-widest uppercase">
-                Full-Service Management
+                {getContent(pageContent, "listvehicle.services.label", "Full-Service Management")}
               </p>
               <h2 className="text-headline text-foreground mb-6">
-                What We Handle
+                {getContent(pageContent, "listvehicle.services.heading", "What We Handle")}
               </h2>
               <p className="text-body text-muted-foreground mb-10">
-                When you partner with Signature, you gain a dedicated team 
-                that treats your vehicle as if it were their own. Every detail 
-                is managed with intention and care.
+                {getContent(pageContent, "listvehicle.services.text", "When you partner with Signature, you gain a dedicated team that treats your vehicle as if it were their own. Every detail is managed with intention and care.")}
               </p>
               
               <div className="space-y-4">
