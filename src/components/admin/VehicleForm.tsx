@@ -60,12 +60,11 @@ interface VehicleFormProps {
 }
 
 const CATEGORIES = [
-  "Luxury Sedan",
-  "Performance",
-  "SUV",
-  "Convertible",
-  "Grand Tourer",
   "Sports Car",
+  "Van",
+  "Convertible",
+  "Executive",
+  "Luxury SUV",
 ];
 
 const TRANSMISSIONS = ["Automatic", "Manual", "DCT", "PDK"];
