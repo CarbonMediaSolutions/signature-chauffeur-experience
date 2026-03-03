@@ -265,6 +265,39 @@ export type Database = {
           },
         ]
       }
+      page_content: {
+        Row: {
+          content_type: string
+          display_order: number | null
+          id: string
+          label: string | null
+          page: string
+          section: string | null
+          updated_at: string | null
+          value: string | null
+        }
+        Insert: {
+          content_type?: string
+          display_order?: number | null
+          id: string
+          label?: string | null
+          page: string
+          section?: string | null
+          updated_at?: string | null
+          value?: string | null
+        }
+        Update: {
+          content_type?: string
+          display_order?: number | null
+          id?: string
+          label?: string | null
+          page?: string
+          section?: string | null
+          updated_at?: string | null
+          value?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

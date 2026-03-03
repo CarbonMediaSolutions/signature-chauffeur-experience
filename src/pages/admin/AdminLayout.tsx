@@ -12,7 +12,8 @@ import {
   Tag,
   Settings,
   MessageSquare,
-  Users
+  Users,
+  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const navItems = [
   { name: "Specials", href: "/admin/specials", icon: Tag },
   { name: "Enquiries", href: "/admin/enquiries", icon: MessageSquare },
   { name: "Team", href: "/admin/team", icon: Users },
+  { name: "Content", href: "/admin/content", icon: FileText },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
