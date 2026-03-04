@@ -148,7 +148,12 @@ const Contact = () => {
                   <h3 className="font-serif text-lg font-medium text-foreground mb-4">Direct Contact</h3>
                   <div className="space-y-4 text-muted-foreground">
                     <a href={`https://wa.me/${siteConfig.whatsapp.number}`} target="_blank" rel="noopener noreferrer" className="block hover:text-foreground transition-colors">
+                      <span className="text-xs text-muted-foreground/70 block">Jason — Sales / Bookings</span>
                       WhatsApp: {siteConfig.whatsapp.displayNumber}
+                    </a>
+                    <a href={`https://wa.me/${siteConfig.whatsappAlt.number}`} target="_blank" rel="noopener noreferrer" className="block hover:text-foreground transition-colors">
+                      <span className="text-xs text-muted-foreground/70 block">Dean — Alternative</span>
+                      WhatsApp: {siteConfig.whatsappAlt.displayNumber}
                     </a>
                   </div>
                 </div>
