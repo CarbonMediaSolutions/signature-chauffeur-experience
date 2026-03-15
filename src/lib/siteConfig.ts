@@ -1,7 +1,7 @@
 export const siteConfig = {
   whatsapp: {
-    number: "27795787154",           // Jason - primary bookings
-    displayNumber: "+27 79 578 7154"
+    number: "27716649603",
+    displayNumber: "+27 71 664 9603"
   },
   whatsappAlt: {
     number: "27827830342",           // Dean - alternative
@@ -9,6 +9,6 @@ export const siteConfig = {
   },
   contact: {
     email: "info@signaturecarrentals.co.za",
-    phone: "+27 79 578 7154"
+    phone: "+27 71 664 9603"
   }
 };
