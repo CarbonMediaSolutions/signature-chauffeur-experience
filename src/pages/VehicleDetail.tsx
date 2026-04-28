@@ -3,6 +3,8 @@ import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { WhatsAppEnquiry } from "@/components/enquiry/WhatsAppEnquiry";
 import { MediaGallery } from "@/components/vehicle/MediaGallery";
+import FareHarborButton from "@/components/FareHarborButton";
+import FareHarborCalendar from "@/components/FareHarborCalendar";
 
 import { useVehicle } from "@/hooks/useVehicles";
 import { useUnavailableDates } from "@/hooks/useAvailability";
@@ -175,6 +177,16 @@ const VehicleDetail = () => {
                 {vehicle.description}
               </p>
 
+              {/* Primary FareHarbor CTA */}
+              <div className="mb-10">
+                <FareHarborButton
+                  itemCode={v.fareharbor_item_code ?? undefined}
+                  size="lg"
+                >
+                  Reserve This Vehicle
+                </FareHarborButton>
+              </div>
+
               {/* Specs & Rental Info Grid */}
               <div className="grid md:grid-cols-2 gap-8 py-8 border-y border-border">
                 {/* Vehicle Specifications */}
@@ -242,6 +254,23 @@ const VehicleDetail = () => {
                   </ul>
                 </div>
               )}
+
+              {/* Live Availability Calendar */}
+              {v.fareharbor_item_code && (
+                <div className="mt-12">
+                  <FareHarborCalendar itemCode={v.fareharbor_item_code} />
+                </div>
+              )}
+
+              {/* Bottom Reserve CTA */}
+              <div className="mt-12 flex justify-center">
+                <FareHarborButton
+                  itemCode={v.fareharbor_item_code ?? undefined}
+                  size="lg"
+                >
+                  Reserve This Vehicle
+                </FareHarborButton>
+              </div>
             </div>
 
             {/* Sidebar - WhatsApp Enquiry Panel */}
