@@ -461,6 +461,7 @@ export type Database = {
           drive_type: string | null
           engine: string | null
           excess_mileage_rate: number | null
+          fareharbor_item_code: string | null
           featured: boolean | null
           features: string[] | null
           fuel_type: string | null
@@ -504,6 +505,7 @@ export type Database = {
           drive_type?: string | null
           engine?: string | null
           excess_mileage_rate?: number | null
+          fareharbor_item_code?: string | null
           featured?: boolean | null
           features?: string[] | null
           fuel_type?: string | null
@@ -547,6 +549,7 @@ export type Database = {
           drive_type?: string | null
           engine?: string | null
           excess_mileage_rate?: number | null
+          fareharbor_item_code?: string | null
           featured?: boolean | null
           features?: string[] | null
           fuel_type?: string | null
