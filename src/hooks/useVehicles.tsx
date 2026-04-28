@@ -33,6 +33,7 @@ export interface Vehicle {
   acceleration: string | null;
   power_kw: number | null;
   is_hot: boolean | null;
+  fareharbor_item_code: string | null;
 }
 
 export const useVehicles = (includeInactive = false) => {

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Vehicle } from "@/hooks/useVehicles";
 import { Users, Gauge, Zap, Cog } from "lucide-react";
+import FareHarborButton from "@/components/FareHarborButton";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -37,12 +38,12 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
   const isAutomatic = transmission?.toLowerCase().includes("auto");
 
   return (
-    <Link
-      to={`/fleet/${vehicle.id}`}
+    <div
       className="group block animate-fade-in-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+      <Link to={`/fleet/${vehicle.id}`} className="block">
+        <div className="relative aspect-[4/3] overflow-hidden bg-muted rounded-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
         <img
           src={displayImage}
           alt={vehicle.name}
@@ -78,22 +79,25 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
             View Vehicle →
           </span>
         </div>
-      </div>
+        </div>
+      </Link>
       
       {/* Vehicle info */}
       <div className="pt-6">
-        {/* Category badge */}
-        <span className="inline-block text-[10px] tracking-[0.2em] uppercase text-accent font-medium mb-3 bg-accent/10 px-2 py-1">
-          {displayCategory}
-        </span>
-        
-        {/* Vehicle name - bolder */}
-        <h3 
-          className="font-serif text-xl font-semibold text-foreground mb-4 group-hover:text-foreground/80 transition-colors duration-500 leading-tight line-clamp-1" 
-          title={vehicle.name}
-        >
-          {vehicle.name}
-        </h3>
+        <Link to={`/fleet/${vehicle.id}`} className="block">
+          {/* Category badge */}
+          <span className="inline-block text-[10px] tracking-[0.2em] uppercase text-accent font-medium mb-3 bg-accent/10 px-2 py-1">
+            {displayCategory}
+          </span>
+          
+          {/* Vehicle name - bolder */}
+          <h3 
+            className="font-serif text-xl font-semibold text-foreground mb-4 group-hover:text-foreground/80 transition-colors duration-500 leading-tight line-clamp-1" 
+            title={vehicle.name}
+          >
+            {vehicle.name}
+          </h3>
+        </Link>
         
         {/* Quick specs row */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
@@ -148,7 +152,18 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
             </p>
           )}
         </div>
+
+        {/* Booking CTA */}
+        <div className="mt-5">
+          <FareHarborButton
+            itemCode={vehicle.fareharbor_item_code ?? undefined}
+            size="sm"
+            className="w-full"
+          >
+            Book Now
+          </FareHarborButton>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 };

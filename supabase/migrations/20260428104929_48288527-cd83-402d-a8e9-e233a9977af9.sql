@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicles ADD COLUMN IF NOT EXISTS fareharbor_item_code text;
