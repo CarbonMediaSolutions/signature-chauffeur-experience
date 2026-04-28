@@ -79,6 +79,7 @@ export const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
             View Vehicle →
           </span>
         </div>
+        </div>
       </Link>
       
       {/* Vehicle info */}
