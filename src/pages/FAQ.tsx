@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
-import { LuxuryButton } from "@/components/ui/luxury-button";
+import { LuxuryButton, luxuryButtonVariants } from "@/components/ui/luxury-button";
 import {
   Accordion,
   AccordionContent,
@@ -119,9 +119,9 @@ const FAQ = () => {
             {getContent(content, "faq.cta.text_2", "Every enquiry is handled personally to ensure a seamless experience.")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/contact">
-              <LuxuryButton variant="hero" size="lg">Book Now</LuxuryButton>
-            </Link>
+            <a href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes" className={luxuryButtonVariants({ variant: "hero", size: "lg" })}>
+              Book Now
+            </a>
             <Link to="/contact">
               <LuxuryButton variant="outline" size="lg">Contact Us</LuxuryButton>
             </Link>

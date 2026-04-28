@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
-import { LuxuryButton } from "@/components/ui/luxury-button";
+import { LuxuryButton, luxuryButtonVariants } from "@/components/ui/luxury-button";
 import {
   Carousel,
   CarouselContent,
@@ -98,7 +98,7 @@ const Process = () => {
         <div className="container-luxury text-center">
           <h2 className="font-serif text-2xl md:text-3xl font-medium text-foreground mb-8">Ready to Begin?</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact"><LuxuryButton variant="hero" size="lg">Book Now</LuxuryButton></Link>
+            <a href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes" className={luxuryButtonVariants({ variant: "hero", size: "lg" })}>Book Now</a>
             <Link to="/terms"><LuxuryButton variant="outline" size="lg">View Rental Terms</LuxuryButton></Link>
           </div>
         </div>
