@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { LuxuryButton } from "@/components/ui/luxury-button";
+import { LuxuryButton, luxuryButtonVariants } from "@/components/ui/luxury-button";
+
+const FH_HREF = "https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes";
 import { FeaturedCarousel } from "@/components/home/FeaturedCarousel";
 import { SpecialsCarousel } from "@/components/home/SpecialsCarousel";
 import { MissionIcons } from "@/components/home/MissionIcons";
@@ -41,16 +43,18 @@ const Index = () => {
               <span className="block">{getContent(content, "home.hero.subtitle_2", "created for moments that matter.")}</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link to="/contact" className="w-full sm:w-[260px]">
-                <LuxuryButton variant="hero" size="lg" className="w-full whitespace-nowrap">
-                  {getContent(content, "home.hero.cta_primary", "Book Now")}
-                </LuxuryButton>
-              </Link>
-              <Link to="/fleet" className="w-full sm:w-[260px]">
-                <LuxuryButton variant="heroInverse" size="lg" className="w-full whitespace-nowrap">
-                  {getContent(content, "home.hero.cta_secondary", "Explore Your Dream Ride")}
-                </LuxuryButton>
-              </Link>
+              <a
+                href={FH_HREF}
+                className={luxuryButtonVariants({ variant: "hero", size: "lg" }) + " w-full sm:w-[260px] whitespace-nowrap"}
+              >
+                {getContent(content, "home.hero.cta_primary", "Book Now")}
+              </a>
+              <a
+                href={FH_HREF}
+                className={luxuryButtonVariants({ variant: "heroInverse", size: "lg" }) + " w-full sm:w-[260px] whitespace-nowrap"}
+              >
+                {getContent(content, "home.hero.cta_secondary", "Explore Your Dream Ride")}
+              </a>
             </div>
           </div>
         </div>
@@ -83,11 +87,9 @@ const Index = () => {
         <div className="container-luxury text-center max-w-3xl mx-auto">
           <h2 className="text-headline text-foreground mb-8">{getContent(content, "home.cta.heading", "Begin your Signature experience")}</h2>
           <p className="text-body-lg text-muted-foreground mb-12">{getContent(content, "home.cta.subheading", "Our team will personally guide you to the perfect vehicle.")}</p>
-          <Link to="/contact">
-            <LuxuryButton variant="default" size="xl">
-              {getContent(content, "home.cta.button", "Start Your Booking")}
-            </LuxuryButton>
-          </Link>
+          <a href={FH_HREF} className={luxuryButtonVariants({ variant: "default", size: "xl" })}>
+            {getContent(content, "home.cta.button", "Start Your Booking")}
+          </a>
         </div>
       </section>
     </Layout>
