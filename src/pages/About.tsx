@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
-import { LuxuryButton } from "@/components/ui/luxury-button";
+import { LuxuryButton, luxuryButtonVariants } from "@/components/ui/luxury-button";
 import {
   Carousel,
   CarouselContent,
@@ -237,7 +237,7 @@ const About = () => {
             <h2 className="text-headline text-foreground mb-12">{getContent(content, "about.cta.heading", "Begin Your Signature Experience")}</h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/fleet"><LuxuryButton variant="default" size="lg">Explore Your Dream Ride</LuxuryButton></Link>
-              <Link to="/contact"><LuxuryButton variant="outline" size="lg">Book Now</LuxuryButton></Link>
+              <a href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes" className={luxuryButtonVariants({ variant: "outline", size: "lg" })}>Book Now</a>
             </div>
           </div>
         </div>

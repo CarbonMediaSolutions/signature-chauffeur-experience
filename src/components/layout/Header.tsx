@@ -107,16 +107,16 @@ export const Header = () => {
           <FareHarborButton itemCode="721140" variant="outline" size="sm">
             Gift Cards
           </FareHarborButton>
-          <Link to="/contact" className="text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
+          <a href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes" className="text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
             Book
-          </Link>
+          </a>
         </div>
 
         {/* Mobile: Book button + Menu button */}
         <div className="lg:hidden flex items-center gap-3">
-          <Link to="/contact" className="text-xs font-light tracking-wide border border-foreground/20 px-4 py-2 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
+          <a href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes" className="text-xs font-light tracking-wide border border-foreground/20 px-4 py-2 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
             Book Now
-          </Link>
+          </a>
           <button type="button" className="p-2 -mr-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle menu">
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -180,13 +180,13 @@ export const Header = () => {
               )}
             </div>
           ))}
-          <Link
-            to="/contact"
+          <a
+            href="https://fareharbor.com/embeds/book/signaturecarrentals/?full-items=yes"
             onClick={() => setMobileMenuOpen(false)}
             className="mt-4 text-center text-sm font-light tracking-wide border border-foreground/20 px-6 py-4 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300"
           >
             Book Now
-          </Link>
+          </a>
           <FareHarborButton itemCode="721140" variant="outline" size="md" className="w-full">
             Gift Cards
           </FareHarborButton>
