@@ -3,6 +3,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { FloatingWhatsApp } from "./FloatingWhatsApp";
+import FloatingBookButton from "@/components/FloatingBookButton";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 interface LayoutProps {
@@ -21,6 +22,7 @@ export const Layout = ({ children }: LayoutProps) => {
         </main>
         <Footer />
         <FloatingWhatsApp />
+        <FloatingBookButton />
       </div>
     </HelmetProvider>
   );

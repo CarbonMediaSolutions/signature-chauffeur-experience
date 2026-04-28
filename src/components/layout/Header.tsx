@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import FareHarborButton from "@/components/FareHarborButton";
 import logo from "@/assets/logo.png";
 
 type NavItem = {
@@ -101,10 +102,15 @@ export const Header = () => {
           )}
         </div>
 
-        {/* CTA Button - Desktop */}
-        <Link to="/contact" className="hidden lg:block text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
-          Book
-        </Link>
+        {/* CTA Buttons - Desktop */}
+        <div className="hidden lg:flex items-center gap-3">
+          <FareHarborButton itemCode="721140" variant="outline" size="sm">
+            Gift Cards
+          </FareHarborButton>
+          <Link to="/contact" className="text-sm font-light tracking-wide border border-foreground/20 px-6 py-2.5 rounded-sm hover:bg-foreground hover:text-primary-foreground transition-all duration-300">
+            Book
+          </Link>
+        </div>
 
         {/* Mobile: Book button + Menu button */}
         <div className="lg:hidden flex items-center gap-3">
@@ -181,6 +187,9 @@ export const Header = () => {
           >
             Book Now
           </Link>
+          <FareHarborButton itemCode="721140" variant="outline" size="md" className="w-full">
+            Gift Cards
+          </FareHarborButton>
         </div>
       </div>
     </header>;
