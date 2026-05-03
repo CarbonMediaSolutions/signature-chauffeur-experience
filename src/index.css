@@ -293,13 +293,17 @@
     letter-spacing: 0.05em;
   }
 
-  /* Hide Klaviyo embedded signup on mobile to prevent overlap with WhatsApp button */
+  /* Hide all Klaviyo signup popups/forms on mobile to prevent overlap with floating buttons */
   @media (max-width: 767px) {
-    .klaviyo-form,
+    div[class*="klaviyo-form"],
+    div[class*="kl-private-reset-css"],
     div[data-testid="POPUP"],
     .klaviyo_embed_footer_module,
-    .go3958317564 {
+    iframe[src*="klaviyo"],
+    iframe[name*="klaviyo"] {
       display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
   }
 }

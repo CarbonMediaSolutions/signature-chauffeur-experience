@@ -1,32 +1,30 @@
-## Issue
+## Problem
 
-Several "Book Now" / "Explore Your Dream Ride" CTAs still link to `/contact` (the enquiry form) instead of opening the FareHarbor Lightframe popup. Kristina wants these to open the booking widget directly.
+A user reported that on iPhone, the Klaviyo signup popup appears off-screen at the bottom right of the page, with only half of the close (X) button visible and barely tappable. The popup also freezes the page.
+
+We already have a CSS rule in `src/index.css` (lines 296-304) intended to hide Klaviyo forms on mobile, but it relies on a brittle obfuscated class name (`.go3958317564`) that Klaviyo regenerates on every deploy. As a result, the live popup is no longer being hidden on mobile.
 
 ## Fix
 
-Swap each `<Link to="/contact">…Book Now…</Link>` (and the homepage hero "Explore Your Dream Ride") for a `<FareHarborButton>` (no `itemCode` -> opens the full catalogue picker in the Lightframe).
+Strengthen the mobile hide rule in `src/index.css` to catch all Klaviyo popup variants regardless of the rotating class names, while keeping the inline footer newsletter (which we render ourselves in `Footer.tsx`) untouched.
 
-### Files to update
+Updated `@media (max-width: 767px)` block will hide:
 
-1. **`src/pages/Index.tsx`** (hero)
-   - "Book Now" -> `FareHarborButton` (full catalogue), keep luxury hero styling via `className`.
-   - "Explore Your Dream Ride" -> `FareHarborButton` (full catalogue), keep inverse-hero styling. (Per the brief, the booking widget should replace the enquiry form path here too.)
-   - Keep the bottom-of-page "Start Your Booking" CTA also pointing to FareHarbor.
+- `div[class*="klaviyo-form-"]` - all Klaviyo-rendered form containers (popups + embeds)
+- `div[class*="needsclick"][class*="kl-private"]` - Klaviyo's internal popup wrapper
+- `div[data-testid="POPUP"]` - tested popup container
+- `.klaviyo_embed_footer_module` - legacy embed
+- Any `iframe[src*="klaviyo"]` - safety net for iframe-based popups
 
-2. **`src/components/layout/Header.tsx`**
-   - Desktop "Book" pill (line 110-112) -> FareHarbor Lightframe link.
-   - Mobile top "Book Now" (line 117-119) -> FareHarbor Lightframe link.
-   - Mobile menu "Book Now" (line 183-189) -> FareHarbor Lightframe link.
+This is purely CSS, scoped to widths under 768px, so desktop behaviour is unchanged. Our own footer signup form (custom HTML inside `Footer.tsx`) is unaffected because it doesn't use any `klaviyo-*` classes.
 
-3. **`src/pages/About.tsx`** (line 240) - "Book Now" -> FareHarbor.
-4. **`src/pages/Process.tsx`** (line 101) - "Book Now" -> FareHarbor.
-5. **`src/pages/FAQ.tsx`** (line 123) - "Book Now" -> FareHarbor.
+## Files changed
 
-### Implementation note
+- `src/index.css` - replace lines 296-304 with the broader selector list
 
-To preserve the existing luxury button look (LuxuryButton variants like `hero`, `heroInverse`, `default`, `outline`), I'll render `FareHarborButton` with a passthrough `className` that mirrors the existing button styling, OR wrap a styled `<a>` directly using the same Tailwind classes the LuxuryButton produces. The FareHarbor global script (already in `index.html`) intercepts `fareharbor.com/embeds/book/...` anchors and opens them in the Lightframe popup, so as long as the element is an `<a>` with that href, it will pop up - no navigation away.
+## Verification
 
-### What stays the same
-
-- "Contact" nav link, contact page, and the WhatsApp/Enquiry forms remain (they're for general enquiries, not bookings).
-- Vehicle cards, vehicle detail page, floating Book button, and Gift Cards already use FareHarbor - no change.
+After the change I will open the preview at iPhone width (390x844) and confirm:
+1. No Klaviyo popup appears at the bottom of the page
+2. The WhatsApp + Book Now floating buttons remain tappable
+3. Desktop view (1280+) still shows the Klaviyo popup as before
