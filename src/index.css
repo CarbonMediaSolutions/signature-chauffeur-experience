@@ -293,17 +293,29 @@
     letter-spacing: 0.05em;
   }
 
-  /* Hide all Klaviyo signup popups/forms on mobile to prevent overlap with floating buttons */
+  /* Hide all Klaviyo signup popups/forms on mobile to prevent overlap with floating buttons
+     and to prevent them from locking page scroll. */
   @media (max-width: 767px) {
     div[class*="klaviyo-form"],
     div[class*="kl-private-reset-css"],
     div[data-testid="POPUP"],
+    div[role="dialog"][aria-modal="true"][class*="needsclick"],
     .klaviyo_embed_footer_module,
+    .dynamic-react-root,
     iframe[src*="klaviyo"],
     iframe[name*="klaviyo"] {
       display: none !important;
       visibility: hidden !important;
       pointer-events: none !important;
+      touch-action: none !important;
+    }
+
+    /* Neutralize Klaviyo's body scroll lock on mobile */
+    body.klaviyo-prevent-body-scrolling {
+      overflow: auto !important;
+      position: static !important;
+      top: auto !important;
+      width: auto !important;
     }
   }
 }

@@ -1,30 +1,25 @@
-## Problem
+## Goal
+Fix the mobile issue where the Fleet page stops scrolling until a vehicle is opened and the user navigates back.
 
-A user reported that on iPhone, the Klaviyo signup popup appears off-screen at the bottom right of the page, with only half of the close (X) button visible and barely tappable. The popup also freezes the page.
+## Plan
+1. Add a small mobile-only cleanup hook that watches for hidden Klaviyo popup state and immediately removes any leftover body scroll lock.
+2. Mount that hook once at app layout level so it protects the whole site, including the Fleet page, without touching desktop behavior.
+3. Keep the existing mobile CSS hide rule, but tighten it so hidden popup wrappers cannot capture touch/scroll events or leave the page in a locked state.
+4. Verify in phone viewport on the Fleet page that:
+   - the page scrolls normally on first load
+   - it still scrolls after the popup scripts initialize
+   - opening a vehicle and going back is no longer required
+   - WhatsApp and Book Now floating buttons still work
 
-We already have a CSS rule in `src/index.css` (lines 296-304) intended to hide Klaviyo forms on mobile, but it relies on a brittle obfuscated class name (`.go3958317564`) that Klaviyo regenerates on every deploy. As a result, the live popup is no longer being hidden on mobile.
+## Technical details
+- Create a hook such as `useMobileKlaviyoScrollUnlock` in `src/hooks/`.
+- In the hook:
+  - only run under `window.innerWidth < 768`
+  - remove `klaviyo-prevent-body-scrolling` from `document.body`
+  - clear inline `overflow` / `position` styles Klaviyo may leave behind
+  - observe DOM/body class changes with `MutationObserver` so the cleanup runs whenever the popup remounts
+- Mount the hook in `src/components/layout/Layout.tsx` so it applies site-wide.
+- Update `src/index.css` mobile selectors if needed to also neutralize any fixed/off-screen dialog wrappers.
 
-## Fix
-
-Strengthen the mobile hide rule in `src/index.css` to catch all Klaviyo popup variants regardless of the rotating class names, while keeping the inline footer newsletter (which we render ourselves in `Footer.tsx`) untouched.
-
-Updated `@media (max-width: 767px)` block will hide:
-
-- `div[class*="klaviyo-form-"]` - all Klaviyo-rendered form containers (popups + embeds)
-- `div[class*="needsclick"][class*="kl-private"]` - Klaviyo's internal popup wrapper
-- `div[data-testid="POPUP"]` - tested popup container
-- `.klaviyo_embed_footer_module` - legacy embed
-- Any `iframe[src*="klaviyo"]` - safety net for iframe-based popups
-
-This is purely CSS, scoped to widths under 768px, so desktop behaviour is unchanged. Our own footer signup form (custom HTML inside `Footer.tsx`) is unaffected because it doesn't use any `klaviyo-*` classes.
-
-## Files changed
-
-- `src/index.css` - replace lines 296-304 with the broader selector list
-
-## Verification
-
-After the change I will open the preview at iPhone width (390x844) and confirm:
-1. No Klaviyo popup appears at the bottom of the page
-2. The WhatsApp + Book Now floating buttons remain tappable
-3. Desktop view (1280+) still shows the Klaviyo popup as before
+## Expected outcome
+On iPhone/mobile, users can freely scroll the Fleet page even if the signup popup script loads in the background.

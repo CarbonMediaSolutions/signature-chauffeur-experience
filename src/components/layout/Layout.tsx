@@ -5,6 +5,7 @@ import { Footer } from "./Footer";
 import { FloatingWhatsApp } from "./FloatingWhatsApp";
 import FloatingBookButton from "@/components/FloatingBookButton";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { useMobileKlaviyoScrollUnlock } from "@/hooks/useMobileKlaviyoScrollUnlock";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   useScrollToTop();
+  useMobileKlaviyoScrollUnlock();
   
   return (
     <HelmetProvider>
