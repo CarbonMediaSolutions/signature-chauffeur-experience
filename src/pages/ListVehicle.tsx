@@ -2,8 +2,8 @@ import { Layout } from "@/components/layout/Layout";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X, ChevronDown } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Shield, Camera, FileCheck, Users, ClipboardCheck, BarChart3, Upload, X, ChevronDown, Mail, MessageCircle, type LucideIcon } from "lucide-react";
+import { createEnquiryEmailUrl, createWhatsAppUrl } from "@/lib/enquiry";
 import { usePageContent, getContent, getJsonContent } from "@/hooks/usePageContent";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
@@ -45,7 +45,6 @@ const ListVehicle = () => {
   });
   const [vehicleImages, setVehicleImages] = useState<File[]>([]);
   const [uploadPreviews, setUploadPreviews] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [photoGuideOpen, setPhotoGuideOpen] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,86 +87,42 @@ const ListVehicle = () => {
     setUploadPreviews(newPreviews);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const buildSubmissionMessage = () => {
+    const vehicleDescription = `${formData.vehicleYear} ${formData.vehicleMake} ${formData.vehicleModel}`.trim();
+    const photoNote = vehicleImages.length > 0
+      ? `\n\nI have ${vehicleImages.length} vehicle photo${vehicleImages.length === 1 ? "" : "s"} to attach to this conversation.`
+      : "";
+
+    return [
+      "Hi Signature Car Rentals, I would like to list my vehicle for investment.",
+      "",
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      `Phone: ${formData.phone}`,
+      `Vehicle: ${vehicleDescription}`,
+      "",
+      formData.message || "No additional message provided.",
+      photoNote,
+    ].join("\n");
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // Upload images to storage
-      const imageUrls: string[] = [];
-      for (const file of vehicleImages) {
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name}`;
-        const { data, error } = await supabase.storage
-          .from('vehicle-submissions')
-          .upload(fileName, file);
-        
-        if (error) {
-          console.error('Upload error:', error);
-          throw new Error(`Failed to upload ${file.name}`);
-        }
-        
-        if (data) {
-          const { data: urlData } = supabase.storage
-            .from('vehicle-submissions')
-            .getPublicUrl(data.path);
-          imageUrls.push(urlData.publicUrl);
-        }
-      }
-      
-      // Build message with image URLs
-      const vehicleDescription = `${formData.vehicleYear} ${formData.vehicleMake} ${formData.vehicleModel}`.trim();
-      let fullMessage = formData.message || "No additional message provided.";
-      if (imageUrls.length > 0) {
-        fullMessage += "\n\n--- Uploaded Vehicle Photos ---\n" + imageUrls.map((url, i) => `Photo ${i + 1}: ${url}`).join("\n");
-      }
+    window.open(createWhatsAppUrl(buildSubmissionMessage()), "_blank", "noopener,noreferrer");
+    toast({
+      title: "Continue in WhatsApp",
+      description: vehicleImages.length > 0
+        ? "Your message is ready. Attach your selected photos in the WhatsApp chat."
+        : "Your vehicle submission is ready to send in WhatsApp.",
+    });
+  };
 
-      // Send enquiry email and save to database
-      const { error: fnError } = await supabase.functions.invoke("send-contact-enquiry", {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          enquiryType: "List Your Vehicle",
-          preferredVehicle: vehicleDescription || null,
-          message: fullMessage,
-          referralSource: "List Your Vehicle Page",
-        },
-      });
-
-      if (fnError) {
-        console.error("Edge function error:", fnError);
-        throw new Error("Failed to send submission");
-      }
-
-      toast({
-        title: "Submission Received",
-        description: "Thank you for your interest. Our team will review your submission and be in touch shortly.",
-      });
-      
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "+27 ",
-        vehicleMake: "",
-        vehicleModel: "",
-        vehicleYear: "",
-        message: "",
-      });
-      // Revoke all preview URLs
-      uploadPreviews.forEach(url => URL.revokeObjectURL(url));
-      setVehicleImages([]);
-      setUploadPreviews([]);
-    } catch (error) {
-      console.error('Submission error:', error);
-      toast({
-        title: "Upload Error",
-        description: "There was an issue uploading your images. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (e.currentTarget.form && !e.currentTarget.form.reportValidity()) return;
+    window.location.href = createEnquiryEmailUrl(
+      "Vehicle listing enquiry",
+      buildSubmissionMessage(),
+    );
   };
 
   const defaultBenefits = [
@@ -179,9 +134,9 @@ const ListVehicle = () => {
     { icon: BarChart3, headline: "Complete Transparency", desc: "Regular updates on bookings, performance, and earnings. No surprises." },
   ];
 
-  const benefitIconMap: Record<string, any> = { "Vetted Clients": Users, "Premium Presentation": Camera, "Zero Admin": FileCheck, "Personal Handovers": Shield, "Full Inspections": ClipboardCheck, "Complete Transparency": BarChart3 };
+  const benefitIconMap: Record<string, LucideIcon> = { "Vetted Clients": Users, "Premium Presentation": Camera, "Zero Admin": FileCheck, "Personal Handovers": Shield, "Full Inspections": ClipboardCheck, "Complete Transparency": BarChart3 };
   const benefitsData = getJsonContent(pageContent, "listvehicle.benefits", defaultBenefits.map(b => ({ headline: b.headline, desc: b.desc })));
-  const benefits = benefitsData.map((b: any, i: number) => ({ ...b, icon: benefitIconMap[b.headline] || defaultBenefits[i]?.icon || Users }));
+  const benefits = benefitsData.map((b, i) => ({ ...b, icon: benefitIconMap[b.headline] || defaultBenefits[i]?.icon || Users }));
 
   const defaultServices = [
     "Client Screening & Approval",
@@ -243,7 +198,7 @@ const ListVehicle = () => {
             <div className="order-1 lg:order-2">
               <div className="relative">
                 <img 
-                  src="/vehicles/porsche-boxster-718-s.png" 
+                  src="/vehicles/porsche-boxster-718-s.webp" 
                   alt="Porsche Boxster 718 S" 
                   className="w-full h-auto object-contain"
                 />
@@ -267,7 +222,7 @@ const ListVehicle = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit: any) => (
+            {benefits.map((benefit) => (
               <div 
                 key={benefit.headline} 
                 className="group p-8 border border-border/50 hover:border-accent/50 transition-all duration-300 bg-background"
@@ -400,7 +355,7 @@ const ListVehicle = () => {
             {/* Vehicle Image */}
             <div className="relative">
               <img 
-                src="/vehicles/mercedes-amg-e63-s.png" 
+                src="/vehicles/mercedes-amg-e63-s.webp" 
                 alt="Mercedes-AMG E63 S" 
                 className="w-full h-auto object-contain"
               />
@@ -536,7 +491,7 @@ const ListVehicle = () => {
                   Vehicle Photos (Optional)
                 </label>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Upload up to 3 clear photos of your vehicle. JPG, PNG or WebP. Max 5MB each.
+                  Preview up to 3 clear photos. JPG, PNG or WebP. Max 5MB each. Photos are not uploaded; attach them in WhatsApp or your email app.
                 </p>
                 
                 {/* Photo Guidelines Collapsible */}
@@ -616,15 +571,25 @@ const ListVehicle = () => {
                 </div>
               </div>
 
-              <div className="pt-4">
-                <LuxuryButton 
-                  type="submit" 
-                  variant="default" 
-                  size="lg" 
+              <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                <LuxuryButton
+                  type="submit"
+                  variant="default"
+                  size="lg"
                   className="w-full md:w-auto"
-                  disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit for Consideration'}
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Continue on WhatsApp
+                </LuxuryButton>
+                <LuxuryButton
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="w-full md:w-auto"
+                  onClick={handleEmail}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Email Instead
                 </LuxuryButton>
               </div>
             </form>

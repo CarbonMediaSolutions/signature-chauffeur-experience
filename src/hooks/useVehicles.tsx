@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import vehicleData from "@/data/vehicles.json";
 
 export interface Vehicle {
   id: string;
@@ -26,63 +27,87 @@ export interface Vehicle {
   cover_image_url: string | null;
   gallery_urls: string[] | null;
   video_urls: string[] | null;
+  hero_video_url: string | null;
+  acceleration: string | null;
+  top_speed: string | null;
+  doors: number | null;
+  excess_mileage_rate: number | null;
+  minimum_rental_days: number | null;
   multi_day_threshold: number | null;
+  multi_day_rate: number | null;
+  original_multi_day_rate: number | null;
   multi_day_discount_percent: number | null;
   has_aircon: boolean | null;
-  doors: number | null;
-  acceleration: string | null;
   power_kw: number | null;
   is_hot: boolean | null;
+  self_drive_rate: number | null;
+  chauffeur_rate: number | null;
   fareharbor_item_code: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
+const vehicles = vehicleData as Vehicle[];
+
+const getStaticVehicles = (includeInactive: boolean) =>
+  includeInactive ? vehicles : vehicles.filter((vehicle) => vehicle.is_active);
+
+/** Public fleet content is bundled with the site and never queries the database. */
 export const useVehicles = (includeInactive = false) => {
+  const data = getStaticVehicles(includeInactive);
+
   return useQuery({
-    queryKey: ["vehicles", { includeInactive }],
-    queryFn: async () => {
-      let query = supabase.from("vehicles").select("*");
-      
-      if (!includeInactive) {
-        query = query.eq("is_active", true);
-      }
-      
-      const { data, error } = await query.order("name");
-      
-      if (error) throw error;
-      return data as Vehicle[];
-    },
+    queryKey: ["vehicles", "static", { includeInactive }],
+    queryFn: async () => data,
+    initialData: data,
+    staleTime: Infinity,
   });
 };
 
 export const useVehicle = (id: string) => {
+  const data = vehicles.find((vehicle) => vehicle.id === id && vehicle.is_active) ?? null;
+
   return useQuery({
-    queryKey: ["vehicle", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("vehicles")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
-      
-      if (error) throw error;
-      return data as Vehicle | null;
-    },
+    queryKey: ["vehicle", "static", id],
+    queryFn: async () => data,
+    initialData: data,
     enabled: !!id,
+    staleTime: Infinity,
   });
 };
 
 export const useCategories = () => {
+  const data = [
+    ...new Set(
+      vehicles
+        .filter((vehicle) => vehicle.is_active)
+        .map((vehicle) => vehicle.category)
+        .filter((category) => category && category.trim() !== ""),
+    ),
+  ];
+
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", "static"],
+    queryFn: async () => data,
+    initialData: data,
+    staleTime: Infinity,
+  });
+};
+
+/** Admin screens continue to read live records so edits and new vehicles appear immediately. */
+export const useAdminVehicles = (includeInactive = true) => {
+  return useQuery({
+    queryKey: ["vehicles", "admin", { includeInactive }],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("vehicles")
-        .select("category")
-        .eq("is_active", true);
-      
+      let query = supabase.from("vehicles").select("*");
+
+      if (!includeInactive) {
+        query = query.eq("is_active", true);
+      }
+
+      const { data, error } = await query.order("name");
       if (error) throw error;
-      const categories = [...new Set(data.map((v) => v.category).filter((c) => c && c.trim() !== ""))];
-      return categories;
+      return data as Vehicle[];
     },
   });
 };

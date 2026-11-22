@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAllPageContent, useUpdatePageContent, ContentBlock } from "@/hooks/usePageContent";
+import { useAdminAllPageContent, useUpdatePageContent, ContentBlock } from "@/hooks/usePageContent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +20,7 @@ const PAGES = [
 ];
 
 const AdminContent = () => {
-  const { data: allContent, isLoading } = useAllPageContent();
+  const { data: allContent, isLoading } = useAdminAllPageContent();
   const updateMutation = useUpdatePageContent();
   const { toast } = useToast();
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});

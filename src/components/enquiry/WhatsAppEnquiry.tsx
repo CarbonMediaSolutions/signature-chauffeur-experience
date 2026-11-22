@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays } from "date-fns";
-import { MessageCircle, Phone, Mail, Copy, Check, Loader2 } from "lucide-react";
+import { MessageCircle, Phone, Mail, Copy, Check } from "lucide-react";
 import { LuxuryButton } from "@/components/ui/luxury-button";
 import { Textarea } from "@/components/ui/textarea";
 import { DateRangePicker } from "@/components/booking/DateRangePicker";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { siteConfig } from "@/lib/siteConfig";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { createEnquiryEmailUrl, createWhatsAppUrl } from "@/lib/enquiry";
 
 interface WhatsAppEnquiryProps {
   vehicleName: string;
@@ -48,7 +48,6 @@ export const WhatsAppEnquiry = ({
   const [notes, setNotes] = useState("");
   const [dateError, setDateError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   // Determine if we're in "Request Pricing" mode
   const isRequestPricing = serviceType === "Events" || 
@@ -122,10 +121,7 @@ export const WhatsAppEnquiry = ({
     }
     
     setDateError(false);
-    const message = buildMessage();
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${siteConfig.whatsapp.number}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank");
+    window.open(createWhatsAppUrl(buildMessage()), "_blank", "noopener,noreferrer");
   };
 
   const handleCopyMessage = async () => {
@@ -147,42 +143,17 @@ export const WhatsAppEnquiry = ({
     }
   };
 
-  const handleEmailEnquiry = async () => {
+  const handleEmailEnquiry = () => {
     if (!dateRange?.from || !dateRange?.to) {
       setDateError(true);
       return;
     }
 
     setDateError(false);
-    setIsSendingEmail(true);
-
-    try {
-      const message = buildMessage();
-      const startDate = format(dateRange.from, "yyyy-MM-dd");
-      const endDate = format(dateRange.to, "yyyy-MM-dd");
-
-      const { error } = await supabase.functions.invoke("send-contact-enquiry", {
-        body: {
-          name: "Vehicle Page Enquiry",
-          email: siteConfig.contact.email,
-          phone: "N/A",
-          enquiryType: vehicleName,
-          preferredVehicle: vehicleName,
-          startDate,
-          endDate,
-          message,
-          referralSource: "Vehicle Page Enquiry",
-        },
-      });
-
-      if (error) throw error;
-      toast.success("Enquiry sent successfully! We'll be in touch shortly.");
-    } catch (err) {
-      console.error("Email enquiry error:", err);
-      toast.error("Failed to send enquiry. Please try again or use WhatsApp.");
-    } finally {
-      setIsSendingEmail(false);
-    }
+    window.location.href = createEnquiryEmailUrl(
+      `Vehicle enquiry - ${vehicleName}`,
+      buildMessage(),
+    );
   };
 
   const handleDateChange = (range: DateRange | undefined) => {
@@ -393,15 +364,10 @@ export const WhatsAppEnquiry = ({
         <span className="text-border">•</span>
         <button
           onClick={handleEmailEnquiry}
-          disabled={isSendingEmail}
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 disabled:opacity-50"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
         >
-          {isSendingEmail ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Mail className="w-4 h-4" />
-          )}
-          {isSendingEmail ? "Sending..." : "Email us"}
+          <Mail className="w-4 h-4" />
+          Email us
         </button>
       </div>
 

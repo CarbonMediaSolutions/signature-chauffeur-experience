@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, parseISO, isWithinInterval } from "date-fns";
 import { useBookings } from "@/hooks/useBookings";
-import { useVehicles } from "@/hooks/useVehicles";
+import { useAdminVehicles } from "@/hooks/useVehicles";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const AdminCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const { data: vehicles } = useVehicles();
+  const { data: vehicles } = useAdminVehicles(false);
   const { data: bookings } = useBookings();
 
   const { data: blocks } = useQuery({

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useVehicles } from "@/hooks/useVehicles";
+import { useAdminVehicles } from "@/hooks/useVehicles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +35,7 @@ interface AvailabilityBlock {
 const AdminAvailability = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data: vehicles } = useVehicles();
+  const { data: vehicles } = useAdminVehicles(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Form state

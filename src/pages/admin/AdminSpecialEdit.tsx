@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useSpecial, useUpdateSpecial, SpecialInsert } from "@/hooks/useSpecials";
+import { useAdminSpecial, useUpdateSpecial, SpecialInsert } from "@/hooks/useSpecials";
 import { SpecialForm } from "@/components/admin/SpecialForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 const AdminSpecialEdit = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: special, isLoading } = useSpecial(id || "");
+  const { data: special, isLoading } = useAdminSpecial(id || "");
   const updateSpecial = useUpdateSpecial();
 
   const handleSubmit = async (data: SpecialInsert) => {

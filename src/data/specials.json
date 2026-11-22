@@ -1,0 +1,34 @@
+[
+  {
+    "id": "fd4a7e6b-bd16-459d-86f7-b94f0d8f0f08",
+    "title": "Drive 4 days. Get the 5th on us!",
+    "description": "Book any vehicle in our fleet for 4 consecutive days and receive the 5th day completely free.",
+    "category_tag": "Seasonal Offer",
+    "image_url": "/vehicles/specials-special-1772446154100.webp",
+    "cta_text": "Book Your Summer Ride",
+    "cta_link": "/fleet",
+    "is_active": true,
+    "display_order": 1,
+    "start_date": null,
+    "end_date": null,
+    "created_at": "2026-01-13T08:13:32.949227+00:00",
+    "updated_at": "2026-03-02T10:09:18.572192+00:00",
+    "discount_percent": 0
+  },
+  {
+    "id": "1fea6e0f-6152-47d5-8c9f-b006589211b7",
+    "title": "Extended Rental Savings",
+    "description": "Planning an extended trip? Enjoy up to 25% off when you rent for 7 days or more. The longer you stay, the more you save.",
+    "category_tag": "Long Term Offer",
+    "image_url": "/vehicles/specials-special-1776330724380.webp",
+    "cta_text": "Explore Long Term Deals",
+    "cta_link": "/fleet",
+    "is_active": true,
+    "display_order": 2,
+    "start_date": null,
+    "end_date": null,
+    "created_at": "2026-01-13T08:13:32.949227+00:00",
+    "updated_at": "2026-04-16T09:12:10.853603+00:00",
+    "discount_percent": 10
+  }
+]

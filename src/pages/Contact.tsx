@@ -6,7 +6,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useVehicles } from "@/hooks/useVehicles";
 import { siteConfig } from "@/lib/siteConfig";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { supabase } from "@/integrations/supabase/client";
+import { createEnquiryEmailUrl, createWhatsAppUrl } from "@/lib/enquiry";
+import { Mail, MessageCircle } from "lucide-react";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { usePageContent, getContent } from "@/hooks/usePageContent";
 
@@ -27,26 +28,41 @@ const Contact = () => {
 
   const [formData, setFormData] = useState({
     name: "", email: "", phone: "+27 ",
-    enquiryType: vehicle ? "Vehicle Rental" : "",
+    enquiryType: vehicle ? "Self-Drive Rental" : "",
     preferredVehicle: vehicle?.name || "",
     startDate: "", endDate: "", message: "", referralSource: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const buildEnquiryMessage = () => [
+    "Hi Signature Car Rentals, I would like to make an enquiry.",
+    "",
+    `Name: ${formData.name}`,
+    `Email: ${formData.email}`,
+    `Phone: ${formData.phone}`,
+    `Enquiry Type: ${formData.enquiryType}`,
+    `Preferred Vehicle: ${formData.preferredVehicle || "No preference"}`,
+    `Preferred Dates: ${formData.startDate || "Not specified"} to ${formData.endDate || "Not specified"}`,
+    `How I found you: ${formData.referralSource}`,
+    "",
+    formData.message,
+  ].join("\n");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("send-contact-enquiry", { body: formData });
-      if (error) throw error;
-      toast({ title: "Enquiry Submitted", description: "Thank you for your enquiry. Our team will respond within 24 hours." });
-      setFormData({ name: "", email: "", phone: "+27 ", enquiryType: "", preferredVehicle: "", startDate: "", endDate: "", message: "", referralSource: "" });
-    } catch (error) {
-      console.error("Submit error:", error);
-      toast({ title: "Something went wrong", description: "Please try again or contact us via WhatsApp.", variant: "destructive" });
-    } finally {
-      setIsSubmitting(false);
+    const whatsappWindow = window.open(createWhatsAppUrl(buildEnquiryMessage()), "_blank");
+    if (whatsappWindow) {
+      whatsappWindow.opener = null;
+    } else {
+      window.location.assign(createWhatsAppUrl(buildEnquiryMessage()));
     }
+    toast({ title: "Continue in WhatsApp", description: "Your enquiry is ready to send in WhatsApp." });
+  };
+
+  const handleEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (e.currentTarget.form && !e.currentTarget.form.reportValidity()) return;
+    window.location.href = createEnquiryEmailUrl(
+      `Website enquiry - ${formData.enquiryType || "General"}`,
+      buildEnquiryMessage(),
+    );
   };
 
   return (
@@ -134,11 +150,19 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="pt-4">
-                  <LuxuryButton type="submit" variant="default" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Submit Enquiry"}
+                <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                  <LuxuryButton type="submit" variant="default" size="lg">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Send via WhatsApp
+                  </LuxuryButton>
+                  <LuxuryButton type="button" variant="outline" size="lg" onClick={handleEmail}>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email Instead
                   </LuxuryButton>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  WhatsApp or your email app will open with this enquiry ready to send.
+                </p>
               </form>
             </div>
 

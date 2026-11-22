@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import specialData from "@/data/specials.json";
 
 export interface Special {
   id: string;
@@ -21,47 +22,71 @@ export interface Special {
 export type SpecialInsert = Omit<Special, "id" | "created_at" | "updated_at">;
 export type SpecialUpdate = Partial<SpecialInsert>;
 
+const specials = (specialData as Special[]).sort(
+  (a, b) => a.display_order - b.display_order,
+);
+
+const getActiveSpecials = (today: string) =>
+  specials.filter(
+    (special) =>
+      special.is_active &&
+      (!special.start_date || special.start_date <= today) &&
+      (!special.end_date || special.end_date >= today),
+  );
+
+/** Public offers are bundled locally and require no database connection. */
 export const useSpecials = () => {
   return useQuery({
-    queryKey: ["specials"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("specials")
-        .select("*")
-        .order("display_order", { ascending: true });
-
-      if (error) throw error;
-      return data as Special[];
-    },
+    queryKey: ["specials", "static"],
+    queryFn: async () => specials,
+    initialData: specials,
+    staleTime: Infinity,
   });
 };
 
 export const useActiveSpecials = () => {
   const today = new Date().toISOString().split("T")[0];
-  
+  const data = getActiveSpecials(today);
+
   return useQuery({
-    queryKey: ["specials", "active", today],
+    queryKey: ["specials", "static", "active", today],
+    queryFn: async () => data,
+    initialData: data,
+    staleTime: Infinity,
+  });
+};
+
+export const useSpecial = (id: string) => {
+  const data = specials.find((special) => special.id === id) ?? null;
+
+  return useQuery({
+    queryKey: ["specials", "static", id],
+    queryFn: async () => data,
+    initialData: data,
+    enabled: !!id,
+    staleTime: Infinity,
+  });
+};
+
+/** Admin screens continue to use live offers so their edits remain visible there. */
+export const useAdminSpecials = () => {
+  return useQuery({
+    queryKey: ["specials", "admin"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("specials")
         .select("*")
-        .eq("is_active", true)
-        .or(`start_date.is.null,start_date.lte.${today}`)
-        .or(`end_date.is.null,end_date.gte.${today}`)
         .order("display_order", { ascending: true });
 
       if (error) throw error;
       return data as Special[];
     },
-    staleTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
   });
 };
 
-export const useSpecial = (id: string) => {
+export const useAdminSpecial = (id: string) => {
   return useQuery({
-    queryKey: ["specials", id],
+    queryKey: ["specials", "admin", id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("specials")

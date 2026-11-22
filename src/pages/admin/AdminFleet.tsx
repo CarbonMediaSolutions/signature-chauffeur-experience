@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useVehicles } from "@/hooks/useVehicles";
+import { useAdminVehicles } from "@/hooks/useVehicles";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ type StatusFilter = "all" | "active" | "inactive";
 const AdminFleet = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data: vehicles, isLoading } = useVehicles(true); // Include inactive for admin
+  const { data: vehicles, isLoading } = useAdminVehicles(true);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -269,7 +269,7 @@ const AdminFleet = () => {
                     Featured
                   </div>
                 )}
-                {(vehicle as any).is_hot && (
+                {vehicle.is_hot && (
                   <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded-sm">
                     Hot
                   </div>

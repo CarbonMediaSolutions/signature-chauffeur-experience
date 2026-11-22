@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSpecials, useDeleteSpecial, useUpdateSpecial } from "@/hooks/useSpecials";
+import { useAdminSpecials, useDeleteSpecial, useUpdateSpecial } from "@/hooks/useSpecials";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 
 const AdminSpecials = () => {
-  const { data: specials, isLoading } = useSpecials();
+  const { data: specials, isLoading } = useAdminSpecials();
   const deleteSpecial = useDeleteSpecial();
   const updateSpecial = useUpdateSpecial();
 
